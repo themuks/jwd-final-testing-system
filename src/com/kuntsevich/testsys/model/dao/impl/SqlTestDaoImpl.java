@@ -15,7 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class TestDao implements Dao<Test> {
+public class SqlTestDaoImpl implements Dao<Test> {
     private static final String FIND_ALL_TEST_QUERY = "SELECT test_id, title, subject, description, status FROM testing_system.tests";
     private static final String FIND_TEST_BY_CRITERIA_QUERY = "SELECT test_id, title, subject, description, status FROM testing_system.tests WHERE ";
     private static final String TEST_ID = "test_id";
@@ -130,8 +130,8 @@ public class TestDao implements Dao<Test> {
     }
 
     @Override
-    public void add(Test test) throws DaoException {
-
+    public long add(Test test) throws DaoException {
+        return 0;
     }
 
     @Override

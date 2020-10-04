@@ -1,9 +1,3 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<html>
-<head>
-    <title>Index</title>
-</head>
-<body>
-    <jsp:forward page="/jsp/login.jsp"/>
-</body>
-</html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:redirect url="controller?command=go-to-welcome-page"/>

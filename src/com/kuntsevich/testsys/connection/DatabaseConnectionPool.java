@@ -1,5 +1,7 @@
 package com.kuntsevich.testsys.connection;
 
+import com.mysql.jdbc.Driver;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -37,12 +39,18 @@ public class DatabaseConnectionPool {
         properties.put(AUTO_RECONNECT, autoReconnect);
         properties.put(CHARACTER_ENCODING, encoding);
         properties.put(USE_UNICODE, useUnicode);
+        try {
+            DriverManager.registerDriver(new Driver());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         freeConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             Connection connection = null;
             try {
                 connection = DriverManager.getConnection(url, properties);
-            } catch (SQLException throwables) {
+            } catch (SQLException e) {
+                e.printStackTrace();
                 // TODO: 28.09.2020 Write logs
             }
             freeConnections.offer(connection);

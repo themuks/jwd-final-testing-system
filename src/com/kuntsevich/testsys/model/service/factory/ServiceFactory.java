@@ -1,18 +1,12 @@
 package com.kuntsevich.testsys.model.service.factory;
 
-import com.kuntsevich.testsys.entity.Status;
-import com.kuntsevich.testsys.entity.Subject;
-import com.kuntsevich.testsys.entity.Test;
-import com.kuntsevich.testsys.model.dao.Dao;
-import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
-import com.kuntsevich.testsys.model.dao.impl.StatusDao;
-import com.kuntsevich.testsys.model.dao.impl.SubjectDao;
-import com.kuntsevich.testsys.model.dao.impl.TestDao;
 import com.kuntsevich.testsys.model.service.TestService;
+import com.kuntsevich.testsys.model.service.UserService;
 
 public class ServiceFactory {
     private static volatile ServiceFactory instance;
     private TestService testService = new TestService();
+    private UserService userService = new UserService();
 
     private ServiceFactory() {
     }
@@ -30,5 +24,9 @@ public class ServiceFactory {
 
     public TestService getTestService() {
         return testService;
+    }
+
+    public UserService getUserService() {
+        return userService;
     }
 }

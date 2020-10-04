@@ -1,5 +1,6 @@
 package com.kuntsevich.testsys.controller;
 
+import com.kuntsevich.testsys.connection.DatabaseConnectionPool;
 import com.kuntsevich.testsys.controller.command.Command;
 import com.kuntsevich.testsys.controller.command.provider.CommandProvider;
 
@@ -19,18 +20,18 @@ public class Controller extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
+
+    }
+
+    @Override
+    public void destroy() {
+        DatabaseConnectionPool connectionPool = DatabaseConnectionPool.getInstance();
+        connectionPool.destroyPool();
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String page;
         CommandProvider commandProvider = new CommandProvider();
         Command command = commandProvider.defineCommand(request);
-        page = command.execute(request);
-        if (page != null) {
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
-            dispatcher.forward(request, response);
-        } else {
-            // TODO : Analyze this code and refactor
-        }
+        command.execute(request, response);
     }
 }

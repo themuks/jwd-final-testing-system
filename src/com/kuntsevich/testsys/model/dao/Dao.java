@@ -13,9 +13,9 @@ public interface Dao<T> {
 
     List<T> findAll() throws DaoException;
 
-    void add(T t) throws DaoException;
+    long add(T t) throws DaoException;
 
-    void update(T t, Map<String, String> criteria) throws DaoException;
+    void update(T t, Map<String, String> params) throws DaoException;
 
     void delete(T t) throws DaoException;
 }
