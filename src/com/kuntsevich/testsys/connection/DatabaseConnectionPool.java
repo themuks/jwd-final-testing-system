@@ -1,6 +1,8 @@
 package com.kuntsevich.testsys.connection;
 
+import com.kuntsevich.testsys.exception.DatabasePoolException;
 import com.mysql.jdbc.Driver;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,21 +15,20 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class DatabaseConnectionPool {
-    private static final String MYSQL_DRIVER_NAME = "com.mysql.jdbc.Driver";
+    private static final Logger log = Logger.getLogger(DatabaseConnectionPool.class);
     private static final String USER = "user";
     private static final String PASSWORD = "password";
     private static final String AUTO_RECONNECT = "autoReconnect";
     private static final String CHARACTER_ENCODING = "characterEncoding";
     private static final String USE_UNICODE = "useUnicode";
+    private final static int DEFAULT_POOL_SIZE = 32;
     private static volatile DatabaseConnectionPool instance;
     private BlockingQueue<Connection> freeConnections;
     private Queue<Connection> givenAwayConnections;
-    private final static int DEFAULT_POOL_SIZE = 32;
 
-    private DatabaseConnectionPool() {
+    private DatabaseConnectionPool() throws SQLException {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
         Properties properties = new Properties();
-        //String driver = resourceBundle.getString("db.driver");
         String url = resourceBundle.getString("db.url");
         String user = resourceBundle.getString("db.user");
         String password = resourceBundle.getString("db.password");
@@ -39,26 +40,17 @@ public class DatabaseConnectionPool {
         properties.put(AUTO_RECONNECT, autoReconnect);
         properties.put(CHARACTER_ENCODING, encoding);
         properties.put(USE_UNICODE, useUnicode);
-        try {
-            DriverManager.registerDriver(new Driver());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        DriverManager.registerDriver(new Driver());
         freeConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
-            Connection connection = null;
-            try {
-                connection = DriverManager.getConnection(url, properties);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                // TODO: 28.09.2020 Write logs
-            }
+            Connection connection;
+            connection = DriverManager.getConnection(url, properties);
             freeConnections.offer(connection);
         }
         givenAwayConnections = new ArrayDeque<>();
     }
 
-    public static DatabaseConnectionPool getInstance() {
+    public static DatabaseConnectionPool getInstance() throws SQLException {
         if (instance == null) {
             synchronized (DatabaseConnectionPool.class) {
                 if (instance == null) {
@@ -69,13 +61,13 @@ public class DatabaseConnectionPool {
         return instance;
     }
 
-    public Connection getConnection() {
-        Connection connection = null;
+    public Connection getConnection() throws DatabasePoolException {
+        Connection connection;
         try {
             connection = freeConnections.take();
             givenAwayConnections.offer(connection);
         } catch (InterruptedException e) {
-            // TODO: 28.09.2020 Write logs
+            throw new DatabasePoolException("Can't get connection form connection queue", e);
         }
         return connection;
     }
@@ -90,9 +82,9 @@ public class DatabaseConnectionPool {
             try {
                 freeConnections.take().close();
             } catch (SQLException e) {
-                // TODO : Throw exception
+                log.warn("Can't access database to close connection", e);
             } catch (InterruptedException e) {
-                // TODO : Throw exception
+                log.warn("Can't take connection from queue", e);
             }
         }
         deregisterDriver();
@@ -103,7 +95,7 @@ public class DatabaseConnectionPool {
             try {
                 DriverManager.deregisterDriver(driver);
             } catch (SQLException e) {
-                // TODO : Throw exception
+                log.warn("Can't access database to deregister driver", e);
             }
         });
     }

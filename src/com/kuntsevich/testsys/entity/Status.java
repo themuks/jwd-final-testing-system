@@ -7,6 +7,10 @@ public class Status {
     public Status() {
     }
 
+    public Status(String name) {
+        this.name = name;
+    }
+
     public Status(long statusId, String name) {
         this.statusId = statusId;
         this.name = name;

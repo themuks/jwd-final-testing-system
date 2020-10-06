@@ -14,6 +14,17 @@ public class User {
     public User() {
     }
 
+    public User(String username, String name, String surname, String emailHash, String passwordHash, String userHash, Role role, Status status) {
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.emailHash = emailHash;
+        this.passwordHash = passwordHash;
+        this.userHash = userHash;
+        this.role = role;
+        this.status = status;
+    }
+
     public User(long userId, String username, String name, String surname, String emailHash, String passwordHash, String userHash, Role role, Status status) {
         this.userId = userId;
         this.username = username;

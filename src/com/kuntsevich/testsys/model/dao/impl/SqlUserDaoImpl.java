@@ -1,18 +1,19 @@
 package com.kuntsevich.testsys.model.dao.impl;
 
 import com.kuntsevich.testsys.connection.DatabaseConnectionPool;
-import com.kuntsevich.testsys.entity.*;
+import com.kuntsevich.testsys.entity.Role;
+import com.kuntsevich.testsys.entity.Status;
+import com.kuntsevich.testsys.entity.User;
 import com.kuntsevich.testsys.exception.DaoException;
-import com.kuntsevich.testsys.model.dao.Dao;
+import com.kuntsevich.testsys.exception.DatabasePoolException;
+import com.kuntsevich.testsys.model.dao.UserDao;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
 import com.kuntsevich.testsys.model.dao.util.DaoUtil;
-import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.*;
 
-public class SqlUserDaoImpl implements Dao<User> {
-    private final Logger log = Logger.getLogger(SqlUserDaoImpl.class);
+public class SqlUserDaoImpl implements UserDao {
     private static final String USER_ID = "user_id";
     private static final String FIND_ALL_USER_QUERY = "SELECT user_id, username, name, surname, email_hash, password_hash, user_hash, role, status FROM testing_system.users";
     private static final String FIND_USER_BY_CRITERIA_QUERY = "SELECT user_id, username, name, surname, email_hash, password_hash, user_hash, role, status FROM testing_system.users WHERE ";
@@ -24,7 +25,7 @@ public class SqlUserDaoImpl implements Dao<User> {
         Optional<User> optionalTest = Optional.empty();
         Map<String, String> criteria = new HashMap<>();
         criteria.put(USER_ID, Long.toString(id));
-        List<User> tests = find(criteria);
+        List<User> tests = findByCriteria(criteria);
         if (tests.size() > 0) {
             optionalTest = Optional.of(tests.get(0));
         }
@@ -32,12 +33,18 @@ public class SqlUserDaoImpl implements Dao<User> {
     }
 
     @Override
-    public List<User> find(Map<String, String> criteria) throws DaoException {
+    public List<User> findByCriteria(Map<String, String> criteria) throws DaoException {
         List<User> users = new ArrayList<>();
-        Connection con = null;
+        Connection con;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        con = DatabaseConnectionPool.getInstance().getConnection();
+        try {
+            con = DatabaseConnectionPool.getInstance().getConnection();
+        } catch (DatabasePoolException e) {
+            throw new DaoException("Can't get connection from database connection pool", e);
+        } catch (SQLException e) {
+            throw new DaoException("Can't get instance of database connection pool to get connection", e);
+        }
         if (con == null) {
             throw new DaoException("Connection is null");
         }
@@ -67,36 +74,23 @@ public class SqlUserDaoImpl implements Dao<User> {
         } catch (SQLException e) {
             throw new DaoException("Error executing query " + query, e);
         } finally {
-            DatabaseConnectionPool.getInstance().releaseConnection(con);
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    log.warn("Can't close result set", e);
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    log.warn("Can't close prepare statement", e);
-                }
-            }
+            DaoUtil.releaseResources(con, ps, rs);
         }
         return users;
     }
 
     @Override
-    public List<User> findAll() throws DaoException {
-        return null;
-    }
-
-    @Override
     public long add(User user) throws DaoException {
-        Connection con = null;
+        Connection con;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        con = DatabaseConnectionPool.getInstance().getConnection();
+        try {
+            con = DatabaseConnectionPool.getInstance().getConnection();
+        } catch (DatabasePoolException e) {
+            throw new DaoException("Can't get connection from database connection pool", e);
+        } catch (SQLException e) {
+            throw new DaoException("Can't get instance of database connection pool to get connection", e);
+        }
         if (con == null) {
             throw new DaoException("Connection is null");
         }
@@ -119,36 +113,28 @@ public class SqlUserDaoImpl implements Dao<User> {
         } catch (SQLException e) {
             throw new DaoException("Error executing query", e);
         } finally {
-            DatabaseConnectionPool.getInstance().releaseConnection(con);
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    log.warn("Can't close result set", e);
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    log.warn("Can't close prepare statement", e);
-                }
-            }
+            DaoUtil.releaseResources(con, ps, rs);
         }
         return id;
     }
 
     @Override
-    public void update(User user, Map<String, String> params) throws DaoException {
+    public void update(User user) throws DaoException {
         delete(user);
         add(user);
     }
 
     @Override
     public void delete(User user) throws DaoException {
-        Connection con = null;
+        Connection con;
         PreparedStatement ps = null;
-        con = DatabaseConnectionPool.getInstance().getConnection();
+        try {
+            con = DatabaseConnectionPool.getInstance().getConnection();
+        } catch (DatabasePoolException e) {
+            throw new DaoException("Can't get connection from database connection pool", e);
+        } catch (SQLException e) {
+            throw new DaoException("Can't get instance of database connection pool to get connection", e);
+        }
         if (con == null) {
             throw new DaoException("Connection is null");
         }
@@ -159,14 +145,7 @@ public class SqlUserDaoImpl implements Dao<User> {
         } catch (SQLException e) {
             throw new DaoException("Error executing query", e);
         } finally {
-            DatabaseConnectionPool.getInstance().releaseConnection(con);
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    log.warn("Can't close prepare statement", e);
-                }
-            }
+            DaoUtil.releaseResources(con, ps);
         }
     }
 }

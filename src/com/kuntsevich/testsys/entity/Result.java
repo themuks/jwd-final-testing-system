@@ -9,6 +9,12 @@ public class Result {
     public Result() {
     }
 
+    public Result(User user, Test test, int points) {
+        this.user = user;
+        this.test = test;
+        this.points = points;
+    }
+
     public Result(long resultId, User user, Test test, int points) {
         this.resultId = resultId;
         this.user = user;

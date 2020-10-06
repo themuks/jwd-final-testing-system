@@ -14,6 +14,11 @@ public class Subject {
         this.description = description;
     }
 
+    public Subject(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public long getSubjectId() {
         return subjectId;
     }

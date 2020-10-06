@@ -8,6 +8,11 @@ public class Answer {
     public Answer() {
     }
 
+    public Answer(String text, boolean isCorrect) {
+        this.text = text;
+        this.isCorrect = isCorrect;
+    }
+
     public Answer(long answerId, String text, boolean isCorrect) {
         this.answerId = answerId;
         this.text = text;

@@ -1,8 +1,8 @@
 package com.kuntsevich.testsys.controller.command.provider;
 
+import com.kuntsevich.testsys.controller.command.Command;
 import com.kuntsevich.testsys.controller.command.impl.EmptyCommand;
 import com.kuntsevich.testsys.controller.command.type.CommandType;
-import com.kuntsevich.testsys.controller.command.Command;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;

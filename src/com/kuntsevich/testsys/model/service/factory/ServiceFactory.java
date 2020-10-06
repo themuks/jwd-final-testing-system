@@ -2,11 +2,13 @@ package com.kuntsevich.testsys.model.service.factory;
 
 import com.kuntsevich.testsys.model.service.TestService;
 import com.kuntsevich.testsys.model.service.UserService;
+import com.kuntsevich.testsys.model.service.impl.TestServiceImpl;
+import com.kuntsevich.testsys.model.service.impl.UserServiceImpl;
 
 public class ServiceFactory {
     private static volatile ServiceFactory instance;
-    private TestService testService = new TestService();
-    private UserService userService = new UserService();
+    private TestService testService = new TestServiceImpl();
+    private UserService userService = new UserServiceImpl();
 
     private ServiceFactory() {
     }

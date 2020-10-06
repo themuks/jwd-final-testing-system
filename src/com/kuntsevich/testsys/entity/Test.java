@@ -10,6 +10,13 @@ public class Test {
     public Test() {
     }
 
+    public Test(String title, Subject subject, String description, Status status) {
+        this.title = title;
+        this.subject = subject;
+        this.description = description;
+        this.status = status;
+    }
+
     public Test(long testId, String title, Subject subject, String description, Status status) {
         this.testId = testId;
         this.title = title;

@@ -4,6 +4,7 @@ import com.kuntsevich.testsys.controller.command.Command;
 import com.kuntsevich.testsys.exception.ServiceException;
 import com.kuntsevich.testsys.model.service.UserService;
 import com.kuntsevich.testsys.model.service.factory.ServiceFactory;
+import com.kuntsevich.testsys.resourse.MessageManager;
 import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -12,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class RegisterCommand implements Command {
-    private static final Logger log = Logger.getLogger(RegisterCommand.class);
+public class RegistrationCommand implements Command {
+    private static final Logger log = Logger.getLogger(RegistrationCommand.class);
     private static final String JSP_SUCCESS_PAGE = "/WEB-INF/jsp/login.jsp";
     private static final String JSP_ERROR_PAGE = "/WEB-INF/jsp/error.jsp";
     private static final String PARAM_NAME_USERNAME = "username";
@@ -21,26 +22,28 @@ public class RegisterCommand implements Command {
     private static final String PARAM_NAME_SURNAME = "surname";
     private static final String PARAM_NAME_EMAIL = "email";
     private static final String PARAM_NAME_PASSWORD = "password";
+    private static final String MESSAGE_REGISTRATION_ERROR = "message.registrationerror";
+    private static final String ERROR_MESSAGE = "errorMessage";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String page = JSP_ERROR_PAGE;
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         UserService userService = serviceFactory.getUserService();
+        System.out.println(request.getParameter(PARAM_NAME_NAME));
         String username = request.getParameter(PARAM_NAME_USERNAME);
         String name = request.getParameter(PARAM_NAME_NAME);
         String surname = request.getParameter(PARAM_NAME_SURNAME);
         String email = request.getParameter(PARAM_NAME_EMAIL);
         String password = request.getParameter(PARAM_NAME_PASSWORD);
-        System.out.println(username + name + surname + email + password);
         try {
             if (userService.register(username, name, surname, email, password)) {
-                // TODO: 05.10.2020 Success message
                 page = JSP_SUCCESS_PAGE;
             } else {
-                // TODO: 05.10.2020 Error message
+                request.setAttribute(ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_REGISTRATION_ERROR));
             }
         } catch (ServiceException e) {
+            request.setAttribute(ERROR_MESSAGE, e.getMessage());
             log.error("Register error", e);
         }
         RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(page);

@@ -3,7 +3,8 @@ package com.kuntsevich.testsys.model.dao.impl;
 import com.kuntsevich.testsys.connection.DatabaseConnectionPool;
 import com.kuntsevich.testsys.entity.Subject;
 import com.kuntsevich.testsys.exception.DaoException;
-import com.kuntsevich.testsys.model.dao.Dao;
+import com.kuntsevich.testsys.exception.DatabasePoolException;
+import com.kuntsevich.testsys.model.dao.SubjectDao;
 import com.kuntsevich.testsys.model.dao.util.DaoUtil;
 
 import java.sql.Connection;
@@ -12,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class SqlSubjectDaoImpl implements Dao<Subject> {
+public class SqlSubjectDaoImpl implements SubjectDao {
     private static final String SUBJECT_ID = "subject_id";
     private static final String SELECT_SUBJECT_BY_CRITERIA_QUERY = "SELECT subject_id, name, description FROM testing_system.subjects WHERE ";
 
@@ -21,7 +22,7 @@ public class SqlSubjectDaoImpl implements Dao<Subject> {
         Optional<Subject> optionalTest = Optional.empty();
         Map<String, String> criteria = new HashMap<>();
         criteria.put(SUBJECT_ID, Long.toString(id));
-        List<Subject> tests = find(criteria);
+        List<Subject> tests = findByCriteria(criteria);
         if (tests.size() > 0) {
             optionalTest = Optional.of(tests.get(0));
         }
@@ -29,12 +30,18 @@ public class SqlSubjectDaoImpl implements Dao<Subject> {
     }
 
     @Override
-    public List<Subject> find(Map<String, String> criteria) throws DaoException {
+    public List<Subject> findByCriteria(Map<String, String> criteria) throws DaoException {
         List<Subject> subjects = new ArrayList<>();
-        Connection con = null;
+        Connection con;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        con = DatabaseConnectionPool.getInstance().getConnection();
+        try {
+            con = DatabaseConnectionPool.getInstance().getConnection();
+        } catch (DatabasePoolException e) {
+            throw new DaoException("Can't get connection from database connection pool", e);
+        } catch (SQLException e) {
+            throw new DaoException("Can't get instance of database connection pool to get connection", e);
+        }
         if (con == null) {
             throw new DaoException("Connection is null");
         }
@@ -52,42 +59,8 @@ public class SqlSubjectDaoImpl implements Dao<Subject> {
         } catch (SQLException e) {
             throw new DaoException("Error executing query", e);
         } finally {
-            DatabaseConnectionPool.getInstance().releaseConnection(con);
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    // TODO : Write logs or throw new exception
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    // TODO : Write logs or throw new exception
-                }
-            }
+            DaoUtil.releaseResources(con, ps, rs);
         }
         return subjects;
-    }
-
-    @Override
-    public List<Subject> findAll() throws DaoException {
-        return null;
-    }
-
-    @Override
-    public long add(Subject subject) throws DaoException {
-        return 0;
-    }
-
-    @Override
-    public void update(Subject subject, Map<String, String> params) throws DaoException {
-
-    }
-
-    @Override
-    public void delete(Subject subject) throws DaoException {
-
     }
 }

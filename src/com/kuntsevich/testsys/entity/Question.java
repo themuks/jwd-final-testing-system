@@ -1,7 +1,5 @@
 package com.kuntsevich.testsys.entity;
 
-import com.google.common.base.Objects;
-
 import java.util.List;
 
 public class Question {
@@ -12,6 +10,13 @@ public class Question {
     private int points;
 
     public Question() {
+    }
+
+    public Question(String text, Subject subject, List<Answer> answers, int points) {
+        this.text = text;
+        this.subject = subject;
+        this.answers = answers;
+        this.points = points;
     }
 
     public Question(long questionId, String text, Subject subject, List<Answer> answers, int points) {

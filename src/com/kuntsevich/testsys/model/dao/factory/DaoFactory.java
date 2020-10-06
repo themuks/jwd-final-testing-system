@@ -1,16 +1,15 @@
 package com.kuntsevich.testsys.model.dao.factory;
 
-import com.kuntsevich.testsys.entity.*;
-import com.kuntsevich.testsys.model.dao.Dao;
+import com.kuntsevich.testsys.model.dao.*;
 import com.kuntsevich.testsys.model.dao.impl.*;
 
 public class DaoFactory {
     private static volatile DaoFactory instance;
-    private Dao<Test> testDao = new SqlTestDaoImpl();
-    private Dao<Subject> subjectDao = new SqlSubjectDaoImpl();
-    private Dao<Status> statusDao = new SqlStatusDaoImpl();
-    private Dao<Role> roleDao = new SqlRoleDaoImpl();
-    private Dao<User> userDao = new SqlUserDaoImpl();
+    private TestDao testDao = new SqlTestDaoImpl();
+    private SubjectDao subjectDao = new SqlSubjectDaoImpl();
+    private StatusDao statusDao = new SqlStatusDaoImpl();
+    private RoleDao roleDao = new SqlRoleDaoImpl();
+    private UserDao userDao = new SqlUserDaoImpl();
 
     private DaoFactory() {
     }
@@ -26,23 +25,23 @@ public class DaoFactory {
         return instance;
     }
 
-    public Dao<Test> getTestDao() {
+    public TestDao getTestDao() {
         return testDao;
     }
 
-    public Dao<Subject> getSubjectDao() {
+    public SubjectDao getSubjectDao() {
         return subjectDao;
     }
 
-    public Dao<Status> getStatusDao() {
+    public StatusDao getStatusDao() {
         return statusDao;
     }
 
-    public Dao<Role> getRoleDao() {
+    public RoleDao getRoleDao() {
         return roleDao;
     }
 
-    public Dao<User> getUserDao() {
+    public UserDao getUserDao() {
         return userDao;
     }
 }
