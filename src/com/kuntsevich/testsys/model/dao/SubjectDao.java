@@ -11,4 +11,6 @@ public interface SubjectDao {
     Optional<Subject> findById(long id) throws DaoException;
 
     List<Subject> findByCriteria(Map<String, String> criteria) throws DaoException;
+
+    List<Subject> findAll() throws DaoException;
 }

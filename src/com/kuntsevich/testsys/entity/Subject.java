@@ -1,6 +1,8 @@
 package com.kuntsevich.testsys.entity;
 
-public class Subject {
+import java.io.Serializable;
+
+public class Subject implements Serializable {
     private long subjectId;
     private String name;
     private String description;

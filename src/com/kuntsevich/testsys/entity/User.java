@@ -1,6 +1,8 @@
 package com.kuntsevich.testsys.entity;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private long userId;
     private String username;
     private String name;

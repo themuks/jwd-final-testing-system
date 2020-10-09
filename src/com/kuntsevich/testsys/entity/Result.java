@@ -1,6 +1,8 @@
 package com.kuntsevich.testsys.entity;
 
-public class Result {
+import java.io.Serializable;
+
+public class Result implements Serializable {
     private long resultId;
     private User user;
     private Test test;

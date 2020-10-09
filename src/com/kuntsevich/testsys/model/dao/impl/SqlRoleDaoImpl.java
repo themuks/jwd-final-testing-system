@@ -1,11 +1,11 @@
 package com.kuntsevich.testsys.model.dao.impl;
 
-import com.kuntsevich.testsys.connection.DatabaseConnectionPool;
 import com.kuntsevich.testsys.entity.Role;
 import com.kuntsevich.testsys.exception.DaoException;
 import com.kuntsevich.testsys.exception.DatabasePoolException;
 import com.kuntsevich.testsys.model.dao.RoleDao;
 import com.kuntsevich.testsys.model.dao.util.DaoUtil;
+import com.kuntsevich.testsys.pool.DatabaseConnectionPool;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

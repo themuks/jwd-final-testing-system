@@ -1,6 +1,8 @@
 package com.kuntsevich.testsys.entity;
 
-public class Answer {
+import java.io.Serializable;
+
+public class Answer implements Serializable {
     private long answerId;
     private String text;
     private boolean isCorrect;

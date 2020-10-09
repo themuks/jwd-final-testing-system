@@ -1,8 +1,9 @@
 package com.kuntsevich.testsys.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Question {
+public class Question implements Serializable {
     private long questionId;
     private String text;
     private Subject subject;

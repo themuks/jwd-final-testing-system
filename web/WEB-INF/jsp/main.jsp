@@ -12,50 +12,49 @@
 <body class="d-flex flex-column h-100">
 <header>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap">
-        <a class="navbar-brand" href="#">Система тестирования</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="<c:url value="/WEB-INF/jsp/main.jsp"/>">Главная<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">О разработчике</a>
-                </li>
-            </ul>
-        </div>
-
-    </nav>
-</header>
-<main role="main" class="flex-shrink-0">
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-lg-3 d-block ml-sm-auto sidebar collapse">
-                <ul class="nav flex-column bg-light">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="<c:url value="/controller?command=test_find_all"/>">Тесты</a>
+        <div class="container">
+            <a class="navbar-brand" href="#">Система тестирования</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<c:url value="/WEB-INF/jsp/main.jsp"/>">Главная<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Список предметов</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Результаты</a>
+                        <a class="nav-link" href="#">О разработчике</a>
                     </li>
                 </ul>
-            </nav>
-            <div class="col-lg-9">
-                <c:forEach var="test" items="${tests}">
-                    <div class="card my-4">
-                        <div class="card-body">
-                            <h5 class="card-title"><c:out value="${test.title}"/></h5>
-                            <p class="card-text"><c:out value="${test.description}"/></p>
-                            <a href="#" class="btn btn-primary">Пройти тест</a>
-                        </div>
-                    </div>
-                </c:forEach>
             </div>
         </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="row">
+        <nav class="col-lg-3 d-block ml-sm-auto sidebar collapse">
+            <ul class="nav flex-column bg-light">
+                <li class="nav-item">
+                    <a class="nav-link active" href="<c:url value="/controller?command=test-find-all"/>">Тесты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Список предметов</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Результаты</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="col-lg-9">
+            <c:forEach var="test" items="${tests}">
+                <div class="card my-4">
+                    <div class="card-body">
+                        <h5 class="card-title"><c:out value="${test.title}"/></h5>
+                        <p class="card-text"><c:out value="${test.description}"/></p>
+                        <a href="${pageContext.request.contextPath}/controller?command=pass-test&id=<c:out value="${test.testId}"/>" class="btn btn-primary">Пройти тест</a>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
     </div>
-</main>
+</div>
 <footer class="footer mt-auto py-3">
     <div class="container text-center">
         <span class="text-muted">© 2020 Testing System. All Rights Reserved.</span>

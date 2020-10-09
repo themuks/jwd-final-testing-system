@@ -1,6 +1,8 @@
 package com.kuntsevich.testsys.entity;
 
-public class Status {
+import java.io.Serializable;
+
+public class Status implements Serializable {
     private long statusId;
     private String name;
 

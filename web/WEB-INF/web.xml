@@ -4,9 +4,35 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+    <display-name>TestingSystem</display-name>
+
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+
+    <listener>
+        <listener-class>com.kuntsevich.testsys.listener.DatabaseConnectionPoolListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>CharsetFilter</filter-name>
+        <filter-class>com.kuntsevich.testsys.filter.CharsetFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CharsetFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>PermissionFilter</filter-name>
+        <filter-class>com.kuntsevich.testsys.filter.PermissionFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>PermissionFilter</filter-name>
+        <url-pattern>/</url-pattern>
+    </filter-mapping>
 
     <servlet>
         <servlet-name>TestingSystemServlet</servlet-name>
@@ -17,16 +43,6 @@
         <servlet-name>TestingSystemServlet</servlet-name>
         <url-pattern>/controller</url-pattern>
     </servlet-mapping>
-
-    <filter>
-        <filter-name>CharsetFilter</filter-name>
-        <filter-class>com.kuntsevich.testsys.filter.CharsetFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>CharsetFilter</filter-name>
-        <url-pattern>/</url-pattern>
-    </filter-mapping>
 
     <session-config>
         <session-timeout>30</session-timeout>

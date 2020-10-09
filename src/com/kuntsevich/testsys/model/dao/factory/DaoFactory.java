@@ -5,11 +5,13 @@ import com.kuntsevich.testsys.model.dao.impl.*;
 
 public class DaoFactory {
     private static volatile DaoFactory instance;
-    private TestDao testDao = new SqlTestDaoImpl();
-    private SubjectDao subjectDao = new SqlSubjectDaoImpl();
-    private StatusDao statusDao = new SqlStatusDaoImpl();
-    private RoleDao roleDao = new SqlRoleDaoImpl();
-    private UserDao userDao = new SqlUserDaoImpl();
+    private final TestDao testDao = new SqlTestDaoImpl();
+    private final SubjectDao subjectDao = new SqlSubjectDaoImpl();
+    private final StatusDao statusDao = new SqlStatusDaoImpl();
+    private final RoleDao roleDao = new SqlRoleDaoImpl();
+    private final UserDao userDao = new SqlUserDaoImpl();
+    private final QuestionDao questionDao = new SqlQuestionDaoImpl();
+    private final AnswerDao answerDao = new SqlAnswerDaoImpl();
 
     private DaoFactory() {
     }
@@ -43,5 +45,13 @@ public class DaoFactory {
 
     public UserDao getUserDao() {
         return userDao;
+    }
+
+    public QuestionDao getQuestionDao() {
+        return questionDao;
+    }
+
+    public AnswerDao getAnswerDao() {
+        return answerDao;
     }
 }

@@ -1,4 +1,4 @@
-package com.kuntsevich.testsys.connection;
+package com.kuntsevich.testsys.pool;
 
 import com.kuntsevich.testsys.exception.DatabasePoolException;
 import com.mysql.jdbc.Driver;

@@ -1,27 +1,33 @@
 package com.kuntsevich.testsys.entity;
 
-public class Test {
+import java.io.Serializable;
+import java.util.List;
+
+public class Test implements Serializable {
     private long testId;
     private String title;
     private Subject subject;
     private String description;
+    private List<Question> questions;
     private Status status;
 
     public Test() {
     }
 
-    public Test(String title, Subject subject, String description, Status status) {
+    public Test(String title, Subject subject, String description, List<Question> questions, Status status) {
         this.title = title;
         this.subject = subject;
         this.description = description;
+        this.questions = questions;
         this.status = status;
     }
 
-    public Test(long testId, String title, Subject subject, String description, Status status) {
+    public Test(long testId, String title, Subject subject, String description, List<Question> questions, Status status) {
         this.testId = testId;
         this.title = title;
         this.subject = subject;
         this.description = description;
+        this.questions = questions;
         this.status = status;
     }
 
@@ -57,6 +63,14 @@ public class Test {
         this.description = description;
     }
 
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
     public Status getStatus() {
         return status;
     }
@@ -76,7 +90,8 @@ public class Test {
         if (title != null ? !title.equals(test.title) : test.title != null) return false;
         if (subject != null ? !subject.equals(test.subject) : test.subject != null) return false;
         if (description != null ? !description.equals(test.description) : test.description != null) return false;
-        return status == test.status;
+        if (questions != null ? !questions.equals(test.questions) : test.questions != null) return false;
+        return status != null ? status.equals(test.status) : test.status == null;
     }
 
     @Override
@@ -85,6 +100,7 @@ public class Test {
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (subject != null ? subject.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (questions != null ? questions.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }
@@ -96,6 +112,7 @@ public class Test {
         sb.append(", title='").append(title).append('\'');
         sb.append(", subject=").append(subject);
         sb.append(", description='").append(description).append('\'');
+        sb.append(", questions=").append(questions);
         sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();

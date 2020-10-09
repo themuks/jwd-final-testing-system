@@ -12,6 +12,8 @@ public interface UserDao {
 
     List<User> findByCriteria(Map<String, String> criteria) throws DaoException;
 
+    List<User> findAll() throws DaoException;
+
     long add(User user) throws DaoException;
 
     void update(User user) throws DaoException;
