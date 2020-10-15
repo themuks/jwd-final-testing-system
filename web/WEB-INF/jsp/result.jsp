@@ -1,13 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:useBean id="test" class="com.kuntsevich.testsys.entity.Test" scope="request"/>
-<jsp:useBean id="question" class="com.kuntsevich.testsys.entity.Question" scope="request"/>
-<jsp:useBean id="answer" class="com.kuntsevich.testsys.entity.Answer" scope="request"/>
-<c:if test="${not empty errorMessage}">
-    ${errorMessage}
-</c:if>
 <div class="border rounded p-3 my-3">
-    <c:if test="${not empty test}">
+    <c:if test="${not empty result}">
+        <p class="h3 text-center">Ваш результат</p>
+        <p class="h3 text-center">Ваш результат</p>
         <p class="h3 text-center">Тест</p>
         <p class="h4">Название теста: <c:out value="${test.title}"/></p>
         <p class="h4">Предмет: <c:out value="${test.subject.name}"/></p>

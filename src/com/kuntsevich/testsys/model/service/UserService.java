@@ -1,7 +1,7 @@
 package com.kuntsevich.testsys.model.service;
 
 import com.kuntsevich.testsys.entity.User;
-import com.kuntsevich.testsys.exception.ServiceException;
+import com.kuntsevich.testsys.model.service.exception.ServiceException;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package com.kuntsevich.testsys.validator;
+package com.kuntsevich.testsys.model.service.validator;
 
 import java.util.regex.Pattern;
 

@@ -1,4 +1,4 @@
-package com.kuntsevich.testsys.filter;
+package com.kuntsevich.testsys.controller.filter;
 
 import javax.servlet.*;
 import java.io.IOException;

@@ -1,6 +1,6 @@
-package com.kuntsevich.testsys.pool;
+package com.kuntsevich.testsys.model.dao.pool;
 
-import com.kuntsevich.testsys.exception.DatabasePoolException;
+import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.mysql.jdbc.Driver;
 import org.apache.log4j.Logger;
 
@@ -21,20 +21,27 @@ public class DatabaseConnectionPool {
     private static final String AUTO_RECONNECT = "autoReconnect";
     private static final String CHARACTER_ENCODING = "characterEncoding";
     private static final String USE_UNICODE = "useUnicode";
-    private final static int DEFAULT_POOL_SIZE = 32;
+    private static final int DEFAULT_POOL_SIZE = 32;
+    private static final String DATABASE_BUNDLE_NAME = "database";
+    private static final String DB_URL = "db.url";
+    private static final String DB_USER = "db.user";
+    private static final String DB_PASSWORD = "db.password";
+    private static final String DB_AUTO_RECONNECT = "db.autoReconnect";
+    private static final String DB_ENCODING = "db.encoding";
+    private static final String DB_USE_UNICODE = "db.useUnicode";
     private static volatile DatabaseConnectionPool instance;
-    private BlockingQueue<Connection> freeConnections;
-    private Queue<Connection> givenAwayConnections;
+    private final BlockingQueue<Connection> freeConnections;
+    private final Queue<Connection> givenAwayConnections;
 
     private DatabaseConnectionPool() throws SQLException {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(DATABASE_BUNDLE_NAME);
         Properties properties = new Properties();
-        String url = resourceBundle.getString("db.url");
-        String user = resourceBundle.getString("db.user");
-        String password = resourceBundle.getString("db.password");
-        String autoReconnect = resourceBundle.getString("db.autoReconnect");
-        String encoding = resourceBundle.getString("db.encoding");
-        String useUnicode = resourceBundle.getString("db.useUnicode");
+        String url = resourceBundle.getString(DB_URL);
+        String user = resourceBundle.getString(DB_USER);
+        String password = resourceBundle.getString(DB_PASSWORD);
+        String autoReconnect = resourceBundle.getString(DB_AUTO_RECONNECT);
+        String encoding = resourceBundle.getString(DB_ENCODING);
+        String useUnicode = resourceBundle.getString(DB_USE_UNICODE);
         properties.put(USER, user);
         properties.put(PASSWORD, password);
         properties.put(AUTO_RECONNECT, autoReconnect);

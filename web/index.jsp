@@ -1,3 +1,3 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<c:redirect url="controller?command=go-to-welcome-page"/>
+<c:redirect url="controller?command=show-welcome-page"/>

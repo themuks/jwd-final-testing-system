@@ -14,6 +14,7 @@ public class ChangeLanguageCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // todo: 09.10.2020 create this method
         /*HttpSession session = request.getSession();
         Object language = session.getAttribute(LANGUAGE_SESSION_ATTRIBUTE);
         if (language != null) {

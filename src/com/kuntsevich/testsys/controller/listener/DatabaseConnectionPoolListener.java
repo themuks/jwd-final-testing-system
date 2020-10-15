@@ -1,6 +1,6 @@
-package com.kuntsevich.testsys.listener;
+package com.kuntsevich.testsys.controller.listener;
 
-import com.kuntsevich.testsys.pool.DatabaseConnectionPool;
+import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContextEvent;

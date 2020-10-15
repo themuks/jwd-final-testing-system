@@ -1,11 +1,11 @@
 package com.kuntsevich.testsys.model.dao.impl;
 
 import com.kuntsevich.testsys.entity.Subject;
-import com.kuntsevich.testsys.exception.DaoException;
-import com.kuntsevich.testsys.exception.DatabasePoolException;
+import com.kuntsevich.testsys.model.dao.exception.DaoException;
+import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.kuntsevich.testsys.model.dao.SubjectDao;
 import com.kuntsevich.testsys.model.dao.util.DaoUtil;
-import com.kuntsevich.testsys.pool.DatabaseConnectionPool;
+import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,14 +20,14 @@ public class SqlSubjectDaoImpl implements SubjectDao {
 
     @Override
     public Optional<Subject> findById(long id) throws DaoException {
-        Optional<Subject> optionalTest = Optional.empty();
+        Optional<Subject> optionalSubject = Optional.empty();
         Map<String, String> criteria = new HashMap<>();
         criteria.put(SUBJECT_ID, Long.toString(id));
-        List<Subject> tests = findByCriteria(criteria);
-        if (tests.size() > 0) {
-            optionalTest = Optional.of(tests.get(0));
+        List<Subject> subjects = findByCriteria(criteria);
+        if (subjects.size() > 0) {
+            optionalSubject = Optional.of(subjects.get(0));
         }
-        return optionalTest;
+        return optionalSubject;
     }
 
     @Override

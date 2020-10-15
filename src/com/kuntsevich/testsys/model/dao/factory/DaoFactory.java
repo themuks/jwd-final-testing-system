@@ -12,6 +12,7 @@ public class DaoFactory {
     private final UserDao userDao = new SqlUserDaoImpl();
     private final QuestionDao questionDao = new SqlQuestionDaoImpl();
     private final AnswerDao answerDao = new SqlAnswerDaoImpl();
+    private final ResultDao resultDao = new SqlResultDaoImpl();
 
     private DaoFactory() {
     }
@@ -53,5 +54,9 @@ public class DaoFactory {
 
     public AnswerDao getAnswerDao() {
         return answerDao;
+    }
+
+    public ResultDao getResultDao() {
+        return resultDao;
     }
 }

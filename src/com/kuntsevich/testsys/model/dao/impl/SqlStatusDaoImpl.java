@@ -1,11 +1,11 @@
 package com.kuntsevich.testsys.model.dao.impl;
 
 import com.kuntsevich.testsys.entity.Status;
-import com.kuntsevich.testsys.exception.DaoException;
-import com.kuntsevich.testsys.exception.DatabasePoolException;
+import com.kuntsevich.testsys.model.dao.exception.DaoException;
+import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.kuntsevich.testsys.model.dao.StatusDao;
 import com.kuntsevich.testsys.model.dao.util.DaoUtil;
-import com.kuntsevich.testsys.pool.DatabaseConnectionPool;
+import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,14 +19,14 @@ public class SqlStatusDaoImpl implements StatusDao {
 
     @Override
     public Optional<Status> findById(long id) throws DaoException {
-        Optional<Status> optionalTest = Optional.empty();
+        Optional<Status> optionalStatus = Optional.empty();
         Map<String, String> criteria = new HashMap<>();
         criteria.put(STATUS_ID, Long.toString(id));
-        List<Status> tests = findByCriteria(criteria);
-        if (tests.size() > 0) {
-            optionalTest = Optional.of(tests.get(0));
+        List<Status> statuses = findByCriteria(criteria);
+        if (statuses.size() > 0) {
+            optionalStatus = Optional.of(statuses.get(0));
         }
-        return optionalTest;
+        return optionalStatus;
     }
 
     @Override

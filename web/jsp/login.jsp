@@ -13,8 +13,7 @@
     <title><fmt:message key="login.title"/></title>
 </head>
 <body class="text-center">
-<form class="form-signin" name="LoginForm" method="POST" action="${pageContext.request.contextPath}/controller"
-      accept-charset="utf-8">
+<form class="form-signin" name="LoginForm" method="POST" action="${pageContext.request.contextPath}/controller">
     <input type="hidden" name="command" value="login"/>
     <h1 class="h3 mb-3 font-weight-normal">Вход</h1>
 
@@ -34,8 +33,7 @@
             <input type="checkbox" value="remember-me"> <fmt:message key="login.remember_me"/>
         </label>
     </div>
-    <button class="btn btn-lg btn-primary btn-block mb-3" type="submit"><fmt:message
-            key="login.submit_button"/></button>
+    <button class="btn btn-lg btn-primary btn-block mb-3" type="submit"><fmt:message key="login.submit_button"/></button>
     <div>
         <fmt:message key="login.question"/>
         <a href="${pageContext.request.contextPath}/jsp/registration.jsp"><fmt:message

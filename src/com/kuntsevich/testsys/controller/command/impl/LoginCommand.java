@@ -2,16 +2,14 @@ package com.kuntsevich.testsys.controller.command.impl;
 
 import com.kuntsevich.testsys.controller.command.Command;
 import com.kuntsevich.testsys.entity.User;
-import com.kuntsevich.testsys.exception.ServiceException;
+import com.kuntsevich.testsys.model.service.exception.ServiceException;
 import com.kuntsevich.testsys.model.service.UserService;
 import com.kuntsevich.testsys.model.service.factory.ServiceFactory;
-import com.kuntsevich.testsys.resourse.ConfigurationManager;
-import com.kuntsevich.testsys.resourse.MessageManager;
+import com.kuntsevich.testsys.controller.manager.ConfigurationManager;
+import com.kuntsevich.testsys.controller.manager.MessageManager;
 import org.apache.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,8 +23,8 @@ public class LoginCommand implements Command {
     private static final String USER_HASH = "user_hash";
     private static final String ERROR_MESSAGE = "errorMessage";
     private static final String MESSAGE_LOGIN_ERROR = "message.login.error";
-    private static final String LOGIN_PAGE_SUCCESS = "path.login.page.success";
-    private static final String LOGIN_PAGE_ERROR = "path.login.page.error";
+    private static final String LOGIN_PAGE_SUCCESS = "login.success";
+    private static final String LOGIN_PAGE_ERROR = "login.error";
     private static final String LOGIN_SERVER_ERROR = "message.login.server.error";
 
     @Override
@@ -50,7 +48,7 @@ public class LoginCommand implements Command {
             request.setAttribute(ERROR_MESSAGE, MessageManager.getProperty(LOGIN_SERVER_ERROR));
             log.error("Login check error", e);
         }
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(page);
-        dispatcher.forward(request, response);
+        String path = request.getContextPath() + ConfigurationManager.getProperty(page);
+        response.sendRedirect(path);
     }
 }

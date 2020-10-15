@@ -1,4 +1,4 @@
-package com.kuntsevich.testsys.resourse;
+package com.kuntsevich.testsys.controller.manager;
 
 import java.util.ResourceBundle;
 

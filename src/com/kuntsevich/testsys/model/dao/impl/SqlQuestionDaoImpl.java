@@ -2,14 +2,13 @@ package com.kuntsevich.testsys.model.dao.impl;
 
 import com.kuntsevich.testsys.entity.Answer;
 import com.kuntsevich.testsys.entity.Question;
-import com.kuntsevich.testsys.entity.Status;
 import com.kuntsevich.testsys.entity.Subject;
-import com.kuntsevich.testsys.exception.DaoException;
-import com.kuntsevich.testsys.exception.DatabasePoolException;
+import com.kuntsevich.testsys.model.dao.exception.DaoException;
+import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.kuntsevich.testsys.model.dao.QuestionDao;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
 import com.kuntsevich.testsys.model.dao.util.DaoUtil;
-import com.kuntsevich.testsys.pool.DatabaseConnectionPool;
+import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,10 +19,18 @@ import java.util.*;
 public class SqlQuestionDaoImpl implements QuestionDao {
     private static final String FIND_QUESTION_BY_CRITERIA_QUERY = "SELECT question_id, text, subject, points, test FROM testing_system.questions WHERE ";
     private static final String CRITERIA_ANSWER_QUESTION = "question";
+    private static final String QUESTION_ID = "question_id";
 
     @Override
     public Optional<Question> findById(long id) throws DaoException {
-        return Optional.empty();
+        Optional<Question> optionalQuestion = Optional.empty();
+        Map<String, String> criteria = new HashMap<>();
+        criteria.put(QUESTION_ID, Long.toString(id));
+        List<Question> questions = findByCriteria(criteria);
+        if (questions.size() > 0) {
+            optionalQuestion = Optional.of(questions.get(0));
+        }
+        return optionalQuestion;
     }
 
     @Override

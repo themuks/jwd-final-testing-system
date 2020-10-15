@@ -1,4 +1,4 @@
-package com.kuntsevich.testsys.exception;
+package com.kuntsevich.testsys.model.service.exception;
 
 public class ServiceException extends Exception {
     public ServiceException() {

@@ -1,4 +1,4 @@
-package com.kuntsevich.testsys.exception;
+package com.kuntsevich.testsys.model.dao.pool.exception;
 
 public class DatabasePoolException extends Exception {
     public DatabasePoolException() {

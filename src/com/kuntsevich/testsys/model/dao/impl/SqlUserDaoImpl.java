@@ -3,12 +3,12 @@ package com.kuntsevich.testsys.model.dao.impl;
 import com.kuntsevich.testsys.entity.Role;
 import com.kuntsevich.testsys.entity.Status;
 import com.kuntsevich.testsys.entity.User;
-import com.kuntsevich.testsys.exception.DaoException;
-import com.kuntsevich.testsys.exception.DatabasePoolException;
+import com.kuntsevich.testsys.model.dao.exception.DaoException;
+import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.kuntsevich.testsys.model.dao.UserDao;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
 import com.kuntsevich.testsys.model.dao.util.DaoUtil;
-import com.kuntsevich.testsys.pool.DatabaseConnectionPool;
+import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
 
 import java.sql.*;
 import java.util.*;
@@ -22,14 +22,14 @@ public class SqlUserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findById(long id) throws DaoException {
-        Optional<User> optionalTest = Optional.empty();
+        Optional<User> optionalUser = Optional.empty();
         Map<String, String> criteria = new HashMap<>();
         criteria.put(USER_ID, Long.toString(id));
-        List<User> tests = findByCriteria(criteria);
-        if (tests.size() > 0) {
-            optionalTest = Optional.of(tests.get(0));
+        List<User> users = findByCriteria(criteria);
+        if (users.size() > 0) {
+            optionalUser = Optional.of(users.get(0));
         }
-        return optionalTest;
+        return optionalUser;
     }
 
     @Override

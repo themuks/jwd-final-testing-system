@@ -3,14 +3,14 @@ package com.kuntsevich.testsys.model.service.impl;
 import com.kuntsevich.testsys.entity.Role;
 import com.kuntsevich.testsys.entity.Status;
 import com.kuntsevich.testsys.entity.User;
-import com.kuntsevich.testsys.exception.DaoException;
-import com.kuntsevich.testsys.exception.ServiceException;
+import com.kuntsevich.testsys.model.dao.exception.DaoException;
+import com.kuntsevich.testsys.model.service.exception.ServiceException;
 import com.kuntsevich.testsys.model.dao.RoleDao;
 import com.kuntsevich.testsys.model.dao.StatusDao;
 import com.kuntsevich.testsys.model.dao.UserDao;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
 import com.kuntsevich.testsys.model.service.UserService;
-import com.kuntsevich.testsys.validator.UserValidator;
+import com.kuntsevich.testsys.model.service.validator.UserValidator;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

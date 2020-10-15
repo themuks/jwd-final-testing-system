@@ -1,6 +1,6 @@
 package com.kuntsevich.testsys.model.dao.util;
 
-import com.kuntsevich.testsys.pool.DatabaseConnectionPool;
+import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;

@@ -1,16 +1,17 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 06.10.2020
-  Time: 22:48
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<c:if test="${not empty errorMessage}">
+    <div class="alert alert-danger" role="alert">${errorMessage}</div>
+</c:if>
+<c:if test="${not empty tests}">
+    <c:forEach var="test" items="${tests}">
+        <div class="card my-4">
+            <div class="card-body">
+                <h5 class="card-title"><c:out value="${test.title}"/></h5>
+                <p class="card-text"><c:out value="${test.description}"/></p>
+                <a href="${pageContext.request.contextPath}/controller?command=show-test&id=<c:out value="${test.testId}"/>"
+                   class="btn btn-primary">Пройти тест</a>
+            </div>
+        </div>
+    </c:forEach>
+</c:if>

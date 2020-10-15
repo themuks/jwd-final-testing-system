@@ -2,11 +2,11 @@ package com.kuntsevich.testsys.controller.command.impl;
 
 import com.kuntsevich.testsys.controller.command.Command;
 import com.kuntsevich.testsys.entity.Test;
-import com.kuntsevich.testsys.exception.ServiceException;
+import com.kuntsevich.testsys.model.service.exception.ServiceException;
 import com.kuntsevich.testsys.model.service.TestService;
 import com.kuntsevich.testsys.model.service.factory.ServiceFactory;
-import com.kuntsevich.testsys.resourse.ConfigurationManager;
-import com.kuntsevich.testsys.resourse.MessageManager;
+import com.kuntsevich.testsys.controller.manager.ConfigurationManager;
+import com.kuntsevich.testsys.controller.manager.MessageManager;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,22 +15,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class PassTestCommand implements Command {
+public class ShowTestCommand implements Command {
     private static final String ERROR_MESSAGE = "errorMessage";
-    private static final String TEST_PAGE_SUCCESS = "path.test.page.success";
+    private static final String SUCCESS_PAGE = "show_test.success";
     private static final String ID_PARAM = "id";
-    private static final String TEST_PAGE_ERROR = "path.test.page.error";
+    private static final String ERROR_PAGE = "show_test.error";
     private static final String TEST_NOTFOUND_ERROR = "message.test.notfound.error";
     private static final String TEST_ATTRIBUTE = "test";
+    private static final String TEMPLATE_PATH = "templatePath";
+    private static final String SHOW_TEST_TEMPLATE_PATH = "show_test.template_path";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String page = ConfigurationManager.getProperty(TEST_PAGE_SUCCESS);
+        String page = ConfigurationManager.getProperty(SUCCESS_PAGE);
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         TestService testService = serviceFactory.getTestService();
-        long testId;
         try {
-            testId = Long.parseLong(request.getParameter(ID_PARAM));
+            long testId = Long.parseLong(request.getParameter(ID_PARAM));
             try {
                 List<Test> tests = testService.findAll();
                 Test currentTest = null;
@@ -49,7 +50,8 @@ public class PassTestCommand implements Command {
         } catch (NumberFormatException e) {
             request.setAttribute(ERROR_MESSAGE, MessageManager.getProperty(TEST_NOTFOUND_ERROR));
         }
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(page);
+        request.setAttribute(TEMPLATE_PATH, ConfigurationManager.getProperty(SHOW_TEST_TEMPLATE_PATH));
+        RequestDispatcher dispatcher = request.getRequestDispatcher(page);
         dispatcher.forward(request, response);
     }
 }
