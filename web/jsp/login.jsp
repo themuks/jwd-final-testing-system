@@ -22,22 +22,17 @@
     </c:if>
 
     <label for="inputEmail" class="sr-only"><fmt:message key="login.email"/></label>
-    <input type="email" name="email" id="inputEmail" class="form-control" placeholder="<fmt:message key="login.email"/>"
-           required
-           autofocus>
+    <input type="email" name="email" id="inputEmail" class="form-control" placeholder="<fmt:message key="login.email"/>" required autofocus>
     <label for="inputPassword" class="sr-only"><fmt:message key="login.password"/></label>
-    <input type="password" name="password" id="inputPassword" class="form-control"
-           placeholder="<fmt:message key="login.password"/>" required>
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" value="remember-me"> <fmt:message key="login.remember_me"/>
-        </label>
+    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<fmt:message key="login.password"/>" required>
+    <div class="custom-control custom-checkbox mb-3">
+        <input type="checkbox" class="custom-control-input" id="customCheck1" value="remember-me">
+        <label class="custom-control-label" for="customCheck1"> <fmt:message key="login.remember_me"/></label>
     </div>
     <button class="btn btn-lg btn-primary btn-block mb-3" type="submit"><fmt:message key="login.submit_button"/></button>
     <div>
         <fmt:message key="login.question"/>
-        <a href="${pageContext.request.contextPath}/jsp/registration.jsp"><fmt:message
-                key="login.question_suggestion"/></a>
+        <a href="${pageContext.request.contextPath}/jsp/registration.jsp"><fmt:message key="login.question_suggestion"/></a>
     </div>
 </form>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

@@ -1,5 +1,6 @@
 package com.kuntsevich.testsys.model.dao;
 
+import com.kuntsevich.testsys.entity.Credential;
 import com.kuntsevich.testsys.entity.User;
 import com.kuntsevich.testsys.model.dao.exception.DaoException;
 
@@ -19,4 +20,10 @@ public interface UserDao {
     void update(User user) throws DaoException;
 
     void delete(User user) throws DaoException;
+
+    Optional<User> findByEmailHash(String emailHash) throws DaoException;
+
+    Optional<User> findByEmailHashAndPasswordHash(String emailHash, String passwordHash) throws DaoException;
+
+    boolean isUserIdAndUserHashExist(Credential credential) throws DaoException;
 }

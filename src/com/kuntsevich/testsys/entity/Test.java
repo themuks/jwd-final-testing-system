@@ -9,29 +9,29 @@ public class Test implements Serializable {
     private Subject subject;
     private String description;
     private List<Question> questions;
-    private int requiredAnswerCount;
     private Status status;
+    private int pointsToPass;
 
     public Test() {
     }
 
-    public Test(String title, Subject subject, String description, List<Question> questions, int requiredAnswerCount, Status status) {
+    public Test(String title, Subject subject, String description, List<Question> questions, Status status, int pointsToPass) {
         this.title = title;
         this.subject = subject;
         this.description = description;
         this.questions = questions;
-        this.requiredAnswerCount = requiredAnswerCount;
         this.status = status;
+        this.pointsToPass = pointsToPass;
     }
 
-    public Test(long testId, String title, Subject subject, String description, List<Question> questions, int requiredAnswerCount, Status status) {
+    public Test(long testId, String title, Subject subject, String description, List<Question> questions, Status status, int pointsToPass) {
         this.testId = testId;
         this.title = title;
         this.subject = subject;
         this.description = description;
         this.questions = questions;
-        this.requiredAnswerCount = requiredAnswerCount;
         this.status = status;
+        this.pointsToPass = pointsToPass;
     }
 
     public long getTestId() {
@@ -74,20 +74,20 @@ public class Test implements Serializable {
         this.questions = questions;
     }
 
-    public int getRequiredAnswerCount() {
-        return requiredAnswerCount;
-    }
-
-    public void setRequiredAnswerCount(int requiredAnswerCount) {
-        this.requiredAnswerCount = requiredAnswerCount;
-    }
-
     public Status getStatus() {
         return status;
     }
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public int getPointsToPass() {
+        return pointsToPass;
+    }
+
+    public void setPointsToPass(int pointsToPass) {
+        this.pointsToPass = pointsToPass;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class Test implements Serializable {
         Test test = (Test) o;
 
         if (testId != test.testId) return false;
-        if (requiredAnswerCount != test.requiredAnswerCount) return false;
+        if (pointsToPass != test.pointsToPass) return false;
         if (title != null ? !title.equals(test.title) : test.title != null) return false;
         if (subject != null ? !subject.equals(test.subject) : test.subject != null) return false;
         if (description != null ? !description.equals(test.description) : test.description != null) return false;
@@ -113,8 +113,8 @@ public class Test implements Serializable {
         result = 31 * result + (subject != null ? subject.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (questions != null ? questions.hashCode() : 0);
-        result = 31 * result + requiredAnswerCount;
         result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + pointsToPass;
         return result;
     }
 
@@ -126,8 +126,8 @@ public class Test implements Serializable {
         sb.append(", subject=").append(subject);
         sb.append(", description='").append(description).append('\'');
         sb.append(", questions=").append(questions);
-        sb.append(", requiredAnswerCount=").append(requiredAnswerCount);
         sb.append(", status=").append(status);
+        sb.append(", pointsToPass=").append(pointsToPass);
         sb.append('}');
         return sb.toString();
     }

@@ -1,11 +1,11 @@
 package com.kuntsevich.testsys.model.dao.impl;
 
 import com.kuntsevich.testsys.entity.Role;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
-import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.kuntsevich.testsys.model.dao.RoleDao;
-import com.kuntsevich.testsys.model.dao.util.DaoUtil;
+import com.kuntsevich.testsys.model.dao.exception.DaoException;
 import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
+import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
+import com.kuntsevich.testsys.model.dao.util.DaoUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,9 @@ import java.util.*;
 
 public class SqlRoleDaoImpl implements RoleDao {
     private static final String ROLE_ID = "role_id";
-    private static final String FIND_ROLE_BY_CRITERIA_QUERY = "SELECT role_id, name FROM testing_system.roles WHERE ";
+    private static final String FIND_ALL_ROLE_QUERY = "SELECT role_id, name FROM testing_system.roles";
+    private static final String NAME = "name";
+    private static final int FIRST_ELEMENT_INDEX = 0;
 
     @Override
     public Optional<Role> findById(long id) throws DaoException {
@@ -47,7 +49,7 @@ public class SqlRoleDaoImpl implements RoleDao {
         }
         try {
             DaoUtil daoUtil = new DaoUtil();
-            ps = con.prepareStatement(daoUtil.createQueryWithCriteria(FIND_ROLE_BY_CRITERIA_QUERY, criteria));
+            ps = con.prepareStatement(daoUtil.createQueryWithCriteria(FIND_ALL_ROLE_QUERY, criteria));
             rs = ps.executeQuery();
             while (rs.next()) {
                 long roleId = rs.getLong(1);
@@ -61,5 +63,17 @@ public class SqlRoleDaoImpl implements RoleDao {
             DaoUtil.releaseResources(con, ps, rs);
         }
         return roles;
+    }
+
+    @Override
+    public Optional<Role> findByName(String name) throws DaoException {
+        Optional<Role> optionalRole = Optional.empty();
+        Map<String, String> criteria = new HashMap<>();
+        criteria.put(NAME, name);
+        List<Role> tests = findByCriteria(criteria);
+        if (tests.size() > 0) {
+            optionalRole = Optional.of(tests.get(FIRST_ELEMENT_INDEX));
+        }
+        return optionalRole;
     }
 }

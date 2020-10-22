@@ -11,4 +11,6 @@ public interface QuestionDao {
     Optional<Question> findById(long id) throws DaoException;
 
     List<Question> findByCriteria(Map<String, String> criteria) throws DaoException;
+
+    List<Question> findByTestId(long id) throws DaoException;
 }

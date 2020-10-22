@@ -14,6 +14,7 @@ public class DaoUtil {
     private static final String EQUALS_STRING = " = ";
     private static final String AND_DELIMITER = " AND ";
     private static final char QUOTE = '\'';
+    private static final String WHERE = " WHERE ";
 
     public static void releaseResources(Connection connection, PreparedStatement preparedStatement, ResultSet resultSet) {
         releaseResources(connection, preparedStatement);
@@ -53,6 +54,9 @@ public class DaoUtil {
         for (String condition : conditions) {
             query.add(condition);
         }
-        return queryStart + query.toString();
+        if (query.toString().isEmpty()) {
+            return queryStart;
+        }
+        return queryStart + WHERE + query.toString();
     }
 }

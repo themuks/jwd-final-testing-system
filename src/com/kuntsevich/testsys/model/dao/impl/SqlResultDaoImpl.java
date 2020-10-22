@@ -14,12 +14,10 @@ import java.sql.*;
 import java.util.*;
 
 public class SqlResultDaoImpl implements ResultDao {
-    private static final String FIND_RESULT_BY_CRITERIA_QUERY = "SELECT result_id, user, test, points FROM testing_system.results WHERE ";
-    private static final String DELETE_RESULT_QUERY = "DELETE FROM `testing_system`.`results` WHERE (`result_id` = ?)";
+    private static final String DELETE_RESULT_QUERY = "DELETE FROM testing_system.results WHERE (result_id = ?)";
     private static final String RESULT_ID = "result_id";
-    private static final String INSERT_RESULT_QUERY = "INSERT INTO testing_system.results (user, test, points) VALUES (?, ?, ?)";
-    private static final String FIND_ALL_RESULT_QUERY = "SELECT result_id, user, test, points FROM testing_system.results";
-    private static final String EMPTY_STRING = "";
+    private static final String INSERT_RESULT_QUERY = "INSERT INTO testing_system.results (user, test, points, correct_answers, total_points) VALUES (?, ?, ?, ?, ?)";
+    private static final String FIND_ALL_RESULT_QUERY = "SELECT result_id, user, test, points, correct_answers, total_points FROM testing_system.results";
 
     @Override
     public Optional<Result> findById(long id) throws DaoException {
@@ -52,7 +50,7 @@ public class SqlResultDaoImpl implements ResultDao {
         String query = "";
         try {
             DaoUtil daoUtil = new DaoUtil();
-            query = daoUtil.createQueryWithCriteria(FIND_RESULT_BY_CRITERIA_QUERY, criteria);
+            query = daoUtil.createQueryWithCriteria(FIND_ALL_RESULT_QUERY, criteria);
             ps = con.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -64,7 +62,9 @@ public class SqlResultDaoImpl implements ResultDao {
                 Optional<Test> testOptional = DaoFactory.getInstance().getTestDao().findById(testId);
                 Test test = testOptional.isPresent() ? testOptional.get() : new Test();
                 int points = rs.getInt(4);
-                Result result = new Result(resultId, user, test, points);
+                int correctAnswers = rs.getInt(5);
+                int totalPoints = rs.getInt(6);
+                Result result = new Result(resultId, user, test, points, correctAnswers, totalPoints);
                 results.add(result);
             }
         } catch (SQLException e) {
@@ -77,42 +77,7 @@ public class SqlResultDaoImpl implements ResultDao {
 
     @Override
     public List<Result> findAll() throws DaoException {
-        List<Result> results = new ArrayList<>();
-        Connection con;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            con = DatabaseConnectionPool.getInstance().getConnection();
-        } catch (DatabasePoolException e) {
-            throw new DaoException("Can't get connection from database connection pool", e);
-        } catch (SQLException e) {
-            throw new DaoException("Can't get instance of database connection pool to get connection", e);
-        }
-        if (con == null) {
-            throw new DaoException("Connection is null");
-        }
-        String query = EMPTY_STRING;
-        try {
-            query = FIND_ALL_RESULT_QUERY;
-            ps = con.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                long resultId = rs.getLong(1);
-                long userId = rs.getLong(2);
-                Optional<User> userOptional = DaoFactory.getInstance().getUserDao().findById(userId);
-                User user = userOptional.isPresent() ? userOptional.get() : new User();
-                long testId = rs.getLong(3);
-                Optional<Test> testOptional = DaoFactory.getInstance().getTestDao().findById(testId);
-                Test test = testOptional.isPresent() ? testOptional.get() : new Test();
-                int points = rs.getInt(4);
-                Result result = new Result(resultId, user, test, points);
-                results.add(result);
-            }
-        } catch (SQLException e) {
-            throw new DaoException("Error executing query " + query, e);
-        } finally {
-            DaoUtil.releaseResources(con, ps, rs);
-        }
+        List<Result> results = findByCriteria(new HashMap<>());
         return results;
     }
 
@@ -137,6 +102,8 @@ public class SqlResultDaoImpl implements ResultDao {
             ps.setLong(1, result.getUser().getUserId());
             ps.setLong(2, result.getTest().getTestId());
             ps.setInt(3, result.getPoints());
+            ps.setInt(4, result.getCorrectAnswers());
+            ps.setInt(5, result.getTotalPoints());
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
             if (rs.next()) {

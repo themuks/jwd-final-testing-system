@@ -1,11 +1,11 @@
 package com.kuntsevich.testsys.model.dao.impl;
 
 import com.kuntsevich.testsys.entity.Status;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
-import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.kuntsevich.testsys.model.dao.StatusDao;
-import com.kuntsevich.testsys.model.dao.util.DaoUtil;
+import com.kuntsevich.testsys.model.dao.exception.DaoException;
 import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
+import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
+import com.kuntsevich.testsys.model.dao.util.DaoUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,9 @@ import java.util.*;
 
 public class SqlStatusDaoImpl implements StatusDao {
     private static final String STATUS_ID = "status_id";
-    private static final String FIND_STATUS_BY_CRITERIA_QUERY = "SELECT status_id, name FROM testing_system.statuses WHERE ";
+    private static final String FIND_ALL_STATUS_QUERY = "SELECT status_id, name FROM testing_system.statuses";
+    private static final int FIRST_ELEMENT_INDEX = 0;
+    private static final String NAME = "name";
 
     @Override
     public Optional<Status> findById(long id) throws DaoException {
@@ -47,7 +49,7 @@ public class SqlStatusDaoImpl implements StatusDao {
         }
         try {
             DaoUtil daoUtil = new DaoUtil();
-            ps = con.prepareStatement(daoUtil.createQueryWithCriteria(FIND_STATUS_BY_CRITERIA_QUERY, criteria));
+            ps = con.prepareStatement(daoUtil.createQueryWithCriteria(FIND_ALL_STATUS_QUERY, criteria));
             rs = ps.executeQuery();
             while (rs.next()) {
                 long subjectId = rs.getLong(1);
@@ -61,5 +63,17 @@ public class SqlStatusDaoImpl implements StatusDao {
             DaoUtil.releaseResources(con, ps, rs);
         }
         return statuses;
+    }
+
+    @Override
+    public Optional<Status> findByName(String name) throws DaoException {
+        Optional<Status> optionalStatus = Optional.empty();
+        Map<String, String> criteria = new HashMap<>();
+        criteria.put(NAME, name);
+        List<Status> statuses = findByCriteria(criteria);
+        if (statuses.size() > 0) {
+            optionalStatus = Optional.of(statuses.get(FIRST_ELEMENT_INDEX));
+        }
+        return optionalStatus;
     }
 }

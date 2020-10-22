@@ -79,18 +79,23 @@ public class TestServiceImpl implements TestService {
             }
 
             int points = 0;
+            int totalPoints = 0;
+            int correctAnswers = 0;
             for (Question question : questions) {
                 long questionId = question.getQuestionId();
+                int questionPoints = question.getPoints();
                 if (isQuestionAnswersCorrect(question, answerMap.get(questionId))) {
-                    points += question.getPoints();
+                    points += questionPoints;
+                    correctAnswers++;
                 }
+                totalPoints += questionPoints;
             }
 
             ResultDao resultDao = DaoFactory.getInstance().getResultDao();
             // FIXME: 15.10.2020 Create Result object with right User reference
             User tempUser = new User();
             tempUser.setUserId(8);
-            Result result = new Result(tempUser, optionalTest.get(), points);
+            Result result = new Result(tempUser, optionalTest.get(), points, correctAnswers, totalPoints);
             try {
                 resultDao.add(result);
             } catch (DaoException e) {

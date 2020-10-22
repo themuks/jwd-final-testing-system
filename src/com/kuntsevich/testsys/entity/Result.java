@@ -7,21 +7,27 @@ public class Result implements Serializable {
     private User user;
     private Test test;
     private int points;
+    private int correctAnswers;
+    private int totalPoints;
 
     public Result() {
     }
 
-    public Result(User user, Test test, int points) {
+    public Result(User user, Test test, int points, int correctAnswers, int totalPoints) {
         this.user = user;
         this.test = test;
         this.points = points;
+        this.correctAnswers = correctAnswers;
+        this.totalPoints = totalPoints;
     }
 
-    public Result(long resultId, User user, Test test, int points) {
+    public Result(long resultId, User user, Test test, int points, int correctAnswers, int totalPoints) {
         this.resultId = resultId;
         this.user = user;
         this.test = test;
         this.points = points;
+        this.correctAnswers = correctAnswers;
+        this.totalPoints = totalPoints;
     }
 
     public long getResultId() {
@@ -56,6 +62,22 @@ public class Result implements Serializable {
         this.points = points;
     }
 
+    public int getCorrectAnswers() {
+        return correctAnswers;
+    }
+
+    public void setCorrectAnswers(int correctAnswers) {
+        this.correctAnswers = correctAnswers;
+    }
+
+    public int getTotalPoints() {
+        return totalPoints;
+    }
+
+    public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,6 +87,8 @@ public class Result implements Serializable {
 
         if (resultId != result.resultId) return false;
         if (points != result.points) return false;
+        if (correctAnswers != result.correctAnswers) return false;
+        if (totalPoints != result.totalPoints) return false;
         if (user != null ? !user.equals(result.user) : result.user != null) return false;
         return test != null ? test.equals(result.test) : result.test == null;
     }
@@ -75,6 +99,8 @@ public class Result implements Serializable {
         result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (test != null ? test.hashCode() : 0);
         result = 31 * result + points;
+        result = 31 * result + correctAnswers;
+        result = 31 * result + totalPoints;
         return result;
     }
 
@@ -85,6 +111,8 @@ public class Result implements Serializable {
         sb.append(", user=").append(user);
         sb.append(", test=").append(test);
         sb.append(", points=").append(points);
+        sb.append(", correctAnswers=").append(correctAnswers);
+        sb.append(", totalPoints=").append(totalPoints);
         sb.append('}');
         return sb.toString();
     }

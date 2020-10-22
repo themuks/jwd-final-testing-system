@@ -3,9 +3,6 @@
 <jsp:useBean id="test" class="com.kuntsevich.testsys.entity.Test" scope="request"/>
 <jsp:useBean id="question" class="com.kuntsevich.testsys.entity.Question" scope="request"/>
 <jsp:useBean id="answer" class="com.kuntsevich.testsys.entity.Answer" scope="request"/>
-<c:if test="${not empty errorMessage}">
-    ${errorMessage}
-</c:if>
 <div class="border rounded p-3 my-3">
     <c:if test="${not empty test}">
         <p class="h3 text-center">Тест</p>

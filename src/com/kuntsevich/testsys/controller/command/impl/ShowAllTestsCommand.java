@@ -35,7 +35,7 @@ public class ShowAllTestsCommand implements Command {
             request.setAttribute(TESTS, tests);
             page = ConfigurationManager.getProperty(PAGE_SUCCESS);
         } catch (ServiceException e) {
-            log.error("Service can't execute findAll method");
+            log.error("Service can't execute findAll method", e);
             request.setAttribute(ERROR_MESSAGE, MessageManager.getProperty(SHOW_ALL_TESTS_SERVER_ERROR));
         }
         request.setAttribute(TEMPLATE_PATH, ConfigurationManager.getProperty(SHOW_ALL_TESTS_TEMPLATE_PATH));

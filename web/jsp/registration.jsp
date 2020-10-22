@@ -47,7 +47,14 @@
     <input type="password" name="password-again" id="inputPasswordAgain" class="form-control form-bottom"
            placeholder="<fmt:message key="registration.password_again"/>" required>
 
-    <button class="btn btn-lg btn-primary btn-block mb-3" type="submit"><fmt:message key="registration.submit_button"/></button>
+    <label for="role" class="sr-only">Роль</label>
+    <select id="role" class="custom-select" name="role" required>
+        <option selected>Выберите роль</option>
+        <option value="Тьютор">Тьютор</option>
+        <option value="Студент">Студент</option>
+    </select>
+
+    <button class="btn btn-lg btn-primary btn-block my-3" type="submit"><fmt:message key="registration.submit_button"/></button>
 
     <div>
         <fmt:message key="registration.question"/>

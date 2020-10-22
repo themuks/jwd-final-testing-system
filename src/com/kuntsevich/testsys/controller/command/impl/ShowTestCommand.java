@@ -1,12 +1,14 @@
 package com.kuntsevich.testsys.controller.command.impl;
 
 import com.kuntsevich.testsys.controller.command.Command;
-import com.kuntsevich.testsys.entity.Test;
-import com.kuntsevich.testsys.model.service.exception.ServiceException;
-import com.kuntsevich.testsys.model.service.TestService;
-import com.kuntsevich.testsys.model.service.factory.ServiceFactory;
 import com.kuntsevich.testsys.controller.manager.ConfigurationManager;
 import com.kuntsevich.testsys.controller.manager.MessageManager;
+import com.kuntsevich.testsys.entity.Test;
+import com.kuntsevich.testsys.model.service.TestService;
+import com.kuntsevich.testsys.model.service.exception.ServiceException;
+import com.kuntsevich.testsys.model.service.factory.ServiceFactory;
+import com.mysql.cj.log.Log;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class ShowTestCommand implements Command {
+    private static final Logger log = Logger.getLogger(ShowTestCommand.class);
     private static final String ERROR_MESSAGE = "errorMessage";
     private static final String SUCCESS_PAGE = "show_test.success";
     private static final String ID_PARAM = "id";
@@ -45,9 +48,11 @@ public class ShowTestCommand implements Command {
                     request.setAttribute(TEST_ATTRIBUTE, currentTest);
                 }
             } catch (ServiceException e) {
+                log.error("Service can't execute tests findAll method", e);
                 request.setAttribute(ERROR_MESSAGE, MessageManager.getProperty(TEST_NOTFOUND_ERROR));
             }
         } catch (NumberFormatException e) {
+            log.error("Error converting testId to long", e);
             request.setAttribute(ERROR_MESSAGE, MessageManager.getProperty(TEST_NOTFOUND_ERROR));
         }
         request.setAttribute(TEMPLATE_PATH, ConfigurationManager.getProperty(SHOW_TEST_TEMPLATE_PATH));

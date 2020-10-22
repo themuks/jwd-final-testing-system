@@ -11,4 +11,6 @@ public interface RoleDao {
     Optional<Role> findById(long id) throws DaoException;
 
     List<Role> findByCriteria(Map<String, String> criteria) throws DaoException;
+
+    Optional<Role> findByName(String name) throws DaoException;
 }

@@ -1,12 +1,15 @@
 package com.kuntsevich.testsys.model.dao.impl;
 
-import com.kuntsevich.testsys.entity.*;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
-import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
+import com.kuntsevich.testsys.entity.Question;
+import com.kuntsevich.testsys.entity.Status;
+import com.kuntsevich.testsys.entity.Subject;
+import com.kuntsevich.testsys.entity.Test;
 import com.kuntsevich.testsys.model.dao.TestDao;
+import com.kuntsevich.testsys.model.dao.exception.DaoException;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
-import com.kuntsevich.testsys.model.dao.util.DaoUtil;
 import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
+import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
+import com.kuntsevich.testsys.model.dao.util.DaoUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,10 +18,8 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class SqlTestDaoImpl implements TestDao {
-    private static final String FIND_ALL_TEST_QUERY = "SELECT test_id, title, subject, description, status FROM testing_system.tests";
-    private static final String FIND_TEST_BY_CRITERIA_QUERY = "SELECT test_id, title, subject, description, status FROM testing_system.tests WHERE ";
+    private static final String FIND_ALL_TEST_QUERY = "SELECT test_id, title, subject, description, status, points_to_pass FROM testing_system.tests";
     private static final String TEST_ID = "test_id";
-    private static final String CRITERIA_QUESTION_TEST = "test";
 
     @Override
     public Optional<Test> findById(long id) throws DaoException {
@@ -50,7 +51,7 @@ public class SqlTestDaoImpl implements TestDao {
         }
         try {
             DaoUtil daoUtil = new DaoUtil();
-            ps = con.prepareStatement(daoUtil.createQueryWithCriteria(FIND_TEST_BY_CRITERIA_QUERY, criteria));
+            ps = con.prepareStatement(daoUtil.createQueryWithCriteria(FIND_ALL_TEST_QUERY, criteria));
             rs = ps.executeQuery();
             while (rs.next()) {
                 long testId = rs.getLong(1);
@@ -62,10 +63,9 @@ public class SqlTestDaoImpl implements TestDao {
                 long statusId = rs.getLong(5);
                 Optional<Status> statusOptional = DaoFactory.getInstance().getStatusDao().findById(statusId);
                 Status status = statusOptional.isPresent() ? statusOptional.get() : new Status();
-                Map<String, String> questionCriteria = new HashMap<>();
-                questionCriteria.put(CRITERIA_QUESTION_TEST, Long.toString(testId));
-                List<Question> questions = DaoFactory.getInstance().getQuestionDao().findByCriteria(questionCriteria);
-                Test test = new Test(testId, title, subject, description, questions, status);
+                List<Question> questions = DaoFactory.getInstance().getQuestionDao().findByTestId(testId);
+                int pointsToPass = rs.getInt(6);
+                Test test = new Test(testId, title, subject, description, questions, status, pointsToPass);
                 tests.add(test);
             }
         } catch (SQLException e) {
@@ -78,44 +78,7 @@ public class SqlTestDaoImpl implements TestDao {
 
     @Override
     public List<Test> findAll() throws DaoException {
-        List<Test> tests = new ArrayList<>();
-        Connection con;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            con = DatabaseConnectionPool.getInstance().getConnection();
-        } catch (DatabasePoolException e) {
-            throw new DaoException("Can't get connection from database connection pool", e);
-        } catch (SQLException e) {
-            throw new DaoException("Can't get instance of database connection pool to get connection", e);
-        }
-        if (con == null) {
-            throw new DaoException("Connection is null");
-        }
-        try {
-            ps = con.prepareStatement(FIND_ALL_TEST_QUERY);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                long testId = rs.getLong(1);
-                String title = rs.getString(2);
-                long subjectId = rs.getLong(3);
-                Optional<Subject> subjectOptional = DaoFactory.getInstance().getSubjectDao().findById(subjectId);
-                Subject subject = subjectOptional.isPresent() ? subjectOptional.get() : new Subject();
-                String description = rs.getString(4);
-                long statusId = rs.getLong(5);
-                Optional<Status> statusOptional = DaoFactory.getInstance().getStatusDao().findById(statusId);
-                Status status = statusOptional.isPresent() ? statusOptional.get() : new Status();
-                Map<String, String> questionCriteria = new HashMap<>();
-                questionCriteria.put(CRITERIA_QUESTION_TEST, Long.toString(testId));
-                List<Question> questions = DaoFactory.getInstance().getQuestionDao().findByCriteria(questionCriteria);
-                Test test = new Test(testId, title, subject, description, questions, status);
-                tests.add(test);
-            }
-        } catch (SQLException e) {
-            throw new DaoException("Error executing query", e);
-        } finally {
-            DaoUtil.releaseResources(con, ps, rs);
-        }
+        List<Test> tests = findByCriteria(new HashMap<>());
         return tests;
     }
 }

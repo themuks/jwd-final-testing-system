@@ -1,53 +1,50 @@
 package com.kuntsevich.testsys.model.service.impl;
 
+import com.kuntsevich.testsys.entity.Credential;
 import com.kuntsevich.testsys.entity.Role;
-import com.kuntsevich.testsys.entity.Status;
 import com.kuntsevich.testsys.entity.User;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
-import com.kuntsevich.testsys.model.service.exception.ServiceException;
-import com.kuntsevich.testsys.model.dao.RoleDao;
-import com.kuntsevich.testsys.model.dao.StatusDao;
 import com.kuntsevich.testsys.model.dao.UserDao;
+import com.kuntsevich.testsys.model.dao.exception.DaoException;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
 import com.kuntsevich.testsys.model.service.UserService;
+import com.kuntsevich.testsys.model.service.creator.CredentialCreator;
+import com.kuntsevich.testsys.model.service.creator.UserCreator;
+import com.kuntsevich.testsys.model.service.exception.CreatorException;
+import com.kuntsevich.testsys.model.service.exception.ServiceException;
 import com.kuntsevich.testsys.model.service.validator.UserValidator;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.Optional;
+import java.util.Random;
 
 public class UserServiceImpl implements UserService {
-    private static final String EMPTY_STRING = "";
-    private static final String STUDENT_ROLE = "Студент";
-    private static final String NAME = "name";
-    private static final String STATUS_ACTIVE = "Активный";
-    private static final int FIRST_ELEMENT_INDEX = 0;
     private static final String HEX_FORMAT_STRING = "%02x";
     private static final String MESSAGE_DIGEST_MD5 = "MD5";
-    private static final String EMAIL_HASH = "email_hash";
-    private static final String PASSWORD_HASH = "password_hash";
+    private static final String SALT = "s7l3T1hTEA3";
 
     @Override
-    public Optional<User> checkLogin(String login, String password) throws ServiceException {
-        Optional<User> optionalUser = Optional.empty();
+    public Optional<Credential> checkLogin(String email, String password) throws ServiceException {
+        Optional<Credential> optionalCredential = Optional.empty();
         DaoFactory daoFactory = DaoFactory.getInstance();
         UserDao userDao = daoFactory.getUserDao();
-        Map<String, String> criteria = new HashMap<>();
+        String emailHash;
+        String passwordHash;
         try {
-            criteria.put(EMAIL_HASH, calculateMdHash(calculateMdHash(login)));
-            criteria.put(PASSWORD_HASH, calculateMdHash(calculateMdHash(password)));
+            emailHash = calculateMdHash(email + SALT);
+            passwordHash = calculateMdHash(password + SALT);
         } catch (NoSuchAlgorithmException e) {
             throw new ServiceException("Can't find MD5 algorithm", e);
         }
-        List<User> users;
+        Optional<User> optionalUser;
         try {
-            users = userDao.findByCriteria(criteria);
+            optionalUser = userDao.findByEmailHashAndPasswordHash(emailHash, passwordHash);
         } catch (DaoException e) {
-            throw new ServiceException("User dao find error", e);
+            throw new ServiceException("Error finding user by emailHash and passwordHash", e);
         }
-        if (users.size() > 0) {
-            User user = users.get(FIRST_ELEMENT_INDEX);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
             Random random = new Random();
             int i = random.nextInt();
             String mdHash;
@@ -62,18 +59,20 @@ public class UserServiceImpl implements UserService {
             } catch (DaoException e) {
                 throw new ServiceException("User dao update error", e);
             }
-            optionalUser = Optional.of(user);
+            Credential credential = new Credential(user.getUserId(), user.getUserHash());
+            optionalCredential = Optional.of(credential);
         }
-        return optionalUser;
+        return optionalCredential;
     }
 
     @Override
-    public boolean register(String username, String name, String surname, String email, String password) throws ServiceException {
+    public boolean register(String username, String name, String surname, String email, String password, String role) throws ServiceException {
         if (username == null
                 || name == null
                 || surname == null
                 || email == null
-                || password == null) {
+                || password == null
+                || role == null) {
             throw new ServiceException("Parameters are null");
         }
         UserValidator userValidator = new UserValidator();
@@ -81,36 +80,35 @@ public class UserServiceImpl implements UserService {
                 || !userValidator.isNameValid(name)
                 || !userValidator.isSurnameValid(surname)
                 || !userValidator.isEmailValid(email)
-                || !userValidator.isPasswordValid(password)) {
+                || !userValidator.isPasswordValid(password)
+                || !userValidator.isRoleValid(role)) {
             throw new ServiceException("Parameters are incorrect");
         }
         String emailHash;
         String passwordHash;
         try {
-            passwordHash = calculateMdHash(calculateMdHash(password));
-            emailHash = calculateMdHash(calculateMdHash(email));
+            passwordHash = calculateMdHash(password + SALT);
+            emailHash = calculateMdHash(email + SALT);
         } catch (NoSuchAlgorithmException e) {
             throw new ServiceException("Can't find MD5 algorithm", e);
         }
         DaoFactory daoFactory = DaoFactory.getInstance();
         UserDao userDao = daoFactory.getUserDao();
-        HashMap<String, String> criteria = new HashMap<>();
-        criteria.put(EMAIL_HASH, emailHash);
-        criteria.put(PASSWORD_HASH, passwordHash);
-        List<User> users;
+        Optional<User> optionalUser;
         try {
-            users = userDao.findByCriteria(criteria);
+            optionalUser = userDao.findByEmailHash(emailHash);
         } catch (DaoException e) {
-            throw new ServiceException("User dao find error", e);
+            throw new ServiceException("Error finding user by emailHash", e);
         }
-        if (users.size() > 0) {
+        if (optionalUser.isPresent()) {
             return false;
         }
+        // TODO: 15.10.2020 Send email to confirm registration
         User user;
         try {
-            user = createUser(username, name, surname, emailHash, passwordHash);
-        } catch (DaoException e) {
-            throw new ServiceException("Can't create user", e);
+            user = UserCreator.createUser(username, name, surname, emailHash, passwordHash, role);
+        } catch (CreatorException e) {
+            throw new ServiceException("Error creating user", e);
         }
         try {
             userDao.add(user);
@@ -118,6 +116,41 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("User dao add error", e);
         }
         return true;
+    }
+
+    @Override
+    public Optional<Role> authorization(String id, String userHash) throws ServiceException {
+        if (id == null || userHash == null) {
+            throw new ServiceException("Parameters are null");
+        }
+        UserValidator userValidator = new UserValidator();
+        if (userValidator.isIdValid(id)) {
+            throw new ServiceException("Parameters are incorrect");
+        }
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        UserDao userDao = daoFactory.getUserDao();
+        Credential credential;
+        try {
+            credential = CredentialCreator.createCredential(id, userHash);
+        } catch (CreatorException e) {
+            throw new ServiceException("Error creating credential", e);
+        }
+        Optional<Role> optionalRole = Optional.empty();
+        try {
+            if (userDao.isUserIdAndUserHashExist(credential)) {
+                Optional<User> optionalUser = userDao.findById(Long.parseLong(id));
+                if (optionalUser.isPresent()) {
+                    User user = optionalUser.get();
+                    Role role = user.getRole();
+                    optionalRole = Optional.of(role);
+                } else {
+                    throw new ServiceException("User not found");
+                }
+            }
+        } catch (DaoException e) {
+            throw new ServiceException("Error finding credential", e);
+        }
+        return optionalRole;
     }
 
     private String calculateMdHash(String str) throws NoSuchAlgorithmException {
@@ -128,21 +161,5 @@ public class UserServiceImpl implements UserService {
             stringBuilder.append(String.format(HEX_FORMAT_STRING, b));
         }
         return stringBuilder.toString();
-    }
-
-    private User createUser(String username, String name, String surname, String emailHash, String passwordHash) throws DaoException {
-        DaoFactory daoFactory = DaoFactory.getInstance();
-        RoleDao roleDao = daoFactory.getRoleDao();
-        HashMap<String, String> criteria = new HashMap<>();
-        criteria.put(NAME, STUDENT_ROLE);
-        List<Role> roles = roleDao.findByCriteria(criteria);
-        Role roleFromDb = roles.get(FIRST_ELEMENT_INDEX);
-        StatusDao statusDao = daoFactory.getStatusDao();
-        criteria.clear();
-        criteria.put(NAME, STATUS_ACTIVE);
-        List<Status> statuses = statusDao.findByCriteria(criteria);
-        Status statusFromDb = statuses.get(FIRST_ELEMENT_INDEX);
-        User user = new User(username, name, surname, emailHash, passwordHash, EMPTY_STRING, roleFromDb, statusFromDb);
-        return user;
     }
 }

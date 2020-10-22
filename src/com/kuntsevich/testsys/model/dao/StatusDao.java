@@ -11,4 +11,6 @@ public interface StatusDao {
     Optional<Status> findById(long id) throws DaoException;
 
     List<Status> findByCriteria(Map<String, String> criteria) throws DaoException;
+
+    Optional<Status> findByName(String name) throws DaoException;
 }

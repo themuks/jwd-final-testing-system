@@ -3,11 +3,16 @@ package com.kuntsevich.testsys.model.service.validator;
 import java.util.regex.Pattern;
 
 public class UserValidator {
-    private static final String[] ROLES = {"Admin", "Tutor", "Student"};
+    private static final String[] ROLES = {"Администратор", "Тьютор", "Студент"};
     private static final String NAME_REGEX = "(\\p{Alpha}|[а-яА-Я])+";
-    private static final String EMAIL_REGEX = "\\p{Alnum}+@\\p{Alpha}+\\.\\p{Alpha}+";
+    private static final String EMAIL_REGEX = "\\p{Alnum}{4,32}@\\p{Alpha}{4,32}\\.\\p{Alpha}{1,8}+";
     private static final String USERNAME_REGEX = "\\p{Alpha}+";
     private static final String PASSWORD_REGEX = "\\p{Alnum}{4,64}";
+    private static final String ID_REGEX = "[1-9]\\d*";
+
+    public boolean isIdValid(String id) {
+        return Pattern.matches(ID_REGEX, id);
+    }
 
     public boolean isUsernameValid(String username) {
         return Pattern.matches(USERNAME_REGEX, username);

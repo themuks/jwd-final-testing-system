@@ -1,8 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<c:if test="${not empty errorMessage}">
-    <div class="alert alert-danger" role="alert">${errorMessage}</div>
-</c:if>
 <c:if test="${not empty tests}">
     <c:forEach var="test" items="${tests}">
         <div class="card my-4">

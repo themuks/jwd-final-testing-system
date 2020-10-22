@@ -3,12 +3,12 @@ package com.kuntsevich.testsys.model.dao.impl;
 import com.kuntsevich.testsys.entity.Answer;
 import com.kuntsevich.testsys.entity.Question;
 import com.kuntsevich.testsys.entity.Subject;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
-import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.kuntsevich.testsys.model.dao.QuestionDao;
+import com.kuntsevich.testsys.model.dao.exception.DaoException;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
-import com.kuntsevich.testsys.model.dao.util.DaoUtil;
 import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
+import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
+import com.kuntsevich.testsys.model.dao.util.DaoUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,9 +17,9 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class SqlQuestionDaoImpl implements QuestionDao {
-    private static final String FIND_QUESTION_BY_CRITERIA_QUERY = "SELECT question_id, text, subject, points, test FROM testing_system.questions WHERE ";
-    private static final String CRITERIA_ANSWER_QUESTION = "question";
+    private static final String FIND_ALL_QUESTION_QUERY = "SELECT question_id, text, subject, points, test FROM testing_system.questions";
     private static final String QUESTION_ID = "question_id";
+    private static final String TEST = "test";
 
     @Override
     public Optional<Question> findById(long id) throws DaoException {
@@ -51,7 +51,7 @@ public class SqlQuestionDaoImpl implements QuestionDao {
         }
         try {
             DaoUtil daoUtil = new DaoUtil();
-            ps = con.prepareStatement(daoUtil.createQueryWithCriteria(FIND_QUESTION_BY_CRITERIA_QUERY, criteria));
+            ps = con.prepareStatement(daoUtil.createQueryWithCriteria(FIND_ALL_QUESTION_QUERY, criteria));
             rs = ps.executeQuery();
             while (rs.next()) {
                 long questionId = rs.getLong(1);
@@ -60,9 +60,7 @@ public class SqlQuestionDaoImpl implements QuestionDao {
                 Optional<Subject> subjectOptional = DaoFactory.getInstance().getSubjectDao().findById(subjectId);
                 Subject subject = subjectOptional.isPresent() ? subjectOptional.get() : new Subject();
                 int points = rs.getInt(4);
-                Map<String, String> answerCriteria = new HashMap<>();
-                answerCriteria.put(CRITERIA_ANSWER_QUESTION, Long.toString(questionId));
-                List<Answer> answers = DaoFactory.getInstance().getAnswerDao().findByCriteria(answerCriteria);
+                List<Answer> answers = DaoFactory.getInstance().getAnswerDao().findByQuestionId(questionId);
                 Question question = new Question(questionId, text, subject, answers, points);
                 questions.add(question);
             }
@@ -71,6 +69,14 @@ public class SqlQuestionDaoImpl implements QuestionDao {
         } finally {
             DaoUtil.releaseResources(con, ps, rs);
         }
+        return questions;
+    }
+
+    @Override
+    public List<Question> findByTestId(long id) throws DaoException {
+        Map<String, String> criteria = new HashMap<>();
+        criteria.put(TEST, Long.toString(id));
+        List<Question> questions = findByCriteria(criteria);
         return questions;
     }
 }

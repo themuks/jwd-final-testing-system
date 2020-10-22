@@ -1,7 +1,6 @@
 package com.kuntsevich.testsys.model.dao;
 
 import com.kuntsevich.testsys.entity.Result;
-import com.kuntsevich.testsys.entity.User;
 import com.kuntsevich.testsys.model.dao.exception.DaoException;
 
 import java.util.List;

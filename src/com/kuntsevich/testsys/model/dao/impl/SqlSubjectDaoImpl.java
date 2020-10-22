@@ -1,11 +1,11 @@
 package com.kuntsevich.testsys.model.dao.impl;
 
 import com.kuntsevich.testsys.entity.Subject;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
-import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.kuntsevich.testsys.model.dao.SubjectDao;
-import com.kuntsevich.testsys.model.dao.util.DaoUtil;
+import com.kuntsevich.testsys.model.dao.exception.DaoException;
 import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
+import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
+import com.kuntsevich.testsys.model.dao.util.DaoUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,6 @@ import java.util.*;
 
 public class SqlSubjectDaoImpl implements SubjectDao {
     private static final String SUBJECT_ID = "subject_id";
-    private static final String FIND_SUBJECT_BY_CRITERIA_QUERY = "SELECT subject_id, name, description FROM testing_system.subjects WHERE ";
     private static final String FIND_ALL_SUBJECT_QUERY = "SELECT subject_id, name, description FROM testing_system.subjects";
 
     @Override
@@ -48,7 +47,7 @@ public class SqlSubjectDaoImpl implements SubjectDao {
         }
         try {
             DaoUtil daoUtil = new DaoUtil();
-            ps = con.prepareStatement(daoUtil.createQueryWithCriteria(FIND_SUBJECT_BY_CRITERIA_QUERY, criteria));
+            ps = con.prepareStatement(daoUtil.createQueryWithCriteria(FIND_ALL_SUBJECT_QUERY, criteria));
             rs = ps.executeQuery();
             while (rs.next()) {
                 long subjectId = rs.getLong(1);

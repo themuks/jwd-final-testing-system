@@ -2,13 +2,9 @@ package com.kuntsevich.testsys.controller.command.impl;
 
 import com.kuntsevich.testsys.controller.command.Command;
 import com.kuntsevich.testsys.controller.manager.ConfigurationManager;
-import com.kuntsevich.testsys.controller.manager.MessageManager;
 import com.kuntsevich.testsys.entity.Result;
-import com.kuntsevich.testsys.entity.Test;
-import com.kuntsevich.testsys.model.service.exception.ServiceException;
 import com.kuntsevich.testsys.model.service.factory.ServiceFactory;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
