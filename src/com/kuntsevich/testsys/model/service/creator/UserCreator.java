@@ -5,7 +5,7 @@ import com.kuntsevich.testsys.entity.Status;
 import com.kuntsevich.testsys.entity.User;
 import com.kuntsevich.testsys.model.dao.RoleDao;
 import com.kuntsevich.testsys.model.dao.StatusDao;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
+import com.kuntsevich.testsys.model.dao.DaoException;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
 import com.kuntsevich.testsys.model.service.exception.CreatorException;
 import com.kuntsevich.testsys.model.service.validator.UserValidator;

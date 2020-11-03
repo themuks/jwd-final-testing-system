@@ -1,7 +1,6 @@
 package com.kuntsevich.testsys.model.dao;
 
 import com.kuntsevich.testsys.entity.Role;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
 
 import java.util.List;
 import java.util.Map;

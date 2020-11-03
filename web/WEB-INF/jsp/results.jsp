@@ -1,16 +1,23 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 06.10.2020
-  Time: 22:35
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<jsp:useBean id="result" class="com.kuntsevich.testsys.entity.Result" scope="request"/>
+<c:if test="${not empty results}">
+    <p class="h4 text-center mt-3">Список результатов по тестам</p>
+    <c:forEach var="result" items="${results}">
+        <div class="border rounded p-3 my-3">
+            <p class="h4 text-center">Тест №: ${result.test.testId}</p>
+            <p class="h4 text-center">${result.test.title}</p>
+            <p class="h5 text-center">${result.points} из ${result.totalPoints} баллов</p>
+            <p class="h5 text-center">Всего правильных ответов: ${result.correctAnswers}</p>
+            <c:if test="${result.testPassed}">
+                <p class="h4 text-center text-success">Тест сдан</p>
+            </c:if>
+            <c:if test="${not result.testPassed}">
+                <p class="h4 text-center text-danger">Тест не сдан</p>
+            </c:if>
+        </div>
+    </c:forEach>
+</c:if>
+<c:if test="${empty results}">
+    У вас нет результатов
+</c:if>

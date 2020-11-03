@@ -28,11 +28,7 @@ public class DaoUtil {
     }
 
     public static void releaseResources(Connection connection, PreparedStatement preparedStatement) {
-        try {
-            DatabaseConnectionPool.getInstance().releaseConnection(connection);
-        } catch (SQLException e) {
-            log.error("Can't get instance of database connection pool to release connection", e);
-        }
+        DatabaseConnectionPool.getInstance().releaseConnection(connection);
         if (preparedStatement != null) {
             try {
                 preparedStatement.close();

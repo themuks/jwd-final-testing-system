@@ -1,7 +1,6 @@
 package com.kuntsevich.testsys.model.dao;
 
 import com.kuntsevich.testsys.entity.Result;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
 
 import java.util.List;
 import java.util.Map;
@@ -19,4 +18,6 @@ public interface ResultDao {
     void update(Result result) throws DaoException;
 
     void delete(Result result) throws DaoException;
+
+    List<Result> findByUserId(long userId) throws DaoException;
 }

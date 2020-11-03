@@ -9,7 +9,8 @@
         <p class="h4">Название теста: <c:out value="${test.title}"/></p>
         <p class="h4">Предмет: <c:out value="${test.subject.name}"/></p>
         <p class="h4">Описание: <c:out value="${test.description}"/></p>
-        <form class="m-0" method="post" action="${pageContext.request.contextPath}/controller?command=submit-test">
+        <form class="m-0" method="post" action="${pageContext.request.contextPath}/controller">
+            <input type="hidden" name="command" value="submit-test"/>
             <input type="hidden" name="test-id" value="<c:out value="${test.testId}"/>">
             <c:forEach var="question" items="${test.questions}" varStatus="questionLoop">
                 <div class="mb-3">

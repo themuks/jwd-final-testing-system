@@ -1,4 +1,4 @@
-package com.kuntsevich.testsys.model.dao.exception;
+package com.kuntsevich.testsys.model.dao;
 
 public class DaoException extends Exception {
     public DaoException() {

@@ -4,11 +4,10 @@ import com.kuntsevich.testsys.entity.Credential;
 import com.kuntsevich.testsys.entity.Role;
 import com.kuntsevich.testsys.entity.Status;
 import com.kuntsevich.testsys.entity.User;
+import com.kuntsevich.testsys.model.dao.DaoException;
 import com.kuntsevich.testsys.model.dao.UserDao;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
 import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
-import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.kuntsevich.testsys.model.dao.util.DaoUtil;
 
 import java.sql.*;
@@ -17,8 +16,9 @@ import java.util.*;
 public class SqlUserDaoImpl implements UserDao {
     private static final String USER_ID = "user_id";
     private static final String FIND_ALL_USER_QUERY = "SELECT user_id, username, name, surname, email_hash, password_hash, user_hash, role, status FROM testing_system.users";
-    private static final String INSERT_USER_QUERY = "INSERT INTO `testing_system`.`users` (`username`, `name`, `surname`, `email_hash`, `password_hash`, `user_hash`, `role`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String DELETE_USER_QUERY = "DELETE FROM `testing_system`.`users` WHERE (`user_id` = ?)";
+    private static final String INSERT_USER_QUERY = "INSERT INTO testing_system.users (username, name, surname, email_hash, password_hash, user_hash, role, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String DELETE_USER_QUERY = "DELETE FROM testing_system.users WHERE (user_id = ?)";
+    private static final String UPDATE_USER_QUERY = "UPDATE testing_system.users SET username = ?, name = ?, surname = ?, email_hash = ?, password_hash = ?, user_hash = ?, role = ?, status = ? WHERE user_id = ?";
     private static final String EMPTY_STRING = "";
     private static final String EMAIL_HASH = "email_hash";
     private static final int FIRST_ELEMENT_INDEX = 0;
@@ -43,16 +43,7 @@ public class SqlUserDaoImpl implements UserDao {
         Connection con;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        try {
-            con = DatabaseConnectionPool.getInstance().getConnection();
-        } catch (DatabasePoolException e) {
-            throw new DaoException("Can't get connection from database connection pool", e);
-        } catch (SQLException e) {
-            throw new DaoException("Can't get instance of database connection pool to get connection", e);
-        }
-        if (con == null) {
-            throw new DaoException("Connection is null");
-        }
+        con = DatabaseConnectionPool.getInstance().getConnection();
         String query = EMPTY_STRING;
         try {
             DaoUtil daoUtil = new DaoUtil();
@@ -95,16 +86,7 @@ public class SqlUserDaoImpl implements UserDao {
         Connection con;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        try {
-            con = DatabaseConnectionPool.getInstance().getConnection();
-        } catch (DatabasePoolException e) {
-            throw new DaoException("Can't get connection from database connection pool", e);
-        } catch (SQLException e) {
-            throw new DaoException("Can't get instance of database connection pool to get connection", e);
-        }
-        if (con == null) {
-            throw new DaoException("Connection is null");
-        }
+        con = DatabaseConnectionPool.getInstance().getConnection();
         long id = -1;
         try {
             ps = con.prepareStatement(INSERT_USER_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -131,24 +113,33 @@ public class SqlUserDaoImpl implements UserDao {
 
     @Override
     public void update(User user) throws DaoException {
-        delete(user);
-        add(user);
+        Connection con;
+        PreparedStatement ps = null;
+        con = DatabaseConnectionPool.getInstance().getConnection();
+        try {
+            ps = con.prepareStatement(UPDATE_USER_QUERY);
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getName());
+            ps.setString(3, user.getSurname());
+            ps.setString(4, user.getEmailHash());
+            ps.setString(5, user.getPasswordHash());
+            ps.setString(6, user.getUserHash());
+            ps.setLong(7, user.getRole().getRoleId());
+            ps.setLong(8, user.getStatus().getStatusId());
+            ps.setLong(9, user.getUserId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Error executing query", e);
+        } finally {
+            DaoUtil.releaseResources(con, ps);
+        }
     }
 
     @Override
     public void delete(User user) throws DaoException {
         Connection con;
         PreparedStatement ps = null;
-        try {
-            con = DatabaseConnectionPool.getInstance().getConnection();
-        } catch (DatabasePoolException e) {
-            throw new DaoException("Can't get connection from database connection pool", e);
-        } catch (SQLException e) {
-            throw new DaoException("Can't get instance of database connection pool to get connection", e);
-        }
-        if (con == null) {
-            throw new DaoException("Connection is null");
-        }
+        con = DatabaseConnectionPool.getInstance().getConnection();
         try {
             ps = con.prepareStatement(DELETE_USER_QUERY);
             ps.setLong(1, user.getUserId());

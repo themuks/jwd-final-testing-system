@@ -21,6 +21,10 @@
         <div class="alert alert-danger" role="alert">${errorMessage}</div>
     </c:if>
 
+    <c:if test="${not empty sessionScope.origin}">
+        <div class="alert alert-info" role="alert">Войдите в систему, чтобы продолжить</div>
+    </c:if>
+
     <label for="inputEmail" class="sr-only"><fmt:message key="login.email"/></label>
     <input type="email" name="email" id="inputEmail" class="form-control" placeholder="<fmt:message key="login.email"/>" required autofocus>
     <label for="inputPassword" class="sr-only"><fmt:message key="login.password"/></label>

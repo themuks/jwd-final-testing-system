@@ -1,6 +1,5 @@
 package com.kuntsevich.testsys.model.dao.pool;
 
-import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.mysql.jdbc.Driver;
 import org.apache.log4j.Logger;
 
@@ -29,11 +28,11 @@ public class DatabaseConnectionPool {
     private static final String DB_AUTO_RECONNECT = "db.autoReconnect";
     private static final String DB_ENCODING = "db.encoding";
     private static final String DB_USE_UNICODE = "db.useUnicode";
-    private static volatile DatabaseConnectionPool instance;
-    private final BlockingQueue<Connection> freeConnections;
-    private final Queue<Connection> givenAwayConnections;
+    private static DatabaseConnectionPool instance = new DatabaseConnectionPool();
+    private final BlockingQueue<ProxyConnection> freeConnections;
+    private final Queue<ProxyConnection> givenAwayConnections;
 
-    private DatabaseConnectionPool() throws SQLException {
+    private DatabaseConnectionPool() {
         ResourceBundle resourceBundle = ResourceBundle.getBundle(DATABASE_BUNDLE_NAME);
         Properties properties = new Properties();
         String url = resourceBundle.getString(DB_URL);
@@ -47,49 +46,55 @@ public class DatabaseConnectionPool {
         properties.put(AUTO_RECONNECT, autoReconnect);
         properties.put(CHARACTER_ENCODING, encoding);
         properties.put(USE_UNICODE, useUnicode);
-        DriverManager.registerDriver(new Driver());
+        try {
+            DriverManager.registerDriver(new Driver());
+        } catch (SQLException e) {
+            log.warn("Error while registering driver", e);
+        }
         freeConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             Connection connection;
-            connection = DriverManager.getConnection(url, properties);
-            freeConnections.offer(connection);
+            try {
+                connection = DriverManager.getConnection(url, properties);
+            } catch (SQLException e) {
+                log.fatal("Error while getting connection from driver manager", e);
+                throw new RuntimeException("Error while getting connection from driver manager", e);
+            }
+            ProxyConnection proxyConnection = new ProxyConnection(connection);
+            freeConnections.offer(proxyConnection);
         }
         givenAwayConnections = new ArrayDeque<>();
     }
 
-    public static DatabaseConnectionPool getInstance() throws SQLException {
-        if (instance == null) {
-            synchronized (DatabaseConnectionPool.class) {
-                if (instance == null) {
-                    instance = new DatabaseConnectionPool();
-                }
-            }
-        }
+    public static DatabaseConnectionPool getInstance() {
         return instance;
     }
 
-    public Connection getConnection() throws DatabasePoolException {
-        Connection connection;
+    public Connection getConnection() {
+        ProxyConnection connection;
         try {
             connection = freeConnections.take();
             givenAwayConnections.offer(connection);
         } catch (InterruptedException e) {
-            throw new DatabasePoolException("Can't get connection form connection queue", e);
+            log.fatal("Can't get connection form connection queue", e);
+            throw new RuntimeException("Error while getting connection from queue", e);
         }
         return connection;
     }
 
     public void releaseConnection(Connection connection) {
-        givenAwayConnections.remove(connection);
-        freeConnections.offer(connection);
+        if (connection instanceof ProxyConnection) {
+            givenAwayConnections.remove(connection);
+            freeConnections.offer((ProxyConnection) connection);
+        } else {
+            log.warn("Invalid connection object provided");
+        }
     }
 
     public void destroyPool() {
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {
                 freeConnections.take().close();
-            } catch (SQLException e) {
-                log.warn("Can't access database to close connection", e);
             } catch (InterruptedException e) {
                 log.warn("Can't take connection from queue", e);
             }

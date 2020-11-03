@@ -2,11 +2,12 @@ package com.kuntsevich.testsys.model.service.impl;
 
 import com.kuntsevich.testsys.entity.*;
 import com.kuntsevich.testsys.model.dao.ResultDao;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
+import com.kuntsevich.testsys.model.dao.DaoException;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
 import com.kuntsevich.testsys.model.service.TestService;
 import com.kuntsevich.testsys.model.service.exception.ServiceException;
 import com.kuntsevich.testsys.model.service.validator.TestValidator;
+import com.kuntsevich.testsys.model.service.validator.UserValidator;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -30,15 +31,18 @@ public class TestServiceImpl implements TestService {
 
     // TODO: 15.10.2020 Refactor this method
     @Override
-    public boolean submitTest(String testId, Map<String, String[]> answers) throws ServiceException {
-        if (testId == null || answers == null) {
+    public Result submitTest(String testId, String userId, Map<String, String[]> answers) throws ServiceException {
+        if (testId == null || userId == null || answers == null) {
             throw new ServiceException("Parameters are null");
         }
         TestValidator testValidator = new TestValidator();
         if (!testValidator.isTestIdValid(testId)) {
             throw new ServiceException("Test id is invalid");
         }
-
+        UserValidator userValidator = new UserValidator();
+        if (!userValidator.isIdValid(userId)) {
+            throw new ServiceException("User id is invalid");
+        }
         long id = Long.parseLong(testId);
         Optional<Test> optionalTest;
         try {
@@ -94,23 +98,19 @@ public class TestServiceImpl implements TestService {
             ResultDao resultDao = DaoFactory.getInstance().getResultDao();
             // FIXME: 15.10.2020 Create Result object with right User reference
             User tempUser = new User();
-            tempUser.setUserId(8);
-            Result result = new Result(tempUser, optionalTest.get(), points, correctAnswers, totalPoints);
+            long userIdLongValue = Long.parseLong(userId);
+            tempUser.setUserId(userIdLongValue);
+            boolean isTestPassed = points >= test.getPointsToPass();
+            Result result = new Result(tempUser, test, points, correctAnswers, totalPoints, isTestPassed);
             try {
                 resultDao.add(result);
             } catch (DaoException e) {
                 throw new ServiceException("Error adding result to the database", e);
             }
-        }
-
-
-        /*for ()
-            // TODO: 13.10.2020 Find right answers and calculate points, then add new result to the database
+            return result;
         } else {
             throw new ServiceException("Test not found");
-        }*/
-
-        return true;
+        }
     }
 
     private boolean isQuestionAnswersCorrect(Question question, List<Answer> answers) {

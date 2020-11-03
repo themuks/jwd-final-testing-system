@@ -7,11 +7,10 @@ public enum CommandType {
     LOGIN(new LoginCommand()),
     REGISTRATION(new RegistrationCommand()),
     SHOW_ALL_TESTS(new ShowAllTestsCommand()),
-    SHOW_AVAILABLE_TESTS(new ShowAvailableTestsCommand()),
+    SHOW_RESULTS(new ShowResultsCommand()),
+    SHOW_SUBJECTS(new ShowSubjectsCommand()),
     SHOW_TEST(new ShowTestCommand()),
     SUBMIT_TEST(new SubmitTestCommand()),
-    SHOW_LOGIN_PAGE(new ShowLoginPageCommand()),
-    SHOW_REGISTRATION_PAGE(new ShowRegistrationPageCommand()),
     SHOW_WELCOME_PAGE(new ShowWelcomePageCommand());
 
     Command command;

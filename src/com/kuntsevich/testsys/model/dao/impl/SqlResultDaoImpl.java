@@ -3,11 +3,10 @@ package com.kuntsevich.testsys.model.dao.impl;
 import com.kuntsevich.testsys.entity.Result;
 import com.kuntsevich.testsys.entity.Test;
 import com.kuntsevich.testsys.entity.User;
+import com.kuntsevich.testsys.model.dao.DaoException;
 import com.kuntsevich.testsys.model.dao.ResultDao;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
 import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
-import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.kuntsevich.testsys.model.dao.util.DaoUtil;
 
 import java.sql.*;
@@ -18,6 +17,8 @@ public class SqlResultDaoImpl implements ResultDao {
     private static final String RESULT_ID = "result_id";
     private static final String INSERT_RESULT_QUERY = "INSERT INTO testing_system.results (user, test, points, correct_answers, total_points) VALUES (?, ?, ?, ?, ?)";
     private static final String FIND_ALL_RESULT_QUERY = "SELECT result_id, user, test, points, correct_answers, total_points FROM testing_system.results";
+    private static final String USER_ID = "user";
+    private static final String EMPTY_STRING = "";
 
     @Override
     public Optional<Result> findById(long id) throws DaoException {
@@ -32,22 +33,20 @@ public class SqlResultDaoImpl implements ResultDao {
     }
 
     @Override
+    public List<Result> findByUserId(long userId) throws DaoException {
+        Map<String, String> criteria = new HashMap<>();
+        criteria.put(USER_ID, Long.toString(userId));
+        return findByCriteria(criteria);
+    }
+
+    @Override
     public List<Result> findByCriteria(Map<String, String> criteria) throws DaoException {
         List<Result> results = new ArrayList<>();
         Connection con;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        try {
-            con = DatabaseConnectionPool.getInstance().getConnection();
-        } catch (DatabasePoolException e) {
-            throw new DaoException("Can't get connection from database connection pool", e);
-        } catch (SQLException e) {
-            throw new DaoException("Can't get instance of database connection pool to get connection", e);
-        }
-        if (con == null) {
-            throw new DaoException("Connection is null");
-        }
-        String query = "";
+        con = DatabaseConnectionPool.getInstance().getConnection();
+        String query = EMPTY_STRING;
         try {
             DaoUtil daoUtil = new DaoUtil();
             query = daoUtil.createQueryWithCriteria(FIND_ALL_RESULT_QUERY, criteria);
@@ -64,7 +63,8 @@ public class SqlResultDaoImpl implements ResultDao {
                 int points = rs.getInt(4);
                 int correctAnswers = rs.getInt(5);
                 int totalPoints = rs.getInt(6);
-                Result result = new Result(resultId, user, test, points, correctAnswers, totalPoints);
+                boolean isTestPassed = points >= test.getPointsToPass();
+                Result result = new Result(resultId, user, test, points, correctAnswers, totalPoints, isTestPassed);
                 results.add(result);
             }
         } catch (SQLException e) {
@@ -77,8 +77,7 @@ public class SqlResultDaoImpl implements ResultDao {
 
     @Override
     public List<Result> findAll() throws DaoException {
-        List<Result> results = findByCriteria(new HashMap<>());
-        return results;
+        return findByCriteria(new HashMap<>());
     }
 
     @Override
@@ -86,16 +85,7 @@ public class SqlResultDaoImpl implements ResultDao {
         Connection con;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        try {
-            con = DatabaseConnectionPool.getInstance().getConnection();
-        } catch (DatabasePoolException e) {
-            throw new DaoException("Can't get connection from database connection pool", e);
-        } catch (SQLException e) {
-            throw new DaoException("Can't get instance of database connection pool to get connection", e);
-        }
-        if (con == null) {
-            throw new DaoException("Connection is null");
-        }
+        con = DatabaseConnectionPool.getInstance().getConnection();
         long id = -1;
         try {
             ps = con.prepareStatement(INSERT_RESULT_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -127,16 +117,7 @@ public class SqlResultDaoImpl implements ResultDao {
     public void delete(Result result) throws DaoException {
         Connection con;
         PreparedStatement ps = null;
-        try {
-            con = DatabaseConnectionPool.getInstance().getConnection();
-        } catch (DatabasePoolException e) {
-            throw new DaoException("Can't get connection from database connection pool", e);
-        } catch (SQLException e) {
-            throw new DaoException("Can't get instance of database connection pool to get connection", e);
-        }
-        if (con == null) {
-            throw new DaoException("Connection is null");
-        }
+        con = DatabaseConnectionPool.getInstance().getConnection();
         try {
             ps = con.prepareStatement(DELETE_RESULT_QUERY);
             ps.setLong(1, result.getResultId());

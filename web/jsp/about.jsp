@@ -17,44 +17,30 @@
     <div class="container">
         <a class="navbar-brand ml-sm-3" href="#">Система тестирования</a>
         <ul class="navbar-nav mr-md-auto list-inline">
+            <li class="nav-item">
+                <a class="nav-link" href="<c:url value="/jsp/home.jsp"/>">Главная</a>
+            </li>
             <li class="nav-item active">
-                <a class="nav-link" href="<c:url value="/jsp/main.jsp"/>">Главная<span
+                <a class="nav-link" href="<c:url value="/jsp/about.jsp"/>">О системе<span
                         class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">О разработчике</a>
-            </li>
         </ul>
+
         <div class="form-inline">
             <a class="btn btn-outline-primary mr-2 my-2 my-lg-0" role="button"
-               href="${pageContext.request.contextPath}/controller?command=show-login-page">Вход</a>
-            <a class="btn btn-outline-secondary" role="button"
-               href="${pageContext.request.contextPath}/controller?command=show-registration-page">Регистрация</a>
+               href="${pageContext.request.contextPath}/jsp/login.jsp">Вход</a>
+            <a class="btn btn-primary" role="button"
+               href="${pageContext.request.contextPath}/jsp/registration.jsp">Регистрация</a>
         </div>
+
     </div>
 </nav>
-<div class="container h-100">
-    <div class="row h-100">
-        <nav class="col-lg-3 d-block ml-sm-auto bg-light sidebar collapse">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link active" href="<c:url value="/controller?command=show-all-tests"/>">Тесты</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Список предметов</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Результаты</a>
-                </li>
-            </ul>
-        </nav>
-        <div class="col-lg-9">
-            <c:if test="${not empty errorMessage}">
-                <div class="alert alert-danger my-3" role="alert">${errorMessage}</div>
-            </c:if>
-            <c:if test="${not empty templatePath}">
-                <c:import url="${templatePath}"/>
-            </c:if>
+<div class="container my-auto">
+    <div class="row">
+        <div class="col align-self-center text-center">
+            <p class="h1">Добро пожаловать!</p>
+            <p class="h2">Testing system предназначена для создания тестов и проверки знания учеников</p>
+            <p class="h2">Зарегистрируйтесь, если еще не сделали этого ;)</p>
         </div>
     </div>
 </div>

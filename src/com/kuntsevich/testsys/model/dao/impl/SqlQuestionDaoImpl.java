@@ -3,11 +3,10 @@ package com.kuntsevich.testsys.model.dao.impl;
 import com.kuntsevich.testsys.entity.Answer;
 import com.kuntsevich.testsys.entity.Question;
 import com.kuntsevich.testsys.entity.Subject;
+import com.kuntsevich.testsys.model.dao.DaoException;
 import com.kuntsevich.testsys.model.dao.QuestionDao;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
 import com.kuntsevich.testsys.model.dao.pool.DatabaseConnectionPool;
-import com.kuntsevich.testsys.model.dao.pool.exception.DatabasePoolException;
 import com.kuntsevich.testsys.model.dao.util.DaoUtil;
 
 import java.sql.Connection;
@@ -39,16 +38,7 @@ public class SqlQuestionDaoImpl implements QuestionDao {
         Connection con;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        try {
-            con = DatabaseConnectionPool.getInstance().getConnection();
-        } catch (DatabasePoolException e) {
-            throw new DaoException("Can't get connection from database connection pool", e);
-        } catch (SQLException e) {
-            throw new DaoException("Can't get instance of database connection pool to get connection", e);
-        }
-        if (con == null) {
-            throw new DaoException("Connection is null");
-        }
+        con = DatabaseConnectionPool.getInstance().getConnection();
         try {
             DaoUtil daoUtil = new DaoUtil();
             ps = con.prepareStatement(daoUtil.createQueryWithCriteria(FIND_ALL_QUESTION_QUERY, criteria));

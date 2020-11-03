@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class Controller extends HttpServlet {
@@ -24,6 +25,14 @@ public class Controller extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CommandProvider commandProvider = new CommandProvider();
         Command command = commandProvider.defineCommand(request);
-        command.execute(request, response);
+        Router router = command.execute(request);
+        HttpSession session = request.getSession();
+        String page = router.getPage();
+        session.setAttribute(RequestParameter.CURRENT_PAGE, page);
+        if (router.getTransition() == Router.Transition.FORWARD) {
+            request.getRequestDispatcher(page).forward(request, response);
+        } else {
+            response.sendRedirect(page);
+        }
     }
 }

@@ -10,6 +10,23 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+    <!--<error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/jsp/error404.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/jsp/error500.jsp</location>
+    </error-page>-->
+
+    <jsp-config>
+        <taglib>
+            <taglib-uri>customtags</taglib-uri>
+            <taglib-location>/WEB-INF/tld/custom.tld</taglib-location>
+        </taglib>
+    </jsp-config>
+
     <listener>
         <listener-class>com.kuntsevich.testsys.controller.listener.DatabaseConnectionPoolListener</listener-class>
     </listener>
@@ -31,7 +48,7 @@
 
     <filter-mapping>
         <filter-name>PermissionFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/WEB-INF/*</url-pattern>
     </filter-mapping>
 
     <servlet>

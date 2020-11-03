@@ -1,10 +1,11 @@
 package com.kuntsevich.testsys.model.service.impl;
 
 import com.kuntsevich.testsys.entity.Credential;
+import com.kuntsevich.testsys.entity.Result;
 import com.kuntsevich.testsys.entity.Role;
 import com.kuntsevich.testsys.entity.User;
 import com.kuntsevich.testsys.model.dao.UserDao;
-import com.kuntsevich.testsys.model.dao.exception.DaoException;
+import com.kuntsevich.testsys.model.dao.DaoException;
 import com.kuntsevich.testsys.model.dao.factory.DaoFactory;
 import com.kuntsevich.testsys.model.service.UserService;
 import com.kuntsevich.testsys.model.service.creator.CredentialCreator;
@@ -16,6 +17,7 @@ import com.kuntsevich.testsys.model.service.validator.UserValidator;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -66,7 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean register(String username, String name, String surname, String email, String password, String role) throws ServiceException {
+    public boolean registration(String username, String name, String surname, String email, String password, String role) throws ServiceException {
         if (username == null
                 || name == null
                 || surname == null
@@ -119,12 +121,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<Role> authorization(String id, String userHash) throws ServiceException {
+    public boolean authorization(String id, String userHash) throws ServiceException {
         if (id == null || userHash == null) {
             throw new ServiceException("Parameters are null");
         }
         UserValidator userValidator = new UserValidator();
-        if (userValidator.isIdValid(id)) {
+        if (!userValidator.isIdValid(id)) {
             throw new ServiceException("Parameters are incorrect");
         }
         DaoFactory daoFactory = DaoFactory.getInstance();
@@ -135,22 +137,42 @@ public class UserServiceImpl implements UserService {
         } catch (CreatorException e) {
             throw new ServiceException("Error creating credential", e);
         }
-        Optional<Role> optionalRole = Optional.empty();
         try {
-            if (userDao.isUserIdAndUserHashExist(credential)) {
-                Optional<User> optionalUser = userDao.findById(Long.parseLong(id));
-                if (optionalUser.isPresent()) {
-                    User user = optionalUser.get();
-                    Role role = user.getRole();
-                    optionalRole = Optional.of(role);
-                } else {
-                    throw new ServiceException("User not found");
-                }
-            }
+            return userDao.isUserIdAndUserHashExist(credential);
         } catch (DaoException e) {
-            throw new ServiceException("Error finding credential", e);
+            throw new ServiceException("Error while checking user id and user hash", e);
         }
-        return optionalRole;
+    }
+
+    @Override
+    public String findUserRole(String id) throws ServiceException {
+        if (id == null) {
+            throw new ServiceException("Parameters are null");
+        }
+        UserValidator userValidator = new UserValidator();
+        if (!userValidator.isIdValid(id)) {
+            throw new ServiceException("Parameters are incorrect");
+        }
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        UserDao userDao = daoFactory.getUserDao();
+        long idValue = Long.parseLong(id);
+        Optional<User> userOptional;
+        try {
+            userOptional = userDao.findById(idValue);
+        } catch (DaoException e) {
+            throw new ServiceException("Error finding user by id", e);
+        }
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return user.getRole().getName();
+        } else {
+            throw new ServiceException("User is not exist");
+        }
+    }
+
+    @Override
+    public List<Result> findUserResults(String role) throws ServiceException {
+        return null;
     }
 
     private String calculateMdHash(String str) throws NoSuchAlgorithmException {

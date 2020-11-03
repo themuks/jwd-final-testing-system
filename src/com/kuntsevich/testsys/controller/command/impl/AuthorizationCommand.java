@@ -1,5 +1,6 @@
 package com.kuntsevich.testsys.controller.command.impl;
 
+import com.kuntsevich.testsys.controller.Router;
 import com.kuntsevich.testsys.controller.command.Command;
 import org.apache.log4j.Logger;
 
@@ -11,10 +12,14 @@ import java.io.IOException;
 
 public class AuthorizationCommand implements Command {
     private static final Logger log = Logger.getLogger(LoginCommand.class);
-    private static final String JSP_SUCCESS_PAGE = "/WEB-INF/jsp/main.jsp";
+    private static final String JSP_SUCCESS_PAGE = "/WEB-INF/jsp/home.jsp";
     private static final String JSP_ERROR_PAGE = "/WEB-INF/jsp/error.jsp";
 
     @Override
+    public Router execute(HttpServletRequest request) {
+        return null;
+    }
+
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String page = JSP_ERROR_PAGE;
         /*ServiceFactory serviceFactory = ServiceFactory.getInstance();

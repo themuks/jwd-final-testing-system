@@ -1,5 +1,6 @@
 package com.kuntsevich.testsys.controller.command.impl;
 
+import com.kuntsevich.testsys.controller.Router;
 import com.kuntsevich.testsys.controller.command.Command;
 
 import javax.servlet.ServletException;
@@ -13,6 +14,10 @@ public class ChangeLanguageCommand implements Command {
     private static final String ENGLISH_LANGUAGE = "en";
 
     @Override
+    public Router execute(HttpServletRequest request) {
+        return null;
+    }
+
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // todo: 09.10.2020 create this method
         /*HttpSession session = request.getSession();

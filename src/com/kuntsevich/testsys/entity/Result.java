@@ -9,25 +9,28 @@ public class Result implements Serializable {
     private int points;
     private int correctAnswers;
     private int totalPoints;
+    private boolean isTestPassed;
 
     public Result() {
     }
 
-    public Result(User user, Test test, int points, int correctAnswers, int totalPoints) {
+    public Result(User user, Test test, int points, int correctAnswers, int totalPoints, boolean isTestPassed) {
         this.user = user;
         this.test = test;
         this.points = points;
         this.correctAnswers = correctAnswers;
         this.totalPoints = totalPoints;
+        this.isTestPassed = isTestPassed;
     }
 
-    public Result(long resultId, User user, Test test, int points, int correctAnswers, int totalPoints) {
+    public Result(long resultId, User user, Test test, int points, int correctAnswers, int totalPoints, boolean isTestPassed) {
         this.resultId = resultId;
         this.user = user;
         this.test = test;
         this.points = points;
         this.correctAnswers = correctAnswers;
         this.totalPoints = totalPoints;
+        this.isTestPassed = isTestPassed;
     }
 
     public long getResultId() {
@@ -78,6 +81,14 @@ public class Result implements Serializable {
         this.totalPoints = totalPoints;
     }
 
+    public boolean isTestPassed() {
+        return isTestPassed;
+    }
+
+    public void setTestPassed(boolean testPassed) {
+        isTestPassed = testPassed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -89,6 +100,7 @@ public class Result implements Serializable {
         if (points != result.points) return false;
         if (correctAnswers != result.correctAnswers) return false;
         if (totalPoints != result.totalPoints) return false;
+        if (isTestPassed != result.isTestPassed) return false;
         if (user != null ? !user.equals(result.user) : result.user != null) return false;
         return test != null ? test.equals(result.test) : result.test == null;
     }
@@ -101,6 +113,7 @@ public class Result implements Serializable {
         result = 31 * result + points;
         result = 31 * result + correctAnswers;
         result = 31 * result + totalPoints;
+        result = 31 * result + (isTestPassed ? 1 : 0);
         return result;
     }
 
@@ -113,6 +126,7 @@ public class Result implements Serializable {
         sb.append(", points=").append(points);
         sb.append(", correctAnswers=").append(correctAnswers);
         sb.append(", totalPoints=").append(totalPoints);
+        sb.append(", isTestPassed=").append(isTestPassed);
         sb.append('}');
         return sb.toString();
     }
