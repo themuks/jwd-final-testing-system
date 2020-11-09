@@ -44,7 +44,7 @@
            placeholder="<fmt:message key="registration.password"/>" required>
 
     <label for="inputPasswordAgain" class="sr-only"><fmt:message key="registration.password_again"/></label>
-    <input type="password" name="password-again" id="inputPasswordAgain" class="form-control form-bottom"
+    <input type="password" name="passwordAgain" id="inputPasswordAgain" class="form-control form-bottom"
            placeholder="<fmt:message key="registration.password_again"/>" required>
 
     <label for="role" class="sr-only">Роль</label>

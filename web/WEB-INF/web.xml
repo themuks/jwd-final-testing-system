@@ -27,13 +27,9 @@
         </taglib>
     </jsp-config>
 
-    <listener>
-        <listener-class>com.kuntsevich.testsys.controller.listener.DatabaseConnectionPoolListener</listener-class>
-    </listener>
-
     <filter>
         <filter-name>CharsetFilter</filter-name>
-        <filter-class>com.kuntsevich.testsys.controller.filter.CharsetFilter</filter-class>
+        <filter-class>com.kuntsevich.ts.controller.filter.CharsetFilter</filter-class>
     </filter>
 
     <filter-mapping>
@@ -43,7 +39,7 @@
 
     <filter>
         <filter-name>PermissionFilter</filter-name>
-        <filter-class>com.kuntsevich.testsys.controller.filter.PermissionFilter</filter-class>
+        <filter-class>com.kuntsevich.ts.controller.filter.PermissionFilter</filter-class>
     </filter>
 
     <filter-mapping>
@@ -53,7 +49,7 @@
 
     <servlet>
         <servlet-name>TestingSystemServlet</servlet-name>
-        <servlet-class>com.kuntsevich.testsys.controller.Controller</servlet-class>
+        <servlet-class>com.kuntsevich.ts.controller.Controller</servlet-class>
     </servlet>
 
     <servlet-mapping>

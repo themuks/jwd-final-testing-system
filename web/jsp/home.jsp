@@ -15,7 +15,7 @@
 <body class="d-flex flex-column h-100">
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap navbar-expand-md">
     <div class="container" style="justify-content: space-evenly">
-        <a class="navbar-brand ml-sm-3" href="#">Система тестирования</a>
+        <a class="navbar-brand ml-sm-3" href="<c:url value="/jsp/home.jsp"/>">Система тестирования</a>
         <ul class="navbar-nav mr-md-auto list-inline">
             <li class="nav-item active">
                 <a class="nav-link" href="<c:url value="/jsp/home.jsp"/>">Главная<span
@@ -25,12 +25,18 @@
                 <a class="nav-link" href="<c:url value="/jsp/about.jsp"/>">О системе</a>
             </li>
         </ul>
-        <div class="form-inline">
-            <a class="btn btn-outline-primary mr-2 my-2 my-lg-0" role="button"
-               href="${pageContext.request.contextPath}/jsp/login.jsp">Вход</a>
-            <a class="btn btn-primary" role="button"
-               href="${pageContext.request.contextPath}/jsp/registration.jsp">Регистрация</a>
-        </div>
+        <c:if test="${not empty sessionScope.role}">
+            <a class="nav-link" href="<c:url value="/controller?command=show-profile"/>">Профиль</a>
+            <a class="nav-link" href="<c:url value="/controller?command=logout"/>">Выйти</a>
+        </c:if>
+        <c:if test="${empty sessionScope.role}">
+            <div class="form-inline">
+                <a class="btn btn-outline-primary mr-2 my-2 my-lg-0" role="button"
+                   href="${pageContext.request.contextPath}/jsp/login.jsp">Вход</a>
+                <a class="btn btn-primary" role="button"
+                   href="${pageContext.request.contextPath}/jsp/registration.jsp">Регистрация</a>
+            </div>
+        </c:if>
     </div>
 </nav>
 <div class="container">
@@ -38,11 +44,24 @@
         <div class="col-lg-3">
             <nav class="d-block ml-sm-auto bg-light sidebar mt-3 mb-lg-3 rounded">
                 <ul class="nav flex-column">
+                    <c:if test="${sessionScope.role eq 'Администратор'}">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="<c:url value="/controller?command=show-test-create"/>">Создать
+                                тест</a>
+                        </li>
+                    </c:if>
+                    <c:if test="${sessionScope.role eq 'Тьютор'}">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="<c:url value="/controller?command=show-test-create"/>">Создать
+                                тест</a>
+                        </li>
+                    </c:if>
                     <li class="nav-item">
                         <a class="nav-link active" href="<c:url value="/controller?command=show-all-tests"/>">Тесты</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<c:url value="/controller?command=show-subjects"/>">Список предметов</a>
+                        <a class="nav-link" href="<c:url value="/controller?command=show-subjects"/>">Список
+                            предметов</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<c:url value="/controller?command=show-results"/>">Результаты</a>
@@ -51,16 +70,19 @@
             </nav>
         </div>
 
-        <div class="col-lg-9 align-self-center">
+        <div class="col-lg-9">
             <c:if test="${not empty errorMessage}">
                 <div class="alert alert-danger my-3" role="alert">${errorMessage}</div>
+            </c:if>
+            <c:if test="${not empty infoMessage}">
+                <div class="alert alert-info my-3" role="alert">${infoMessage}</div>
             </c:if>
             <c:if test="${not empty templatePath}">
                 <c:import url="${templatePath}"/>
             </c:if>
             <c:if test="${empty templatePath}">
-                <div class="text-center">
-                    <span class="mx-auto">Выберите пункт из левого меню, чтобы начать работу</span>
+                <div class="mx-auto my-3 text-center">
+                    Выберите пункт из меню, чтобы начать работу
                 </div>
             </c:if>
         </div>

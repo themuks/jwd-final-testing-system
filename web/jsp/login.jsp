@@ -13,7 +13,7 @@
     <title><fmt:message key="login.title"/></title>
 </head>
 <body class="text-center">
-<form class="form-signin" name="LoginForm" method="POST" action="${pageContext.request.contextPath}/controller">
+<form class="form-signin" name="LoginForm" method="post" action="${pageContext.request.contextPath}/controller">
     <input type="hidden" name="command" value="login"/>
     <h1 class="h3 mb-3 font-weight-normal">Вход</h1>
 
@@ -30,7 +30,7 @@
     <label for="inputPassword" class="sr-only"><fmt:message key="login.password"/></label>
     <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<fmt:message key="login.password"/>" required>
     <div class="custom-control custom-checkbox mb-3">
-        <input type="checkbox" class="custom-control-input" id="customCheck1" value="remember-me">
+        <input type="checkbox" class="custom-control-input" id="customCheck1" name="rememberMe" value="rememberMe">
         <label class="custom-control-label" for="customCheck1"> <fmt:message key="login.remember_me"/></label>
     </div>
     <button class="btn btn-lg btn-primary btn-block mb-3" type="submit"><fmt:message key="login.submit_button"/></button>

@@ -1,6 +1,6 @@
 package test.kuntsevich.testsys.model.service.validator;
 
-import com.kuntsevich.testsys.model.service.validator.UserValidator;
+import com.kuntsevich.ts.model.service.validator.UserValidator;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;

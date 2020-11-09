@@ -15,7 +15,7 @@
 <body class="d-flex flex-column h-100">
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap navbar-expand-md">
     <div class="container">
-        <a class="navbar-brand ml-sm-3" href="#">Система тестирования</a>
+        <a class="navbar-brand ml-sm-3" href="<c:url value="/jsp/home.jsp"/>">Система тестирования</a>
         <ul class="navbar-nav mr-md-auto list-inline">
             <li class="nav-item">
                 <a class="nav-link" href="<c:url value="/jsp/home.jsp"/>">Главная</a>

@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:useBean id="result" class="com.kuntsevich.testsys.entity.Result" scope="request"/>
+<jsp:useBean id="result" class="com.kuntsevich.ts.entity.Result" scope="request"/>
 <c:if test="${not empty results}">
     <p class="h4 text-center mt-3">Список результатов по тестам</p>
     <c:forEach var="result" items="${results}">
@@ -19,5 +19,7 @@
     </c:forEach>
 </c:if>
 <c:if test="${empty results}">
-    У вас нет результатов
+    <div class="mx-auto my-3 text-center">
+        У вас нет результатов
+    </div>
 </c:if>

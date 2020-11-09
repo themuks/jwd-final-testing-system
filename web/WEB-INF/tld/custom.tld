@@ -10,19 +10,19 @@
 
     <tag>
         <name>side-menu</name>
-        <tag-class>com.kuntsevich.testsys.tag.SideMenuTag</tag-class>
+        <tag-class>com.kuntsevich.ts.tag.SideMenuTag</tag-class>
         <body-content>empty</body-content>
     </tag>
 
     <tag>
         <name>profile-info</name>
-        <tag-class>com.kuntsevich.testsys.tag.ProfileInfoTag</tag-class>
+        <tag-class>com.kuntsevich.ts.tag.ProfileInfoTag</tag-class>
         <body-content>empty</body-content>
     </tag>
 
     <tag>
         <name>user-pagination</name>
-        <tag-class>com.kuntsevich.testsys.tag.PaginationTag</tag-class>
+        <tag-class>com.kuntsevich.ts.tag.PaginationTag</tag-class>
         <body-content>empty</body-content>
     </tag>
 </taglib>
