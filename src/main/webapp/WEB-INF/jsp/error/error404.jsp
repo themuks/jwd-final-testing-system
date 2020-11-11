@@ -4,6 +4,6 @@
     <title>Error 404</title>
 </head>
 <body>
-    404 error
+404 error
 </body>
 </html>

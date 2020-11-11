@@ -4,6 +4,6 @@
     <title>Error 500</title>
 </head>
 <body>
-    500 error
+500 error
 </body>
 </html>

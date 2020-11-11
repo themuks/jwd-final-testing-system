@@ -1,42 +1,37 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="ctg" uri="customtags" %>
 <fmt:setBundle basename="text"/>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="<c:url value="/css/main.css"/>">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="<c:url value="/css/sticky-footer.css"/>">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sticky-footer.css">
+    <link rel="icon" href="${pageContext.request.contextPath}/img/favicon.ico" type="image/x-icon"/>
     <title>Система тестирования</title>
 </head>
 <body class="d-flex flex-column h-100">
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap navbar-expand-md">
     <div class="container" style="justify-content: space-evenly">
-        <a class="navbar-brand ml-sm-3" href="<c:url value="/jsp/home.jsp"/>">Система тестирования</a>
+        <a class="navbar-brand ml-sm-3" href="${pageContext.request.contextPath}/jsp/home.jsp">
+            <img src="${pageContext.request.contextPath}/img/logo.png" width="30" height="30" class="d-inline-block align-top mr-2" alt="logo" loading="lazy">
+            Система тестирования
+        </a>
         <ul class="navbar-nav mr-md-auto list-inline">
             <li class="nav-item active">
-                <a class="nav-link" href="<c:url value="/jsp/home.jsp"/>">Главная<span
+                <a class="nav-link" href="${pageContext.request.contextPath}/jsp/home.jsp">Главная<span
                         class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<c:url value="/jsp/about.jsp"/>">О системе</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/jsp/about.jsp">О системе</a>
             </li>
         </ul>
-        <c:if test="${not empty sessionScope.role}">
-            <a class="nav-link" href="<c:url value="/controller?command=show-profile"/>">Профиль</a>
-            <a class="nav-link" href="<c:url value="/controller?command=logout"/>">Выйти</a>
-        </c:if>
-        <c:if test="${empty sessionScope.role}">
-            <div class="form-inline">
-                <a class="btn btn-outline-primary mr-2 my-2 my-lg-0" role="button"
-                   href="${pageContext.request.contextPath}/jsp/login.jsp">Вход</a>
-                <a class="btn btn-primary" role="button"
-                   href="${pageContext.request.contextPath}/jsp/registration.jsp">Регистрация</a>
-            </div>
-        </c:if>
+        <tags:user-status/>
     </div>
 </nav>
 <div class="container">

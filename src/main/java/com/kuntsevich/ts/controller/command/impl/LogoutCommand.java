@@ -1,7 +1,6 @@
 package com.kuntsevich.ts.controller.command.impl;
 
 import com.kuntsevich.ts.controller.PagePath;
-import com.kuntsevich.ts.controller.SessionAttribute;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.router.Router;
 

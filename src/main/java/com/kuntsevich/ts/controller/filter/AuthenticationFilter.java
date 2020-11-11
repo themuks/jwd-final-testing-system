@@ -38,7 +38,7 @@ public class AuthenticationFilter implements Filter {
         List<Cookie> cookies = List.of(request.getCookies());
         String userHash = null;
         String emailHash = null;
-        for (var cookie: cookies) {
+        for (var cookie : cookies) {
             if (cookie.getName().equals(USER_HASH)) {
                 userHash = cookie.getValue();
             }
@@ -54,6 +54,7 @@ public class AuthenticationFilter implements Filter {
                     User user = optionalUser.get();
                     session.setAttribute(SessionAttribute.USER_ID, user.getUserId());
                     session.setAttribute(SessionAttribute.ROLE, user.getRole().getName());
+                    session.setAttribute(SessionAttribute.USER_NAME, user.getUsername());
                 }
             } catch (DaoException e) {
                 log.error("Error authorizing user", e);

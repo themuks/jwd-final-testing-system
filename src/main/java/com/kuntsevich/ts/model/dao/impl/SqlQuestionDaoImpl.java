@@ -14,7 +14,7 @@ import java.util.*;
 public class SqlQuestionDaoImpl implements QuestionDao {
     private static final String FIND_ALL_QUESTION_QUERY = "SELECT question_id, text, points, test FROM testing_system.questions";
     private static final String QUESTION_ID = "question_id";
-    private static final String TEST = "test";
+    private static final String TEST_ID = "test";
     private static final String INSERT_QUESTION_QUERY = "INSERT INTO testing_system.questions (text, points, test) VALUES (?, ?, ?)";
     private static final String UPDATE_QUESTION_QUERY = "UPDATE testing_system.questions SET text = ?, points = ?, test = ? WHERE (question_id = ?)";
     private static final String DELETE_QUESTION_QUERY = "DELETE FROM testing_system.questions WHERE (question_id = ?)";
@@ -61,7 +61,7 @@ public class SqlQuestionDaoImpl implements QuestionDao {
     @Override
     public List<Question> findByTestId(long id) throws DaoException {
         Map<String, String> criteria = new HashMap<>();
-        criteria.put(TEST, Long.toString(id));
+        criteria.put(TEST_ID, Long.toString(id));
         return findByCriteria(criteria);
     }
 

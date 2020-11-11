@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.*;
 
 public class SqlAnswerDaoImpl implements AnswerDao {
-    private static final String FIND_ALL_ANSWER_QUERY = "SELECT answer_id, text, question, correct FROM testing_system.answers";
+    private static final String FIND_ALL_ANSWER_QUERY = "SELECT answer_id, text, correct FROM testing_system.answers";
     private static final String ANSWER_ID = "answer_id";
     private static final String QUESTION = "question";
     private static final String INSERT_ANSWER_QUERY = "INSERT INTO testing_system.answers (text, question, correct) VALUES (?, ?, ?)";

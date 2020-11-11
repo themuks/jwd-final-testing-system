@@ -19,6 +19,7 @@
     </div>
 </c:if>
 <div class="mx-auto text-center">
-    <a class="btn btn-primary" role="button" href="${pageContext.request.contextPath}/controller?command=show-subject-add">Добавить
+    <a class="btn btn-primary" role="button"
+       href="${pageContext.request.contextPath}/controller?command=show-subject-add">Добавить
         предмет</a>
 </div>

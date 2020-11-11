@@ -1,16 +1,8 @@
 package com.kuntsevich.ts.controller.filter;
 
-import com.kuntsevich.ts.controller.PagePath;
-import com.kuntsevich.ts.controller.RequestParameter;
-import com.kuntsevich.ts.model.service.UserService;
-import com.kuntsevich.ts.model.service.exception.ServiceException;
-import com.kuntsevich.ts.model.service.factory.ServiceFactory;
 import org.apache.log4j.Logger;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

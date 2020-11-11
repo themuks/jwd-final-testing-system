@@ -9,7 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="<c:url value="/css/sign-in.css"/>">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sign-in.css">
+    <link rel="icon" href="${pageContext.request.contextPath}/img/favicon.ico" type="image/x-icon"/>
     <title><fmt:message key="login.title"/></title>
 </head>
 <body class="text-center">
@@ -26,17 +27,20 @@
     </c:if>
 
     <label for="inputEmail" class="sr-only"><fmt:message key="login.email"/></label>
-    <input type="email" name="email" id="inputEmail" class="form-control" placeholder="<fmt:message key="login.email"/>" required autofocus>
+    <input type="email" name="email" id="inputEmail" class="form-control" placeholder="<fmt:message key="login.email"/>"
+           required autofocus>
     <label for="inputPassword" class="sr-only"><fmt:message key="login.password"/></label>
-    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<fmt:message key="login.password"/>" required>
+    <input type="password" name="password" id="inputPassword" class="form-control"
+           placeholder="<fmt:message key="login.password"/>" required>
     <div class="custom-control custom-checkbox mb-3">
         <input type="checkbox" class="custom-control-input" id="customCheck1" name="rememberMe" value="rememberMe">
         <label class="custom-control-label" for="customCheck1"> <fmt:message key="login.remember_me"/></label>
     </div>
-    <button class="btn btn-lg btn-primary btn-block mb-3" type="submit"><fmt:message key="login.submit_button"/></button>
+    <button class="btn btn-lg btn-primary btn-block mb-3" type="submit"><fmt:message
+            key="login.submit_button"/></button>
     <div>
         <fmt:message key="login.question"/>
-        <a href="${pageContext.request.contextPath}/jsp/registration.jsp"><fmt:message key="login.question_suggestion"/></a>
+        <a href="registration.jsp"><fmt:message key="login.question_suggestion"/></a>
     </div>
 </form>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

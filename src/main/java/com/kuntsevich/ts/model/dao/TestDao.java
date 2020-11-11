@@ -1,6 +1,5 @@
 package com.kuntsevich.ts.model.dao;
 
-import com.kuntsevich.ts.entity.Question;
 import com.kuntsevich.ts.entity.Test;
 
 import java.util.List;

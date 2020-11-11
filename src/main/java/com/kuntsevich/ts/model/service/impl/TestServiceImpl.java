@@ -199,7 +199,7 @@ public class TestServiceImpl implements TestService {
         } catch (DaoException e) {
             throw new ServiceException("Error while adding test", e);
         }
-        for (var question: questions) {
+        for (var question : questions) {
             long questionId;
             try {
                 questionId = questionDao.add(question, testId);

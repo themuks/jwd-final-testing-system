@@ -29,7 +29,7 @@ public class TestValidator extends EntityValidator {
         } catch (DaoException e) {
             return false;
         }
-        for (var s: subjects) {
+        for (var s : subjects) {
             if (s.getName().equals(subject)) {
                 return true;
             }

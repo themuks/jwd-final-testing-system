@@ -4,6 +4,6 @@
     <title>Error 505</title>
 </head>
 <body>
-    505 error
+505 error
 </body>
 </html>

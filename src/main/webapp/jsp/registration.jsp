@@ -9,7 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="<c:url value="/css/sign-up.css"/>">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sign-up.css">
+    <link rel="icon" href="${pageContext.request.contextPath}/img/favicon.ico" type="image/x-icon"/>
     <title><fmt:message key="registration.title"/></title>
 </head>
 <body class="text-center">
@@ -54,11 +55,12 @@
         <option value="Студент">Студент</option>
     </select>
 
-    <button class="btn btn-lg btn-primary btn-block my-3" type="submit"><fmt:message key="registration.submit_button"/></button>
+    <button class="btn btn-lg btn-primary btn-block my-3" type="submit"><fmt:message
+            key="registration.submit_button"/></button>
 
     <div>
         <fmt:message key="registration.question"/>
-        <a href="${pageContext.request.contextPath}/jsp/login.jsp"><fmt:message key="registration.question_suggestion"/></a>
+        <a href="login.jsp"><fmt:message key="registration.question_suggestion"/></a>
     </div>
 </form>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

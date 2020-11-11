@@ -1,9 +1,9 @@
 package com.kuntsevich.ts.model.service.validator;
 
-import com.kuntsevich.ts.model.service.validator.UserValidator;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class UserValidatorTest {
     private final UserValidator userValidator = new UserValidator();

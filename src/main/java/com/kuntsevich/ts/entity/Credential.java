@@ -1,9 +1,9 @@
 package com.kuntsevich.ts.entity;
 
 public class Credential {
-    private long userId;
     private final String userHash;
     private final String emailHash;
+    private long userId;
 
     public Credential(String userHash, String emailHash) {
         this.userHash = userHash;

@@ -10,6 +10,7 @@ public class SessionAttribute {
     public static final String ORIGIN = "origin";
     public static final String TEST = "test";
     public static final String RESULT = "result";
+    public static final String USER_NAME = "username";
 
     private SessionAttribute() {
     }

@@ -59,6 +59,6 @@ public class ChangeUserParametersCommand implements Command {
                 request.setAttribute(RequestParameter.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SERVER_ERROR));
             }
         }
-        return new Router("/controller?command=show-profile");
+        return new Router(CommandPath.SHOW_PROFILE);
     }
 }

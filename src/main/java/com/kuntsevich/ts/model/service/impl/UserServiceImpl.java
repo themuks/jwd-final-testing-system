@@ -277,6 +277,31 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
+    public String findUserUsername(String id) throws ServiceException {
+        if (id == null) {
+            throw new ServiceException("Parameters are null");
+        }
+        UserValidator userValidator = new UserValidator();
+        if (!userValidator.isIdValid(id)) {
+            throw new ServiceException("Parameters are incorrect");
+        }
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        long idValue = Long.parseLong(id);
+        Optional<User> userOptional;
+        try {
+            userOptional = userDao.findById(idValue);
+        } catch (DaoException e) {
+            throw new ServiceException("Error finding user by id", e);
+        }
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return user.getUsername();
+        } else {
+            throw new ServiceException("User is not exist");
+        }
+    }
+
     private String calculateMdHash(String str) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance(MESSAGE_DIGEST_MD5);
         byte[] hashInBytes = md.digest(str.getBytes(StandardCharsets.UTF_8));

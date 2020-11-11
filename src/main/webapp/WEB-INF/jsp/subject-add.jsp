@@ -13,7 +13,8 @@
         </div>
         <div class="form-group">
             <label for="subjectDescriptionInput">Описание предмета</label>
-            <textarea class="form-control" name="subjectDescription" id="subjectDescriptionInput" rows="3" required></textarea>
+            <textarea class="form-control" name="subjectDescription" id="subjectDescriptionInput" rows="3"
+                      required></textarea>
         </div>
         <div class="d-flex justify-content-center">
             <button class="btn btn-primary" type="submit">Подтвердить</button>

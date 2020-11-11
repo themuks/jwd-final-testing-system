@@ -24,4 +24,6 @@ public interface UserService {
     boolean changeUserPassword(String userId, String oldPassword, String newPassword, String newPasswordAgain) throws ServiceException;
 
     boolean changeUserData(String userId, String username, String name, String surname) throws ServiceException;
+
+    String findUserUsername(String id) throws ServiceException;
 }

@@ -4,6 +4,6 @@
     <title>Error 403</title>
 </head>
 <body>
-    403 error
+403 error
 </body>
 </html>

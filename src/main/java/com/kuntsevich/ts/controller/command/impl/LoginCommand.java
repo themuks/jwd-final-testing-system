@@ -46,6 +46,8 @@ public class LoginCommand implements Command {
                 session.setAttribute(SessionAttribute.USER_ID, credential.getUserId());
                 String userRoleName = userService.findUserRole(Long.toString(credential.getUserId()));
                 session.setAttribute(SessionAttribute.ROLE, userRoleName);
+                String username = userService.findUserUsername(Long.toString(credential.getUserId()));
+                session.setAttribute(SessionAttribute.USER_NAME, username);
                 if (rememberMe) {
                     response.addCookie(new Cookie(USER_HASH, credential.getUserHash()));
                     response.addCookie(new Cookie(EMAIL_HASH, credential.getEmailHash()));
