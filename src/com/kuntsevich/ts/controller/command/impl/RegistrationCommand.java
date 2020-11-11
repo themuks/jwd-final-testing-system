@@ -2,7 +2,6 @@ package com.kuntsevich.ts.controller.command.impl;
 
 import com.kuntsevich.ts.controller.PagePath;
 import com.kuntsevich.ts.controller.RequestParameter;
-import com.kuntsevich.ts.controller.SessionAttribute;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.manager.MessageManager;
 import com.kuntsevich.ts.controller.router.Router;
@@ -12,13 +11,14 @@ import com.kuntsevich.ts.model.service.factory.ServiceFactory;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class RegistrationCommand implements Command {
     private static final Logger log = Logger.getLogger(RegistrationCommand.class);
     private static final String MESSAGE_REGISTRATION_ERROR = "message.registration.error";
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         String page;
         String username = request.getParameter(RequestParameter.USERNAME);
         String name = request.getParameter(RequestParameter.NAME);

@@ -1,5 +1,6 @@
 package com.kuntsevich.ts.controller.command.impl;
 
+import com.kuntsevich.ts.controller.CommandPath;
 import com.kuntsevich.ts.controller.RequestParameter;
 import com.kuntsevich.ts.controller.SessionAttribute;
 import com.kuntsevich.ts.controller.command.Command;
@@ -10,6 +11,7 @@ import com.kuntsevich.ts.model.service.exception.ServiceException;
 import com.kuntsevich.ts.model.service.factory.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class ChangeUserParametersCommand implements Command {
@@ -18,7 +20,7 @@ public class ChangeUserParametersCommand implements Command {
     private static final String MESSAGE_DATA_CHANGE_SUCCESS = "message.data_change.success";
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         String username = request.getParameter(RequestParameter.USERNAME);
         String name = request.getParameter(RequestParameter.NAME);
         String surname = request.getParameter(RequestParameter.SURNAME);
@@ -29,7 +31,7 @@ public class ChangeUserParametersCommand implements Command {
                 || name == null || name.isEmpty()
                 || surname == null || surname.isEmpty()) {
             request.setAttribute(RequestParameter.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
-            return new Router("/controller?command=show-profile");
+            return new Router(CommandPath.SHOW_PROFILE);
         }
         HttpSession session = request.getSession();
         Long userId = (Long) session.getAttribute(SessionAttribute.USER_ID);
@@ -42,7 +44,7 @@ public class ChangeUserParametersCommand implements Command {
             }
         } catch (ServiceException e) {
             request.setAttribute(RequestParameter.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SERVER_ERROR));
-            return new Router("/controller?command=show-profile");
+            return new Router(CommandPath.SHOW_PROFILE);
         }
         if (!(oldPassword == null) && !oldPassword.isEmpty()
                 || !(newPassword == null) && !newPassword.isEmpty()

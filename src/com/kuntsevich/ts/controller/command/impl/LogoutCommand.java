@@ -6,11 +6,12 @@ import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.router.Router;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class LogoutCommand implements Command {
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         session.removeAttribute(SessionAttribute.ROLE);
         session.removeAttribute(SessionAttribute.USER_ID);

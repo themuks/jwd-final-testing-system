@@ -12,6 +12,7 @@ import com.kuntsevich.ts.model.service.exception.ServiceException;
 import com.kuntsevich.ts.model.service.factory.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ShowTestEditCommand implements Command {
     private static final String MESSAGE_SERVER_ERROR = "message.server.error";
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         String questionsCount = request.getParameter(RequestParameter.QUESTIONS_COUNT);
         if (questionsCount == null || questionsCount.isEmpty()) {
             request.setAttribute(RequestParameter.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));

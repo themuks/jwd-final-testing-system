@@ -5,10 +5,11 @@ import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.router.Router;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class EmptyCommand implements Command {
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         return new Router(PagePath.WELCOME).setRedirect();
     }
 }

@@ -13,7 +13,7 @@ public interface UserService {
 
     boolean registration(String username, String name, String surname, String email, String password, String role) throws ServiceException;
 
-    boolean authorization(String id, String userHash) throws ServiceException;
+    boolean authorization(String emailHash, String userHash) throws ServiceException;
 
     String findUserRole(String id) throws ServiceException;
 

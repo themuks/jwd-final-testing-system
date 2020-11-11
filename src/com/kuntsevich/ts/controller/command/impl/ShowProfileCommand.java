@@ -11,11 +11,12 @@ import com.kuntsevich.ts.model.service.exception.ServiceException;
 import com.kuntsevich.ts.model.service.factory.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class ShowProfileCommand implements Command {
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         Long userId = (Long) session.getAttribute(SessionAttribute.USER_ID);
         if (userId == null) {

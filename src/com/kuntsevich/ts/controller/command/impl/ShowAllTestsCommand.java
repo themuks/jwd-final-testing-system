@@ -11,6 +11,7 @@ import com.kuntsevich.ts.model.service.factory.ServiceFactory;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class ShowAllTestsCommand implements Command {
@@ -18,7 +19,7 @@ public class ShowAllTestsCommand implements Command {
     private static final String MESSAGE_PARAMETERS_ERROR = "message.parameters.error";
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         String page;
         List<Test> tests;
         try {

@@ -27,4 +27,6 @@ public interface UserDao {
     boolean isUserIdAndUserHashExist(Credential credential) throws DaoException;
 
     Optional<User> findByUserIdAndPasswordHash(long userId, String passwordHash) throws DaoException;
+
+    Optional<User> findByEmailHashAndUserHash(String userHash, String emailHash) throws DaoException;
 }

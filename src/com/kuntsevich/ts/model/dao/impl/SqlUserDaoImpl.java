@@ -199,4 +199,17 @@ public class SqlUserDaoImpl implements UserDao {
         }
         return optionalUser;
     }
+
+    @Override
+    public Optional<User> findByEmailHashAndUserHash(String userHash, String emailHash) throws DaoException {
+        Map<String, String> criteria = new HashMap<>();
+        criteria.put(USER_HASH, userHash);
+        criteria.put(EMAIL_HASH, emailHash);
+        List<User> users = findByCriteria(criteria);
+        Optional<User> optionalUser = Optional.empty();
+        if (users.size() > 0) {
+            optionalUser = Optional.of(users.get(FIRST_ELEMENT_INDEX));
+        }
+        return optionalUser;
+    }
 }

@@ -3,18 +3,12 @@ package com.kuntsevich.ts.controller.command.impl;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.router.Router;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class ChangeLanguageCommand implements Command {
     @Override
-    public Router execute(HttpServletRequest request) {
-        return null;
-    }
-
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         // todo: 09.10.2020 create this method
         /*HttpSession session = request.getSession();
         Object language = session.getAttribute(LANGUAGE_SESSION_ATTRIBUTE);
@@ -29,5 +23,6 @@ public class ChangeLanguageCommand implements Command {
         }
         RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher();
         dispatcher.forward(request, response);*/
+        throw new UnsupportedOperationException();
     }
 }

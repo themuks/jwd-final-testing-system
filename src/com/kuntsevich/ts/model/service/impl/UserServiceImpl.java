@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
             } catch (DaoException e) {
                 throw new ServiceException("User dao update error", e);
             }
-            Credential credential = new Credential(user.getUserId(), user.getUserHash());
+            Credential credential = new Credential(user.getUserId(), user.getUserHash(), user.getEmailHash());
             optionalCredential = Optional.of(credential);
         }
         return optionalCredential;
@@ -120,19 +120,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean authorization(String id, String userHash) throws ServiceException {
-        if (id == null || userHash == null) {
+    public boolean authorization(String emailHash, String userHash) throws ServiceException {
+        if (emailHash == null || userHash == null) {
             throw new ServiceException("Parameters are null");
         }
         UserValidator userValidator = new UserValidator();
-        if (!userValidator.isIdValid(id)) {
+        if (!userValidator.isIdValid(emailHash)) {
             throw new ServiceException("Parameters are incorrect");
         }
         DaoFactory daoFactory = DaoFactory.getInstance();
         UserDao userDao = daoFactory.getUserDao();
         Credential credential;
         try {
-            credential = CredentialCreator.createCredential(id, userHash);
+            credential = CredentialCreator.createCredential(userHash, emailHash);
         } catch (CreatorException e) {
             throw new ServiceException("Error creating credential", e);
         }
@@ -152,8 +152,7 @@ public class UserServiceImpl implements UserService {
         if (!userValidator.isIdValid(id)) {
             throw new ServiceException("Parameters are incorrect");
         }
-        DaoFactory daoFactory = DaoFactory.getInstance();
-        UserDao userDao = daoFactory.getUserDao();
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
         long idValue = Long.parseLong(id);
         Optional<User> userOptional;
         try {

@@ -10,6 +10,7 @@ import com.kuntsevich.ts.model.service.exception.ServiceException;
 import com.kuntsevich.ts.model.service.factory.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class CreateTestCommand implements Command {
     private static final String MESSAGE_PARAMETERS_ERROR = "message.parameters.error";
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         String title = request.getParameter(RequestParameter.TITLE);
         String description = request.getParameter(RequestParameter.DESCRIPTION);
         String subject = request.getParameter(RequestParameter.SUBJECT);

@@ -19,7 +19,7 @@ public enum CommandType {
     CREATE_TEST(new CreateTestCommand()),
     SUBMIT_TEST(new SubmitTestCommand()),
     CHANGE_USER_PARAMETERS(new ChangeUserParametersCommand()),
-    SHOW_WELCOME_PAGE(r -> new Router(PagePath.WELCOME).setRedirect());
+    SHOW_WELCOME_PAGE((r, response) -> new Router(PagePath.WELCOME).setRedirect());
 
     Command command;
 

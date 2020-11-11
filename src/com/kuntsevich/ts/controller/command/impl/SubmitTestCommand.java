@@ -13,6 +13,7 @@ import com.kuntsevich.ts.model.service.factory.ServiceFactory;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class SubmitTestCommand implements Command {
     private static final String MESSAGE_SUBMIT_TEST_PARAMETERS_ERROR = "message.submit_test.parameters.error";
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         String page;
         String testId = request.getParameter(RequestParameter.TEST_ID);
         HttpSession session = request.getSession();

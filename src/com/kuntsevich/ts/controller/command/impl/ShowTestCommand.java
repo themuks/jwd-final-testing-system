@@ -13,6 +13,7 @@ import com.kuntsevich.ts.model.service.factory.ServiceFactory;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -21,15 +22,14 @@ public class ShowTestCommand implements Command {
     private static final String TEST_NOTFOUND_ERROR = "message.test.notfound.error";
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         String page;
         try {
             String testIdParameter = request.getParameter(RequestParameter.ID);
             long testId = Long.parseLong(testIdParameter);
             HttpSession session = request.getSession();
             Long userId = (Long) session.getAttribute(SessionAttribute.USER_ID);
-            String userHash = (String) session.getAttribute(SessionAttribute.USER_HASH);
-            if (userId == null || userHash == null || userHash.isEmpty()) {
+            if (userId == null) {
                 session.setAttribute(SessionAttribute.ORIGIN, request.getRequestURL().toString());
                 page = PagePath.LOGIN;
                 return new Router(page).setRedirect();

@@ -46,7 +46,7 @@ public class PermissionFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        /*HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute(USER_ID);
@@ -93,7 +93,7 @@ public class PermissionFilter implements Filter {
             String page = request.getContextPath() + PagePath.LOGIN;
             response.sendRedirect(page);
             return;
-        }
+        }*/
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }

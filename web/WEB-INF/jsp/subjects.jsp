@@ -12,5 +12,7 @@
     </c:forEach>
 </c:if>
 <c:if test="${empty subjects}">
-    Нет учебных предметов
+    <div class="mx-auto my-3 text-center">
+        Нет учебных предметов
+    </div>
 </c:if>

@@ -12,7 +12,9 @@ import com.kuntsevich.ts.model.service.exception.ServiceException;
 import com.kuntsevich.ts.model.service.factory.ServiceFactory;
 import org.apache.log4j.Logger;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +24,11 @@ public class LoginCommand implements Command {
     private static final Logger log = Logger.getLogger(LoginCommand.class);
     private static final String MESSAGE_LOGIN_ERROR = "message.login.error";
     private static final String LOGIN_SERVER_ERROR = "message.login.server.error";
+    private static final String USER_HASH = "userHash";
+    private static final String EMAIL_HASH = "userEmail";
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         String page;
         String email = request.getParameter(RequestParameter.EMAIL);
         String password = request.getParameter(RequestParameter.PASSWORD);
@@ -40,9 +44,12 @@ public class LoginCommand implements Command {
             if (optionalCredential.isPresent()) {
                 Credential credential = optionalCredential.get();
                 session.setAttribute(SessionAttribute.USER_ID, credential.getUserId());
-                session.setAttribute(SessionAttribute.USER_HASH, credential.getUserHash());
                 String userRoleName = userService.findUserRole(Long.toString(credential.getUserId()));
                 session.setAttribute(SessionAttribute.ROLE, userRoleName);
+                if (rememberMe) {
+                    response.addCookie(new Cookie(USER_HASH, credential.getUserHash()));
+                    response.addCookie(new Cookie(EMAIL_HASH, credential.getEmailHash()));
+                }
                 page = PagePath.HOME;
                 isSuccessful = true;
             } else {

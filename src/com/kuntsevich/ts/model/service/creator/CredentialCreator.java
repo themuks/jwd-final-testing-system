@@ -5,8 +5,10 @@ import com.kuntsevich.ts.model.service.exception.CreatorException;
 import com.kuntsevich.ts.model.service.validator.UserValidator;
 
 public class CredentialCreator {
-    public static Credential createCredential(String userId, String userHash) throws CreatorException {
-        if (userId == null || userHash == null) {
+    public static Credential createCredential(String userId, String userHash, String emailHash) throws CreatorException {
+        if (userId == null
+                || userHash == null
+                || emailHash == null) {
             throw new CreatorException("Parameters are null");
         }
         UserValidator userValidator = new UserValidator();
@@ -14,7 +16,13 @@ public class CredentialCreator {
             throw new CreatorException("Parameters are incorrect");
         }
         long id = Long.parseLong(userId);
-        Credential credential = new Credential(id, userHash);
-        return credential;
+        return new Credential(id, userHash, emailHash);
+    }
+
+    public static Credential createCredential(String userHash, String emailHash) throws CreatorException {
+        if (userHash == null || emailHash == null) {
+            throw new CreatorException("Parameters are null");
+        }
+        return new Credential(userHash, emailHash);
     }
 }
