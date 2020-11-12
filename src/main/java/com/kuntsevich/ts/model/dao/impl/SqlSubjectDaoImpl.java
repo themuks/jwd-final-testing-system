@@ -6,15 +6,15 @@ import com.kuntsevich.ts.model.dao.SubjectDao;
 import com.kuntsevich.ts.model.dao.pool.DatabaseConnectionPool;
 import com.kuntsevich.ts.model.dao.util.DaoUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 public class SqlSubjectDaoImpl implements SubjectDao {
     private static final String SUBJECT_ID = "subject_id";
     private static final String FIND_ALL_SUBJECT_QUERY = "SELECT subject_id, name, description FROM testing_system.subjects";
+    private static final String INSERT_SUBJECT_QUERY = "INSERT INTO  testing_system.subjects (name, description) VALUES (?, ?)";
+    private static final String DELETE_SUBJECT_QUERY = "DELETE FROM testing_system.subjects WHERE (subject_id = ?)";
+    private static final String UPDATE_SUBJECT_QUERY = "UPDATE testing_system.subjects SET name = ?, description = ? WHERE (subject_id = ?)";
     private static final String NAME = "name";
     private static final int FIRST_ELEMENT = 0;
 
@@ -94,5 +94,63 @@ public class SqlSubjectDaoImpl implements SubjectDao {
             optionalSubject = Optional.of(subjects.get(FIRST_ELEMENT));
         }
         return optionalSubject;
+    }
+
+    @Override
+    public long add(Subject subject) throws DaoException {
+        Connection con;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        con = DatabaseConnectionPool.getInstance().getConnection();
+        long id = -1;
+        try {
+            ps = con.prepareStatement(INSERT_SUBJECT_QUERY, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, subject.getName());
+            ps.setString(2, subject.getDescription());
+            ps.executeUpdate();
+            rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                id = rs.getLong(1);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Error executing query", e);
+        } finally {
+            DaoUtil.releaseResources(con, ps, rs);
+        }
+        return id;
+    }
+
+    @Override
+    public void update(Subject subject) throws DaoException {
+        Connection con;
+        PreparedStatement ps = null;
+        con = DatabaseConnectionPool.getInstance().getConnection();
+        try {
+            ps = con.prepareStatement(UPDATE_SUBJECT_QUERY);
+            ps.setString(1, subject.getName());
+            ps.setString(2, subject.getDescription());
+            ps.setLong(3, subject.getSubjectId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Error executing query", e);
+        } finally {
+            DaoUtil.releaseResources(con, ps);
+        }
+    }
+
+    @Override
+    public void delete(Subject subject) throws DaoException {
+        Connection con;
+        PreparedStatement ps = null;
+        con = DatabaseConnectionPool.getInstance().getConnection();
+        try {
+            ps = con.prepareStatement(DELETE_SUBJECT_QUERY);
+            ps.setLong(1, subject.getSubjectId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Error executing query", e);
+        } finally {
+            DaoUtil.releaseResources(con, ps);
+        }
     }
 }

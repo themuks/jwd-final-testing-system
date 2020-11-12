@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface SubjectService {
     List<Subject> findAllSubjects() throws ServiceException;
+
+    boolean addSubject(String subjectName, String subjectDescription) throws ServiceException;
+
+    boolean deleteSubject(String subjectId) throws ServiceException;
 }

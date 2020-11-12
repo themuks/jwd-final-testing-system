@@ -6,5 +6,7 @@ import com.kuntsevich.ts.model.service.exception.ServiceException;
 import java.util.List;
 
 public interface ResultService {
-    List<Result> findCurrentUserResults(String id) throws ServiceException;
+    List<Result> findUserResults(String id) throws ServiceException;
+
+    boolean deleteUserResult(String resultId) throws ServiceException;
 }

@@ -1,7 +1,7 @@
 package com.kuntsevich.ts.controller.filter;
 
 import com.kuntsevich.ts.controller.PagePath;
-import com.kuntsevich.ts.controller.SessionAttribute;
+import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.entity.User;
 import com.kuntsevich.ts.model.dao.DaoException;
 import com.kuntsevich.ts.model.dao.UserDao;
@@ -52,9 +52,9 @@ public class AuthenticationFilter implements Filter {
                 Optional<User> optionalUser = userDao.findByEmailHashAndUserHash(userHash, emailHash);
                 if (optionalUser.isPresent()) {
                     User user = optionalUser.get();
-                    session.setAttribute(SessionAttribute.USER_ID, user.getUserId());
-                    session.setAttribute(SessionAttribute.ROLE, user.getRole().getName());
-                    session.setAttribute(SessionAttribute.USER_NAME, user.getUsername());
+                    session.setAttribute(AttributeName.USER_ID, user.getUserId());
+                    session.setAttribute(AttributeName.ROLE, user.getRole().getName());
+                    session.setAttribute(AttributeName.USER_NAME, user.getUsername());
                 }
             } catch (DaoException e) {
                 log.error("Error authorizing user", e);

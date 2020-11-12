@@ -1,8 +1,7 @@
 package com.kuntsevich.ts.controller;
 
-public class SessionAttribute {
+public class AttributeName {
     public static final String USER_ID = "userId";
-    public static final String USER_HASH = "userHash";
     public static final String ROLE = "role";
     public static final String TEMPLATE_PATH = "templatePath";
     public static final String RESULTS = "results";
@@ -11,7 +10,10 @@ public class SessionAttribute {
     public static final String TEST = "test";
     public static final String RESULT = "result";
     public static final String USER_NAME = "username";
+    public static final String USERS = "users";
+    public static final String ERROR_MESSAGE = "errorMessage";
+    public static final String INFO_MESSAGE = "infoMessage";
 
-    private SessionAttribute() {
+    private AttributeName() {
     }
 }

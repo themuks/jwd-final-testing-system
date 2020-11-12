@@ -1,4 +1,4 @@
-package com.kuntsevich.ts.model.service.validator;
+package com.kuntsevich.ts.validator;
 
 import org.testng.annotations.Test;
 

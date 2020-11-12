@@ -1,4 +1,4 @@
-package com.kuntsevich.ts.model.service.validator;
+package com.kuntsevich.ts.validator;
 
 import com.kuntsevich.ts.entity.Subject;
 import com.kuntsevich.ts.model.dao.DaoException;

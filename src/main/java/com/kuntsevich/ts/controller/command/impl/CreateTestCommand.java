@@ -1,7 +1,9 @@
 package com.kuntsevich.ts.controller.command.impl;
 
+import com.kuntsevich.ts.controller.AttributeName;
+import com.kuntsevich.ts.controller.CommandPath;
 import com.kuntsevich.ts.controller.PagePath;
-import com.kuntsevich.ts.controller.RequestParameter;
+import com.kuntsevich.ts.controller.ParameterName;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.manager.MessageManager;
 import com.kuntsevich.ts.controller.router.Router;
@@ -21,21 +23,21 @@ public class CreateTestCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        String title = request.getParameter(RequestParameter.TITLE);
-        String description = request.getParameter(RequestParameter.DESCRIPTION);
-        String subject = request.getParameter(RequestParameter.SUBJECT);
-        String pointsToPass = request.getParameter(RequestParameter.POINTS_TO_PASS);
+        String title = request.getParameter(ParameterName.TITLE);
+        String description = request.getParameter(ParameterName.DESCRIPTION);
+        String subject = request.getParameter(ParameterName.SUBJECT);
+        String pointsToPass = request.getParameter(ParameterName.POINTS_TO_PASS);
         Map<String, String[]> answers = request.getParameterMap();
-        String[] checkboxesRaw = request.getParameterValues(RequestParameter.CHECKBOXES);
+        String[] checkboxesRaw = request.getParameterValues(ParameterName.CHECKBOXES);
         List<String> answersAttributes = checkboxesRaw != null ? List.of(checkboxesRaw) : new ArrayList<>();
         TestService testService = ServiceFactory.getInstance().getTestService();
         try {
             if (!testService.createTest(title, subject, description, pointsToPass, answers, answersAttributes)) {
-                request.setAttribute(RequestParameter.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
+                request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
             }
         } catch (ServiceException e) {
-            request.setAttribute(RequestParameter.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SERVER_ERROR));
+            request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SERVER_ERROR));
         }
-        return new Router(PagePath.HOME);
+        return new Router(CommandPath.SHOW_ALL_TESTS).setRedirect();
     }
 }

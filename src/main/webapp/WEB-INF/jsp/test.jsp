@@ -11,7 +11,7 @@
         <p class="h4">Описание: <c:out value="${test.description}"/></p>
         <form class="m-0" method="post" action="${pageContext.request.contextPath}/controller">
             <input type="hidden" name="command" value="submit-test"/>
-            <input type="hidden" name="test-id" value="<c:out value="${test.testId}"/>">
+            <input type="hidden" name="testId" value="<c:out value="${test.testId}"/>">
             <c:forEach var="question" items="${test.questions}" varStatus="questionLoop">
                 <div class="mb-3">
                     <div class="border rounded p-3 my-3">

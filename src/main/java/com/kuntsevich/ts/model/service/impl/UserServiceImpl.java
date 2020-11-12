@@ -11,7 +11,7 @@ import com.kuntsevich.ts.model.service.creator.CredentialCreator;
 import com.kuntsevich.ts.model.service.creator.UserCreator;
 import com.kuntsevich.ts.model.service.exception.CreatorException;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
-import com.kuntsevich.ts.model.service.validator.UserValidator;
+import com.kuntsevich.ts.validator.UserValidator;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -24,6 +24,8 @@ public class UserServiceImpl implements UserService {
     private static final String HEX_FORMAT_STRING = "%02x";
     private static final String MESSAGE_DIGEST_MD5 = "MD5";
     private static final String SALT = "s7l3T1hTEA3";
+    private static final String INACTIVE = "Не активный";
+    private static final String ADMIN = "Администратор";
 
     @Override
     public Optional<Credential> checkLogin(String email, String password) throws ServiceException {
@@ -46,6 +48,9 @@ public class UserServiceImpl implements UserService {
         }
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+            if (user.getStatus().getName().equals(INACTIVE)) {
+                return Optional.empty();
+            }
             Random random = new Random();
             int i = random.nextInt();
             String mdHash;
@@ -84,6 +89,9 @@ public class UserServiceImpl implements UserService {
                 || !userValidator.isPasswordValid(password)
                 || !userValidator.isRoleValid(role)) {
             throw new ServiceException("Parameters are incorrect");
+        }
+        if (role.equals(ADMIN)) {
+            return false;
         }
         String emailHash;
         String passwordHash;
@@ -299,6 +307,16 @@ public class UserServiceImpl implements UserService {
             return user.getUsername();
         } else {
             throw new ServiceException("User is not exist");
+        }
+    }
+
+    @Override
+    public List<User> findAllUsers() throws ServiceException {
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        try {
+            return userDao.findAll();
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding all users", e);
         }
     }
 

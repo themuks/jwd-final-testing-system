@@ -1,7 +1,8 @@
 package com.kuntsevich.ts.controller.command.impl;
 
+import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.controller.PagePath;
-import com.kuntsevich.ts.controller.RequestParameter;
+import com.kuntsevich.ts.controller.ParameterName;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.manager.MessageManager;
 import com.kuntsevich.ts.controller.router.Router;
@@ -20,20 +21,16 @@ public class ShowAllTestsCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        String page;
-        List<Test> tests;
         try {
             ServiceFactory serviceFactory = ServiceFactory.getInstance();
-            tests = serviceFactory.getTestService().findAll();
-            request.setAttribute(RequestParameter.TESTS, tests);
-            page = PagePath.HOME;
+            List<Test> tests = serviceFactory.getTestService().findAll();
+            request.setAttribute(ParameterName.TESTS, tests);
         } catch (ServiceException e) {
             log.error("Service can't execute findAll method", e);
-            request.setAttribute(RequestParameter.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
-            page = PagePath.ERROR_505;
-            return new Router(page).setRedirect();
+            request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
+            return new Router(PagePath.ERROR_500).setRedirect();
         }
-        request.setAttribute(RequestParameter.TEMPLATE_PATH, PagePath.TESTS_TEMPLATE);
-        return new Router(page);
+        request.setAttribute(ParameterName.TEMPLATE_PATH, PagePath.TESTS_TEMPLATE);
+        return new Router(PagePath.HOME);
     }
 }

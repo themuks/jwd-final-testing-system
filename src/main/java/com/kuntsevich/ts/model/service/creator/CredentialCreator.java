@@ -2,7 +2,7 @@ package com.kuntsevich.ts.model.service.creator;
 
 import com.kuntsevich.ts.entity.Credential;
 import com.kuntsevich.ts.model.service.exception.CreatorException;
-import com.kuntsevich.ts.model.service.validator.UserValidator;
+import com.kuntsevich.ts.validator.UserValidator;
 
 public class CredentialCreator {
     public static Credential createCredential(String userId, String userHash, String emailHash) throws CreatorException {

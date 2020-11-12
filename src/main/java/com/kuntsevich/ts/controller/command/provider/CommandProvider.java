@@ -1,6 +1,6 @@
 package com.kuntsevich.ts.controller.command.provider;
 
-import com.kuntsevich.ts.controller.RequestParameter;
+import com.kuntsevich.ts.controller.ParameterName;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.command.impl.EmptyCommand;
 import com.kuntsevich.ts.controller.command.type.CommandType;
@@ -15,7 +15,7 @@ public class CommandProvider {
 
     public Command defineCommand(HttpServletRequest request) {
         Command currentCommand = new EmptyCommand();
-        String action = request.getParameter(RequestParameter.COMMAND);
+        String action = request.getParameter(ParameterName.COMMAND);
         if (action == null || action.isEmpty()) {
             return currentCommand;
         }

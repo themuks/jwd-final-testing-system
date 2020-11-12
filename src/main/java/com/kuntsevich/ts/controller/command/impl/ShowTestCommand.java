@@ -1,8 +1,8 @@
 package com.kuntsevich.ts.controller.command.impl;
 
 import com.kuntsevich.ts.controller.PagePath;
-import com.kuntsevich.ts.controller.RequestParameter;
-import com.kuntsevich.ts.controller.SessionAttribute;
+import com.kuntsevich.ts.controller.ParameterName;
+import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.manager.MessageManager;
 import com.kuntsevich.ts.controller.router.Router;
@@ -25,12 +25,12 @@ public class ShowTestCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         String page;
         try {
-            String testIdParameter = request.getParameter(RequestParameter.ID);
+            String testIdParameter = request.getParameter(ParameterName.ID);
             long testId = Long.parseLong(testIdParameter);
             HttpSession session = request.getSession();
-            Long userId = (Long) session.getAttribute(SessionAttribute.USER_ID);
+            Long userId = (Long) session.getAttribute(AttributeName.USER_ID);
             if (userId == null) {
-                session.setAttribute(SessionAttribute.ORIGIN, request.getRequestURL().toString());
+                session.setAttribute(AttributeName.ORIGIN, request.getRequestURL().toString());
                 page = PagePath.LOGIN;
                 return new Router(page).setRedirect();
             }
@@ -46,16 +46,16 @@ public class ShowTestCommand implements Command {
                     }
                 }
                 if (currentTest != null) {
-                    request.setAttribute(SessionAttribute.TEST, currentTest);
-                    request.setAttribute(SessionAttribute.TEMPLATE_PATH, PagePath.TEST_TEMPLATE);
+                    request.setAttribute(AttributeName.TEST, currentTest);
+                    request.setAttribute(AttributeName.TEMPLATE_PATH, PagePath.TEST_TEMPLATE);
                 }
             } catch (ServiceException e) {
                 log.error("Service can't execute tests findAll method", e);
-                request.setAttribute(RequestParameter.ERROR_MESSAGE, MessageManager.getProperty(TEST_NOTFOUND_ERROR));
+                request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(TEST_NOTFOUND_ERROR));
             }
         } catch (NumberFormatException e) {
             log.error("Error converting testId to long", e);
-            request.setAttribute(RequestParameter.ERROR_MESSAGE, MessageManager.getProperty(TEST_NOTFOUND_ERROR));
+            request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(TEST_NOTFOUND_ERROR));
         }
         page = PagePath.HOME;
         return new Router(page);

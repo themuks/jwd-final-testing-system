@@ -19,6 +19,7 @@ public class SqlResultDaoImpl implements ResultDao {
     private static final String FIND_ALL_RESULT_QUERY = "SELECT result_id, user, test, points, correct_answers, total_points FROM testing_system.results";
     private static final String USER_ID = "user";
     private static final String EMPTY_STRING = "";
+    private static final String TEST_ID = "test";
 
     @Override
     public Optional<Result> findById(long id) throws DaoException {
@@ -36,6 +37,13 @@ public class SqlResultDaoImpl implements ResultDao {
     public List<Result> findByUserId(long userId) throws DaoException {
         Map<String, String> criteria = new HashMap<>();
         criteria.put(USER_ID, Long.toString(userId));
+        return findByCriteria(criteria);
+    }
+
+    @Override
+    public List<Result> findByTestId(long testId) throws DaoException {
+        Map<String, String> criteria = new HashMap<>();
+        criteria.put(TEST_ID, Long.toString(testId));
         return findByCriteria(criteria);
     }
 

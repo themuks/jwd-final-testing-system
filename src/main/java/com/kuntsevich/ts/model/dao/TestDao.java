@@ -18,4 +18,6 @@ public interface TestDao {
     void update(Test test) throws DaoException;
 
     void delete(Test test) throws DaoException;
+
+    List<Test> findBySubjectId(long subjectId) throws DaoException;
 }

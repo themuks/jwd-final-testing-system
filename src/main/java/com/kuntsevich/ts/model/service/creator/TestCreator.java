@@ -9,7 +9,7 @@ import com.kuntsevich.ts.model.dao.StatusDao;
 import com.kuntsevich.ts.model.dao.SubjectDao;
 import com.kuntsevich.ts.model.dao.factory.DaoFactory;
 import com.kuntsevich.ts.model.service.exception.CreatorException;
-import com.kuntsevich.ts.model.service.validator.TestValidator;
+import com.kuntsevich.ts.validator.TestValidator;
 
 import java.util.List;
 import java.util.Optional;

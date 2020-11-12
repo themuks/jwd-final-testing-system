@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class LogoutCommand implements Command {
-
     private static final String USER_HASH = "userHash";
     private static final String EMPTY_STRING = "";
     private static final String USER_EMAIL = "userEmail";

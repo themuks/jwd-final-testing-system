@@ -26,4 +26,6 @@ public interface UserService {
     boolean changeUserData(String userId, String username, String name, String surname) throws ServiceException;
 
     String findUserUsername(String id) throws ServiceException;
+
+    List<User> findAllUsers() throws ServiceException;
 }

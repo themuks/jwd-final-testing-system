@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class Controller extends HttpServlet {
+public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
@@ -30,10 +30,10 @@ public class Controller extends HttpServlet {
         Router router = command.execute(request, response);
         HttpSession session = request.getSession();
         String page = router.getPage();
-        session.setAttribute(RequestParameter.CURRENT_PAGE, page);
+        session.setAttribute(ParameterName.CURRENT_PAGE, page);
         switch (router.getTransitionType()) {
             case FORWARD -> request.getRequestDispatcher(router.getPage()).forward(request, response);
-            case REDIRECT -> response.sendRedirect(router.getPage());
+            case REDIRECT -> response.sendRedirect(request.getContextPath() + router.getPage());
             case INCLUDE -> request.getRequestDispatcher(router.getPage()).include(request, response);
         }
     }

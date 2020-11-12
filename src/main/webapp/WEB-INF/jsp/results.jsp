@@ -4,22 +4,27 @@
 <c:if test="${not empty results}">
     <p class="h4 text-center mt-3">Список результатов по тестам</p>
     <c:forEach var="result" items="${results}">
-        <div class="border rounded p-3 my-3">
-            <p class="h4 text-center">Тест № ${result.test.testId}</p>
-            <p class="h4 text-center">${result.test.title}</p>
-            <p class="h5 text-center">${result.points} из ${result.totalPoints} баллов</p>
-            <p class="h5 text-center">Всего правильных ответов: ${result.correctAnswers}</p>
-            <c:if test="${result.testPassed}">
-                <p class="h4 text-center text-success">Тест сдан</p>
-            </c:if>
-            <c:if test="${not result.testPassed}">
-                <p class="h4 text-center text-danger">Тест не сдан</p>
-            </c:if>
+        <div class="card my-3">
+            <div class="card-body">
+                <h5 class="card-title">Тест № ${result.test.testId}</h5>
+                <p class="card-text">${result.test.title} (${result.points} из ${result.totalPoints} баллов)</p>
+                <p class="card-text">Всего правильных ответов: ${result.correctAnswers}</p>
+                <c:if test="${result.testPassed}">
+                    <p class="card-text text-success">Тест сдан</p>
+                </c:if>
+                <c:if test="${not result.testPassed}">
+                    <p class="card-text text-danger">Тест не сдан</p>
+                </c:if>
+                <c:if test="${not empty sessionScope.role eq 'Администратор' || sessionScope.role eq 'Тьютор'}">
+                    <a href="<c:url value="/controller?command=delete-result&userId=${userId}&resultId=${result.resultId}"/>"
+                       class="btn btn-outline-danger">Удалить</a>
+                </c:if>
+            </div>
         </div>
     </c:forEach>
 </c:if>
 <c:if test="${empty results}">
     <div class="mx-auto my-3 text-center">
-        У вас нет результатов
+        Нет результатов
     </div>
 </c:if>

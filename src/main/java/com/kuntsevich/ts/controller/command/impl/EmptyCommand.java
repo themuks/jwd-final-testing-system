@@ -10,6 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 public class EmptyCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        return new Router(PagePath.WELCOME).setRedirect();
+        return new Router(PagePath.HOME).setRedirect();
     }
 }

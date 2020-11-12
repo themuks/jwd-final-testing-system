@@ -30,6 +30,15 @@
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/jsp/about.jsp">О системе</a>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Язык
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="<c:url value="/controller?command=change-language&lang=ru"/>">Русский</a>
+                    <a class="dropdown-item" href="<c:url value="/controller?command=change-language&lang=en"/>">English</a>
+                </div>
+            </li>
         </ul>
         <tags:user-status/>
     </div>
@@ -39,16 +48,15 @@
         <div class="col-lg-3">
             <nav class="d-block ml-sm-auto bg-light sidebar mt-3 mb-lg-3 rounded">
                 <ul class="nav flex-column">
-                    <c:if test="${sessionScope.role eq 'Администратор'}">
-                        <li class="nav-item">
+                    <c:if test="${(sessionScope.role eq 'Администратор') || (sessionScope.role eq 'Тьютор')}">
+                    <li class="nav-item">
                             <a class="nav-link active" href="<c:url value="/controller?command=show-test-create"/>">Создать
                                 тест</a>
                         </li>
                     </c:if>
-                    <c:if test="${sessionScope.role eq 'Тьютор'}">
+                    <c:if test="${(sessionScope.role eq 'Администратор') || (sessionScope.role eq 'Тьютор')}">
                         <li class="nav-item">
-                            <a class="nav-link active" href="<c:url value="/controller?command=show-test-create"/>">Создать
-                                тест</a>
+                            <a class="nav-link active" href="<c:url value="/controller?command=show-all-users"/>">Список пользователей</a>
                         </li>
                     </c:if>
                     <li class="nav-item">
@@ -59,7 +67,7 @@
                             предметов</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<c:url value="/controller?command=show-results"/>">Результаты</a>
+                        <a class="nav-link" href="<c:url value="/controller?command=show-user-results&userId=${sessionScope.userId}"/>">Результаты</a>
                     </li>
                 </ul>
             </nav>

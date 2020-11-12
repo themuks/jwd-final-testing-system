@@ -8,7 +8,7 @@ import com.kuntsevich.ts.model.dao.RoleDao;
 import com.kuntsevich.ts.model.dao.StatusDao;
 import com.kuntsevich.ts.model.dao.factory.DaoFactory;
 import com.kuntsevich.ts.model.service.exception.CreatorException;
-import com.kuntsevich.ts.model.service.validator.UserValidator;
+import com.kuntsevich.ts.validator.UserValidator;
 
 public class UserCreator {
     private static final String STATUS_ACTIVE = "Активный";

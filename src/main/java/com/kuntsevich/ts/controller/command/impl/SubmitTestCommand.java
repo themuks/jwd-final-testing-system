@@ -1,8 +1,8 @@
 package com.kuntsevich.ts.controller.command.impl;
 
 import com.kuntsevich.ts.controller.PagePath;
-import com.kuntsevich.ts.controller.RequestParameter;
-import com.kuntsevich.ts.controller.SessionAttribute;
+import com.kuntsevich.ts.controller.ParameterName;
+import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.manager.MessageManager;
 import com.kuntsevich.ts.controller.router.Router;
@@ -25,24 +25,24 @@ public class SubmitTestCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         String page;
-        String testId = request.getParameter(RequestParameter.TEST_ID);
+        String testId = request.getParameter(ParameterName.TEST_ID);
         HttpSession session = request.getSession();
-        Long userId = (Long) session.getAttribute(SessionAttribute.USER_ID);
+        Long userId = (Long) session.getAttribute(AttributeName.USER_ID);
         Map<String, String[]> answers = request.getParameterMap();
         page = PagePath.HOME;
         if (testId == null || testId.isEmpty() || userId == null) {
-            request.setAttribute(RequestParameter.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SUBMIT_TEST_PARAMETERS_ERROR));
+            request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SUBMIT_TEST_PARAMETERS_ERROR));
             return new Router(page).setRedirect();
         }
         try {
             ServiceFactory serviceFactory = ServiceFactory.getInstance();
             TestService testService = serviceFactory.getTestService();
             Result result = testService.submitTest(testId, userId.toString(), answers);
-            request.setAttribute(SessionAttribute.RESULT, result);
-            request.setAttribute(SessionAttribute.TEMPLATE_PATH, PagePath.RESULT_TEMPLATE);
+            request.setAttribute(AttributeName.RESULT, result);
+            request.setAttribute(AttributeName.TEMPLATE_PATH, PagePath.RESULT_TEMPLATE);
         } catch (ServiceException e) {
             log.error("Error submitting test", e);
-            request.setAttribute(RequestParameter.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SUBMIT_TEST_SUBMIT_ERROR));
+            request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SUBMIT_TEST_SUBMIT_ERROR));
         }
         return new Router(page);
     }

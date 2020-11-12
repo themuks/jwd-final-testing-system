@@ -29,6 +29,15 @@
                 <a class="nav-link" href="${pageContext.request.contextPath}/jsp/about.jsp">О системе<span
                         class="sr-only">(current)</span></a>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Язык
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="<c:url value="/controller?command=change-language&lang=ru"/>">Русский</a>
+                    <a class="dropdown-item" href="<c:url value="/controller?command=change-language&lang=en"/>">English</a>
+                </div>
+            </li>
         </ul>
         <tags:user-status/>
     </div>
@@ -39,6 +48,7 @@
             <p class="h1">Добро пожаловать!</p>
             <p class="h2">Testing system предназначена для создания тестов и проверки знания учеников</p>
             <p class="h2">Зарегистрируйтесь, если еще не сделали этого ;)</p>
+            <a class="btn btn-outline-primary mt-3" href="${pageContext.request.contextPath}/jsp/home.jsp">На главную</a>
         </div>
     </div>
 </div>

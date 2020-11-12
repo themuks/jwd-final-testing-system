@@ -19,6 +19,7 @@ public class SqlTestDaoImpl implements TestDao {
     private static final String INSERT_TEST_QUERY = "INSERT INTO testing_system.tests (title, subject, description, status, points_to_pass) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_TEST_QUERY = "UPDATE testing_system.tests SET title = ?, subject = ?, description = ?, status = ?, points_to_pass = ? WHERE (test_id = ?)";
     private static final String DELETE_TEST_QUERY = "DELETE FROM testing_system.tests WHERE (test_id = ?)";
+    private static final String SUBJECT = "subject";
 
     @Override
     public Optional<Test> findById(long id) throws DaoException {
@@ -133,5 +134,12 @@ public class SqlTestDaoImpl implements TestDao {
         } finally {
             DaoUtil.releaseResources(con, ps);
         }
+    }
+
+    @Override
+    public List<Test> findBySubjectId(long subjectId) throws DaoException {
+        HashMap<String, String> criteria = new HashMap<>();
+        criteria.put(SUBJECT, Long.toString(subjectId));
+        return findByCriteria(criteria);
     }
 }

@@ -9,8 +9,8 @@ import com.kuntsevich.ts.model.service.creator.QuestionCreator;
 import com.kuntsevich.ts.model.service.creator.TestCreator;
 import com.kuntsevich.ts.model.service.exception.CreatorException;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
-import com.kuntsevich.ts.model.service.validator.TestValidator;
-import com.kuntsevich.ts.model.service.validator.UserValidator;
+import com.kuntsevich.ts.validator.TestValidator;
+import com.kuntsevich.ts.validator.UserValidator;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -223,17 +223,16 @@ public class TestServiceImpl implements TestService {
     @Override
     public boolean deleteTest(String testId) throws ServiceException {
         if (testId == null) {
-            throw new ServiceException("Invalid parameters");
+            return false;
         }
         TestValidator testValidator = new TestValidator();
         if (!testValidator.isIdValid(testId)) {
-            throw new ServiceException("Invalid parameter value");
+            return false;
         }
-        long testIdValue = Long.parseLong(testId);
         TestDao testDao = DaoFactory.getInstance().getTestDao();
         Test test;
         try {
-            Optional<Test> optionalTest = testDao.findById(testIdValue);
+            Optional<Test> optionalTest = testDao.findById(Long.parseLong(testId));
             if (optionalTest.isPresent()) {
                 test = optionalTest.get();
             } else {
@@ -241,6 +240,38 @@ public class TestServiceImpl implements TestService {
             }
         } catch (DaoException e) {
             throw new ServiceException("Error while finding test by id", e);
+        }
+        QuestionDao questionDao = DaoFactory.getInstance().getQuestionDao();
+        AnswerDao answerDao = DaoFactory.getInstance().getAnswerDao();
+        List<Question> questions = test.getQuestions();
+        for (var question: questions) {
+            List<Answer> answers = question.getAnswers();
+            for (var answer: answers) {
+                try {
+                    answerDao.delete(answer);
+                } catch (DaoException e) {
+                    throw new ServiceException("Error while deleting answer", e);
+                }
+            }
+            try {
+                questionDao.delete(question);
+            } catch (DaoException e) {
+                throw new ServiceException("Error while deleting question", e);
+            }
+        }
+        ResultDao resultDao = DaoFactory.getInstance().getResultDao();
+        List<Result> results;
+        try {
+            results = resultDao.findByTestId(Long.parseLong(testId));
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding results by test id", e);
+        }
+        for (var result: results) {
+            try {
+                resultDao.delete(result);
+            } catch (DaoException e) {
+                throw new ServiceException("Error while deleting result", e);
+            }
         }
         try {
             testDao.delete(test);

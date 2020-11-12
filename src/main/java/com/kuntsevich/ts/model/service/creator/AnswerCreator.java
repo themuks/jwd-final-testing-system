@@ -2,7 +2,7 @@ package com.kuntsevich.ts.model.service.creator;
 
 import com.kuntsevich.ts.entity.Answer;
 import com.kuntsevich.ts.model.service.exception.CreatorException;
-import com.kuntsevich.ts.model.service.validator.AnswerValidator;
+import com.kuntsevich.ts.validator.AnswerValidator;
 
 public class AnswerCreator {
     public static Answer createAnswer(String text, String isCorrect) throws CreatorException {
