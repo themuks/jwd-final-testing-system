@@ -2,7 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="text"/>
+<fmt:setBundle basename="content.text"/>
 <html>
 <head>
     <meta charset="utf-8">
@@ -16,14 +16,14 @@
 <body class="text-center">
 <form class="form-signin" name="LoginForm" method="post" action="${pageContext.request.contextPath}/controller">
     <input type="hidden" name="command" value="login"/>
-    <h1 class="h3 mb-3 font-weight-normal">Вход</h1>
+    <h1 class="h3 mb-3 font-weight-normal"><fmt:message key="login.title"/></h1>
 
     <c:if test="${not empty errorMessage}">
         <div class="alert alert-danger" role="alert">${errorMessage}</div>
     </c:if>
 
     <c:if test="${not empty sessionScope.origin}">
-        <div class="alert alert-info" role="alert">Войдите в систему, чтобы продолжить</div>
+        <div class="alert alert-info" role="alert"><fmt:message key="login.enter_hint"/></div>
     </c:if>
 
     <label for="inputEmail" class="sr-only"><fmt:message key="login.email"/></label>

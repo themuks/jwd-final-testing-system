@@ -23,10 +23,6 @@ public class AuthenticationFilter implements Filter {
     private static final String EMAIL_HASH = "userEmail";
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
-
-    @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
@@ -64,9 +60,5 @@ public class AuthenticationFilter implements Filter {
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);
-    }
-
-    @Override
-    public void destroy() {
     }
 }

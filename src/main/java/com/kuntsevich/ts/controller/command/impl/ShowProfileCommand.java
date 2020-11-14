@@ -26,8 +26,7 @@ public class ShowProfileCommand implements Command {
         try {
             User user = userService.findUserById(userId.toString());
             request.setAttribute(ParameterName.USER, user);
-            request.setAttribute(ParameterName.TEMPLATE_PATH, PagePath.PROFILE_TEMPLATE);
-            return new Router(PagePath.HOME);
+            return new Router(PagePath.PROFILE);
         } catch (ServiceException e) {
             return new Router(PagePath.ERROR_500);
         }

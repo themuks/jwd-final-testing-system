@@ -33,11 +33,10 @@ public class ShowUserResultsCommand implements Command {
             List<Result> results = resultService.findUserResults(userId);
             request.setAttribute(AttributeName.USER_ID, userId);
             request.setAttribute(AttributeName.RESULTS, results);
-            request.setAttribute(AttributeName.TEMPLATE_PATH, PagePath.RESULTS_TEMPLATE);
         } catch (ServiceException e) {
             log.error("Error while finding user results", e);
             return new Router(PagePath.ERROR_500).setRedirect();
         }
-        return new Router(PagePath.HOME);
+        return new Router(PagePath.RESULTS);
     }
 }

@@ -28,7 +28,6 @@ public class ShowAllUsersCommand implements Command {
             log.error("Error while finding all users", e);
             return new Router(PagePath.ERROR_500);
         }
-        request.setAttribute(AttributeName.TEMPLATE_PATH, PagePath.USERS_TEMPLATE);
-        return new Router(PagePath.HOME);
+        return new Router(PagePath.USERS);
     }
 }

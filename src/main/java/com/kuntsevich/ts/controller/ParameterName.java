@@ -20,7 +20,6 @@ public class ParameterName {
     public static final String USER_ID = "userId";
     public static final String RESULT = "result";
     public static final String RESULTS = "results";
-    public static final String TEMPLATE_PATH = "templatePath";
     public static final String ORIGIN = "origin";
     public static final String SUBJECTS = "subjects";
     public static final String COMMAND = "command";
@@ -36,6 +35,7 @@ public class ParameterName {
     public static final String SUBJECT_DESCRIPTION = "subjectDescription";
     public static final String SUBJECT_NAME = "subjectName";
     public static final String SUBJECT_ID = "subjectId";
+    public static final String LANGUAGE = "lang";
 
     private ParameterName() {
     }

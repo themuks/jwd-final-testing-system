@@ -2,7 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="text"/>
+<fmt:setBundle basename="content.text"/>
 <html>
 <head>
     <meta charset="utf-8">
@@ -50,9 +50,9 @@
 
     <label for="role" class="sr-only">Роль</label>
     <select id="role" class="custom-select" name="role" required>
-        <option selected>Выберите роль</option>
-        <option value="Тьютор">Тьютор</option>
-        <option value="Студент">Студент</option>
+        <option selected><fmt:message key="registration.choose_role"/></option>
+        <option value="Тьютор"><fmt:message key="registration.tutor"/></option>
+        <option value="Студент"><fmt:message key="registration.student"/></option>
     </select>
 
     <button class="btn btn-lg btn-primary btn-block my-3" type="submit"><fmt:message

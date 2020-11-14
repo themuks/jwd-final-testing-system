@@ -25,12 +25,11 @@ public class ShowAllTestsCommand implements Command {
             ServiceFactory serviceFactory = ServiceFactory.getInstance();
             List<Test> tests = serviceFactory.getTestService().findAll();
             request.setAttribute(ParameterName.TESTS, tests);
+            return new Router(PagePath.TESTS);
         } catch (ServiceException e) {
             log.error("Service can't execute findAll method", e);
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
             return new Router(PagePath.ERROR_500).setRedirect();
         }
-        request.setAttribute(ParameterName.TEMPLATE_PATH, PagePath.TESTS_TEMPLATE);
-        return new Router(PagePath.HOME);
     }
 }

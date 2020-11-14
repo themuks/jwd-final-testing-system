@@ -25,7 +25,7 @@ public class ShowSubjectsCommand implements Command {
         try {
             List<Subject> subjects = subjectService.findAllSubjects();
             request.setAttribute(AttributeName.SUBJECTS, subjects);
-            request.setAttribute(AttributeName.TEMPLATE_PATH, PagePath.SUBJECTS_TEMPLATE);
+            return new Router(PagePath.SUBJECTS);
         } catch (ServiceException e) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SERVER_ERROR));
         }

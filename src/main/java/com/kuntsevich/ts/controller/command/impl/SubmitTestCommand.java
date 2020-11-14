@@ -24,26 +24,23 @@ public class SubmitTestCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        String page;
         String testId = request.getParameter(ParameterName.TEST_ID);
         HttpSession session = request.getSession();
         Long userId = (Long) session.getAttribute(AttributeName.USER_ID);
         Map<String, String[]> answers = request.getParameterMap();
-        page = PagePath.HOME;
         if (testId == null || testId.isEmpty() || userId == null) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SUBMIT_TEST_PARAMETERS_ERROR));
-            return new Router(page).setRedirect();
+            return new Router(PagePath.HOME).setRedirect();
         }
         try {
             ServiceFactory serviceFactory = ServiceFactory.getInstance();
             TestService testService = serviceFactory.getTestService();
             Result result = testService.submitTest(testId, userId.toString(), answers);
             request.setAttribute(AttributeName.RESULT, result);
-            request.setAttribute(AttributeName.TEMPLATE_PATH, PagePath.RESULT_TEMPLATE);
         } catch (ServiceException e) {
             log.error("Error submitting test", e);
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SUBMIT_TEST_SUBMIT_ERROR));
         }
-        return new Router(page);
+        return new Router(PagePath.RESULT);
     }
 }

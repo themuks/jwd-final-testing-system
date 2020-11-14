@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 public class ShowSubjectAddCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        request.setAttribute(ParameterName.TEMPLATE_PATH, PagePath.SUBJECT_ADD_TEMPLATE);
-        return new Router(PagePath.HOME);
+        return new Router(PagePath.SUBJECT_ADD);
     }
 }

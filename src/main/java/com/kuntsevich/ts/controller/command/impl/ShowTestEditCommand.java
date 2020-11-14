@@ -48,8 +48,7 @@ public class ShowTestEditCommand implements Command {
                 return new Router(PagePath.ERROR_500).setRedirect();
             }
             request.setAttribute(ParameterName.QUESTIONS_COUNT, count);
-            request.setAttribute(ParameterName.TEMPLATE_PATH, PagePath.TEST_EDIT_TEMPLATE);
-            return new Router(PagePath.HOME);
+            return new Router(PagePath.TEST_EDIT);
         }
         return new Router(PagePath.ERROR_403).setRedirect();
     }

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 public class ShowTestCreateCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        request.setAttribute(ParameterName.TEMPLATE_PATH, PagePath.TEST_CREATE_TEMPLATE);
-        return new Router(PagePath.HOME);
+        return new Router(PagePath.TEST_CREATE);
     }
 }
