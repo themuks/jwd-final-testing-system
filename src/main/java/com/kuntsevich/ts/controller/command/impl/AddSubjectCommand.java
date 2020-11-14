@@ -32,7 +32,7 @@ public class AddSubjectCommand implements Command {
             subjectService.addSubject(subjectName, subjectDescription);
         } catch (ServiceException e) {
             log.error("Error while adding subject", e);
-            return new Router(PagePath.ERROR_500).setRedirect();
+            return new Router(PagePath.ERROR_500);
         }
         return new Router(CommandPath.SHOW_SUBJECTS).setRedirect();
     }

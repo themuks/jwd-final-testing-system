@@ -35,7 +35,7 @@ public class ShowUserResultsCommand implements Command {
             request.setAttribute(AttributeName.RESULTS, results);
         } catch (ServiceException e) {
             log.error("Error while finding user results", e);
-            return new Router(PagePath.ERROR_500).setRedirect();
+            return new Router(PagePath.ERROR_500);
         }
         return new Router(PagePath.RESULTS);
     }

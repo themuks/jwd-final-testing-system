@@ -26,7 +26,7 @@ public enum CommandType {
     SUBMIT_TEST(new SubmitTestCommand()),
     CHANGE_USER_PARAMETERS(new ChangeUserParametersCommand()),
     CHANGE_LANGUAGE(new ChangeLanguageCommand()),
-    SHOW_WELCOME_PAGE((r, response) -> new Router(PagePath.WELCOME).setRedirect());
+    SHOW_WELCOME_PAGE((req, resp) -> new Router(PagePath.WELCOME).setRedirect());
 
     Command command;
 

@@ -34,7 +34,7 @@ public class ShowTestEditCommand implements Command {
             count = Long.parseLong(questionsCount);
         } catch (NumberFormatException e) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
-            return new Router(PagePath.ERROR_500).setRedirect();
+            return new Router(PagePath.ERROR_500);
         }
         HttpSession session = request.getSession();
         String role = (String) session.getAttribute(AttributeName.ROLE);
@@ -45,7 +45,7 @@ public class ShowTestEditCommand implements Command {
                 request.setAttribute(ParameterName.SUBJECTS, allSubjects);
             } catch (ServiceException e) {
                 request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SERVER_ERROR));
-                return new Router(PagePath.ERROR_500).setRedirect();
+                return new Router(PagePath.ERROR_500);
             }
             request.setAttribute(ParameterName.QUESTIONS_COUNT, count);
             return new Router(PagePath.TEST_EDIT);

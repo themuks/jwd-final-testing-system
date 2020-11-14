@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class TestValidator extends EntityValidator {
-    private static final String TITLE_REGEX = ".{4,255}";
-    private static final String DESCRIPTION_REGEX = ".{4,2048}";
+    private static final String TITLE_REGEX = ".{1,255}";
+    private static final String DESCRIPTION_REGEX = ".{0,2048}";
     private static final String POINTS_TO_PASS_REGEX = "[1-9]\\d*";
 
     public boolean isTitleValid(String title) {

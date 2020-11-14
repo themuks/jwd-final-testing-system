@@ -29,7 +29,7 @@ public class ShowAllTestsCommand implements Command {
         } catch (ServiceException e) {
             log.error("Service can't execute findAll method", e);
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
-            return new Router(PagePath.ERROR_500).setRedirect();
+            return new Router(PagePath.ERROR_500);
         }
     }
 }

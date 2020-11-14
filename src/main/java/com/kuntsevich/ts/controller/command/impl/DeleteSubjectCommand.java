@@ -35,7 +35,7 @@ public class DeleteSubjectCommand implements Command {
             }
         } catch (ServiceException e) {
             log.error("Error while deleting subject", e);
-            return new Router(PagePath.ERROR_500).setRedirect();
+            return new Router(PagePath.ERROR_500);
         }
         return new Router(CommandPath.SHOW_SUBJECTS).setRedirect();
     }
