@@ -13,6 +13,7 @@ import com.kuntsevich.ts.model.service.factory.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public class ShowSubjectsCommand implements Command {
@@ -20,6 +21,9 @@ public class ShowSubjectsCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
+        MessageManager.setLanguage(language);
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         SubjectService subjectService = serviceFactory.getSubjectService();
         try {

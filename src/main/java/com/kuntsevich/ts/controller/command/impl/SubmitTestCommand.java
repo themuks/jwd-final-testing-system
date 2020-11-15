@@ -24,13 +24,15 @@ public class SubmitTestCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        String testId = request.getParameter(ParameterName.TEST_ID);
         HttpSession session = request.getSession();
+        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
+        MessageManager.setLanguage(language);
+        String testId = request.getParameter(ParameterName.TEST_ID);
         Long userId = (Long) session.getAttribute(AttributeName.USER_ID);
         Map<String, String[]> answers = request.getParameterMap();
         if (testId == null || testId.isEmpty() || userId == null) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SUBMIT_TEST_PARAMETERS_ERROR));
-            return new Router(PagePath.HOME).setRedirect();
+            return new Router(PagePath.HOME);
         }
         try {
             ServiceFactory serviceFactory = ServiceFactory.getInstance();

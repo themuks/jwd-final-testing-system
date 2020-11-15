@@ -9,27 +9,27 @@ public class UserValidator extends EntityValidator {
     private static final String USERNAME_REGEX = "\\p{Alpha}+";
     private static final String PASSWORD_REGEX = "\\p{Alnum}{4,64}";
 
-    public boolean isUsernameValid(String username) {
+    public static boolean isUsernameValid(String username) {
         return Pattern.matches(USERNAME_REGEX, username);
     }
 
-    public boolean isNameValid(String name) {
+    public static boolean isNameValid(String name) {
         return Pattern.matches(NAME_REGEX, name);
     }
 
-    public boolean isSurnameValid(String surname) {
+    public static boolean isSurnameValid(String surname) {
         return Pattern.matches(NAME_REGEX, surname);
     }
 
-    public boolean isEmailValid(String email) {
+    public static boolean isEmailValid(String email) {
         return Pattern.matches(EMAIL_REGEX, email);
     }
 
-    public boolean isPasswordValid(String password) {
+    public static boolean isPasswordValid(String password) {
         return Pattern.matches(PASSWORD_REGEX, password);
     }
 
-    public boolean isRoleValid(String role) {
+    public static boolean isRoleValid(String role) {
         boolean flag = false;
         for (String currentRole : ROLES) {
             if (Pattern.matches(currentRole, role)) {

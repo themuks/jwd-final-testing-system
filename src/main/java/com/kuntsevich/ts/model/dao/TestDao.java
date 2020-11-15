@@ -1,6 +1,7 @@
 package com.kuntsevich.ts.model.dao;
 
 import com.kuntsevich.ts.entity.Test;
+import com.kuntsevich.ts.entity.User;
 
 import java.util.List;
 import java.util.Map;
@@ -20,4 +21,8 @@ public interface TestDao {
     void delete(Test test) throws DaoException;
 
     List<Test> findBySubjectId(long subjectId) throws DaoException;
+
+    List<Test> findWithLimits(int offset, int limit) throws DaoException;
+
+    int findCount() throws DaoException;
 }

@@ -2,7 +2,6 @@ package com.kuntsevich.ts.controller.command.impl;
 
 import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.controller.CommandPath;
-import com.kuntsevich.ts.controller.PagePath;
 import com.kuntsevich.ts.controller.ParameterName;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.manager.MessageManager;
@@ -13,6 +12,7 @@ import com.kuntsevich.ts.model.service.factory.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +23,9 @@ public class CreateTestCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
+        MessageManager.setLanguage(language);
         String title = request.getParameter(ParameterName.TITLE);
         String description = request.getParameter(ParameterName.DESCRIPTION);
         String subject = request.getParameter(ParameterName.SUBJECT);
@@ -38,6 +41,6 @@ public class CreateTestCommand implements Command {
         } catch (ServiceException e) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SERVER_ERROR));
         }
-        return new Router(CommandPath.SHOW_ALL_TESTS).setRedirect();
+        return new Router(CommandPath.SHOW_TESTS);
     }
 }

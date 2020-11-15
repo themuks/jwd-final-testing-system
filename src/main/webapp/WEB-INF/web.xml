@@ -20,13 +20,6 @@
         <location>/WEB-INF/jsp/error/error500.jsp</location>
     </error-page>-->
 
-    <jsp-config>
-        <taglib>
-            <taglib-uri>customtags</taglib-uri>
-            <taglib-location>/WEB-INF/tld/custom.tld</taglib-location>
-        </taglib>
-    </jsp-config>
-
     <filter>
         <filter-name>CharsetFilter</filter-name>
         <filter-class>com.kuntsevich.ts.controller.filter.CharsetFilter</filter-class>
@@ -54,7 +47,7 @@
 
     <filter-mapping>
         <filter-name>PermissionFilter</filter-name>
-        <url-pattern>/WEB-INF/*</url-pattern>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
 
     <filter>

@@ -10,6 +10,7 @@
         <tags:sidebar/>
     </div>
     <div class="col-lg-9">
+        <tags:message/>
         <c:if test="${not empty users}">
             <p class="h4 text-center mt-3"><fmt:message key="users.title"/></p>
             <c:forEach var="user" items="${users}">
@@ -18,10 +19,10 @@
                         <c:if test="${user.status.name eq 'Активный'}">
                             <h5 class="card-title">${user.name} ${user.surname} (${user.username})</h5>
                             <p class="card-text"><fmt:message key="users.active"/></p>
-                            <a href="<c:url value="/controller?command=show-user-results&userId=${user.userId}"/>"
+                            <a href="<c:url value="/controller?command=show-user-results&userId=${user.userId}&page=1"/>"
                                class="btn btn-outline-primary"><fmt:message key="users.results"/></a>
                             <c:if test="${not empty sessionScope.role eq 'Администратор'}">
-                                <a href="<c:url value="/controller?command=show-user-results&userId=${user.userId}"/>"
+                                <a href="<c:url value="/controller?command=show-user-results&userId=${user.userId}?"/>"
                                    class="btn btn-outline-danger"><fmt:message key="users.deactivate"/></a>
                             </c:if>
                         </c:if>
@@ -32,6 +33,8 @@
                     </div>
                 </div>
             </c:forEach>
+            <tags:pagination pageCount="${pageCount}" currentPage="${page}"
+                             url="/controller?command=show-users"/>
         </c:if>
         <c:if test="${empty users}">
             <div class="mx-auto my-3 text-center">

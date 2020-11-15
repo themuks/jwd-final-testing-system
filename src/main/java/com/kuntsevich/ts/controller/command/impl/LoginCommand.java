@@ -30,6 +30,9 @@ public class LoginCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
+        MessageManager.setLanguage(language);
         String page;
         String email = request.getParameter(ParameterName.EMAIL);
         String password = request.getParameter(ParameterName.PASSWORD);
@@ -37,7 +40,6 @@ public class LoginCommand implements Command {
         List<String> checkboxes = checkBoxValues != null ? List.of(checkBoxValues) : new ArrayList<>();
         boolean rememberMe = checkboxes.contains(ParameterName.REMEMBER_ME);
         boolean isSuccessful = false;
-        HttpSession session = request.getSession();
         if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
             return new Router(PagePath.LOGIN);

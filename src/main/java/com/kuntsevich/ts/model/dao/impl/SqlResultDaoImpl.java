@@ -20,6 +20,8 @@ public class SqlResultDaoImpl implements ResultDao {
     private static final String USER_ID = "user";
     private static final String EMPTY_STRING = "";
     private static final String TEST_ID = "test";
+    private static final String FIND_RESULT_BY_USER_ID_WITH_LIMITS_QUERY = "SELECT result_id, user, test, points, correct_answers, total_points FROM testing_system.results WHERE user = ? ORDER BY result_id DESC LIMIT ? OFFSET ?";
+    private static final String FIND_COUNT_OF_RESULTS_BY_USER_ID_QUERY = "SELECT count(user) FROM testing_system.results WHERE user = ?";
 
     @Override
     public Optional<Result> findById(long id) throws DaoException {
@@ -48,6 +50,65 @@ public class SqlResultDaoImpl implements ResultDao {
     }
 
     @Override
+    public int findCountByUserId(long userId) throws DaoException {
+        Connection con;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        con = DatabaseConnectionPool.getInstance().getConnection();
+        String query = EMPTY_STRING;
+        try {
+            query = FIND_COUNT_OF_RESULTS_BY_USER_ID_QUERY;
+            ps = con.prepareStatement(query);
+            ps.setLong(1, userId);
+            rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            throw new DaoException("Error executing query " + query, e);
+        } finally {
+            DaoUtil.releaseResources(con, ps, rs);
+        }
+    }
+
+    @Override
+    public List<Result> findByUserIdWithLimits(long userId, int offset, int limit) throws DaoException {
+        List<Result> results = new ArrayList<>();
+        Connection con;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        con = DatabaseConnectionPool.getInstance().getConnection();
+        String query = EMPTY_STRING;
+        try {
+            query = FIND_RESULT_BY_USER_ID_WITH_LIMITS_QUERY;
+            ps = con.prepareStatement(query);
+            ps.setLong(1, userId);
+            ps.setInt(2, limit);
+            ps.setInt(3, offset);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                long resultId = rs.getLong(1);
+                long foundUserId = rs.getLong(2);
+                Optional<User> userOptional = DaoFactory.getInstance().getUserDao().findById(foundUserId);
+                User user = userOptional.orElseGet(User::new);
+                long testId = rs.getLong(3);
+                Optional<Test> testOptional = DaoFactory.getInstance().getTestDao().findById(testId);
+                Test test = testOptional.orElseGet(Test::new);
+                int points = rs.getInt(4);
+                int correctAnswers = rs.getInt(5);
+                int totalPoints = rs.getInt(6);
+                boolean isTestPassed = points >= test.getPointsToPass();
+                Result result = new Result(resultId, user, test, points, correctAnswers, totalPoints, isTestPassed);
+                results.add(result);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Error executing query " + query, e);
+        } finally {
+            DaoUtil.releaseResources(con, ps, rs);
+        }
+        return results;
+    }
+
+    @Override
     public List<Result> findByCriteria(Map<String, String> criteria) throws DaoException {
         List<Result> results = new ArrayList<>();
         Connection con;
@@ -64,10 +125,10 @@ public class SqlResultDaoImpl implements ResultDao {
                 long resultId = rs.getLong(1);
                 long userId = rs.getLong(2);
                 Optional<User> userOptional = DaoFactory.getInstance().getUserDao().findById(userId);
-                User user = userOptional.isPresent() ? userOptional.get() : new User();
+                User user = userOptional.orElseGet(User::new);
                 long testId = rs.getLong(3);
                 Optional<Test> testOptional = DaoFactory.getInstance().getTestDao().findById(testId);
-                Test test = testOptional.isPresent() ? testOptional.get() : new Test();
+                Test test = testOptional.orElseGet(Test::new);
                 int points = rs.getInt(4);
                 int correctAnswers = rs.getInt(5);
                 int totalPoints = rs.getInt(6);
@@ -113,12 +174,6 @@ public class SqlResultDaoImpl implements ResultDao {
             DaoUtil.releaseResources(con, ps, rs);
         }
         return id;
-    }
-
-    @Override
-    public void update(Result result) throws DaoException {
-        delete(result);
-        add(result);
     }
 
     @Override

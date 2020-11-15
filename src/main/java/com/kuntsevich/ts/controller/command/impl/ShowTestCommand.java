@@ -19,18 +19,20 @@ import java.util.List;
 
 public class ShowTestCommand implements Command {
     private static final Logger log = Logger.getLogger(ShowTestCommand.class);
-    private static final String TEST_NOTFOUND_ERROR = "message.test.notfound.error";
+    private static final String MESSAGE_TEST_NOTFOUND_ERROR = "message.test.notfound.error";
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
+        MessageManager.setLanguage(language);
         try {
             String testIdParameter = request.getParameter(ParameterName.ID);
             long testId = Long.parseLong(testIdParameter);
-            HttpSession session = request.getSession();
             Long userId = (Long) session.getAttribute(AttributeName.USER_ID);
             if (userId == null) {
                 session.setAttribute(AttributeName.ORIGIN, request.getRequestURL().toString());
-                return new Router(PagePath.LOGIN).setRedirect();
+                return new Router(PagePath.LOGIN);
             }
             try {
                 ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -49,11 +51,11 @@ public class ShowTestCommand implements Command {
                 }
             } catch (ServiceException e) {
                 log.error("Service can't execute tests findAll method", e);
-                request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(TEST_NOTFOUND_ERROR));
+                request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_TEST_NOTFOUND_ERROR));
             }
         } catch (NumberFormatException e) {
             log.error("Error converting testId to long", e);
-            request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(TEST_NOTFOUND_ERROR));
+            request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_TEST_NOTFOUND_ERROR));
         }
         return new Router(PagePath.HOME);
     }

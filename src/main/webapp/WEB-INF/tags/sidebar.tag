@@ -14,12 +14,12 @@
         </c:if>
         <c:if test="${(sessionScope.role eq 'Администратор') || (sessionScope.role eq 'Тьютор')}">
             <li class="nav-item">
-                <a class="nav-link active" href="<c:url value="/controller?command=show-all-users"/>"><fmt:message
+                <a class="nav-link active" href="<c:url value="/controller?command=show-users&page=1"/>"><fmt:message
                         key="home.user_list"/></a>
             </li>
         </c:if>
         <li class="nav-item">
-            <a class="nav-link active" href="<c:url value="/controller?command=show-all-tests"/>"><fmt:message
+            <a class="nav-link active" href="<c:url value="/controller?command=show-tests&page=1"/>"><fmt:message
                     key="home.tests"/></a>
         </li>
         <li class="nav-item">
@@ -29,7 +29,7 @@
         <li class="nav-item">
             <c:if test="${not empty sessionScope.userId}">
                 <a class="nav-link"
-                   href="<c:url value="/controller?command=show-user-results&userId=${sessionScope.userId}"/>"><fmt:message
+                   href="<c:url value="/controller?command=show-user-results&userId=${sessionScope.userId}&page=1"/>"><fmt:message
                         key="home.results"/></a>
             </c:if>
             <c:if test="${empty sessionScope.userId}">

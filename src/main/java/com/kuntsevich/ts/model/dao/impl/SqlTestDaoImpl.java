@@ -1,9 +1,6 @@
 package com.kuntsevich.ts.model.dao.impl;
 
-import com.kuntsevich.ts.entity.Question;
-import com.kuntsevich.ts.entity.Status;
-import com.kuntsevich.ts.entity.Subject;
-import com.kuntsevich.ts.entity.Test;
+import com.kuntsevich.ts.entity.*;
 import com.kuntsevich.ts.model.dao.DaoException;
 import com.kuntsevich.ts.model.dao.TestDao;
 import com.kuntsevich.ts.model.dao.factory.DaoFactory;
@@ -20,6 +17,9 @@ public class SqlTestDaoImpl implements TestDao {
     private static final String UPDATE_TEST_QUERY = "UPDATE testing_system.tests SET title = ?, subject = ?, description = ?, status = ?, points_to_pass = ? WHERE (test_id = ?)";
     private static final String DELETE_TEST_QUERY = "DELETE FROM testing_system.tests WHERE (test_id = ?)";
     private static final String SUBJECT = "subject";
+    private static final String EMPTY_STRING = "";
+    private static final String FIND_TEST_WITH_LIMITS_QUERY = "SELECT test_id, title, subject, description, status, points_to_pass FROM testing_system.tests ORDER BY test_id DESC LIMIT ? OFFSET ?";
+    private static final String FIND_COUNT_OF_TESTS_QUERY = "SELECT count(*) FROM testing_system.tests";
 
     @Override
     public Optional<Test> findById(long id) throws DaoException {
@@ -141,5 +141,60 @@ public class SqlTestDaoImpl implements TestDao {
         HashMap<String, String> criteria = new HashMap<>();
         criteria.put(SUBJECT, Long.toString(subjectId));
         return findByCriteria(criteria);
+    }
+
+    @Override
+    public List<Test> findWithLimits(int offset, int limit) throws DaoException {
+        List<Test> tests = new ArrayList<>();
+        Connection con;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        con = DatabaseConnectionPool.getInstance().getConnection();
+        try {
+            ps = con.prepareStatement(FIND_TEST_WITH_LIMITS_QUERY);
+            ps.setInt(1, limit);
+            ps.setInt(2, offset);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                long testId = rs.getLong(1);
+                String title = rs.getString(2);
+                long subjectId = rs.getLong(3);
+                Optional<Subject> subjectOptional = DaoFactory.getInstance().getSubjectDao().findById(subjectId);
+                Subject subject = subjectOptional.orElseGet(Subject::new);
+                String description = rs.getString(4);
+                long statusId = rs.getLong(5);
+                Optional<Status> statusOptional = DaoFactory.getInstance().getStatusDao().findById(statusId);
+                Status status = statusOptional.orElseGet(Status::new);
+                List<Question> questions = DaoFactory.getInstance().getQuestionDao().findByTestId(testId);
+                int pointsToPass = rs.getInt(6);
+                Test test = new Test(testId, title, subject, description, questions, status, pointsToPass);
+                tests.add(test);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Error executing query", e);
+        } finally {
+            DaoUtil.releaseResources(con, ps, rs);
+        }
+        return tests;
+    }
+
+    @Override
+    public int findCount() throws DaoException {
+        Connection con;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        con = DatabaseConnectionPool.getInstance().getConnection();
+        String query = EMPTY_STRING;
+        try {
+            query = FIND_COUNT_OF_TESTS_QUERY;
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            throw new DaoException("Error executing query " + query, e);
+        } finally {
+            DaoUtil.releaseResources(con, ps, rs);
+        }
     }
 }

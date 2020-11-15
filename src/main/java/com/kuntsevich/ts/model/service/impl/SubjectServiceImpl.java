@@ -8,6 +8,7 @@ import com.kuntsevich.ts.model.dao.TestDao;
 import com.kuntsevich.ts.model.dao.factory.DaoFactory;
 import com.kuntsevich.ts.model.service.SubjectService;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
+import com.kuntsevich.ts.validator.EntityValidator;
 import com.kuntsevich.ts.validator.SubjectValidator;
 
 import java.util.List;
@@ -29,8 +30,7 @@ public class SubjectServiceImpl implements SubjectService {
         if (subjectName == null || subjectDescription == null) {
             return false;
         }
-        SubjectValidator subjectValidator = new SubjectValidator();
-        if (!subjectValidator.isNameValid(subjectName) || !subjectValidator.isDescriptionValid(subjectDescription)) {
+        if (!SubjectValidator.isNameValid(subjectName) || !SubjectValidator.isDescriptionValid(subjectDescription)) {
             return false;
         }
         SubjectDao subjectDao = DaoFactory.getInstance().getSubjectDao();
@@ -48,8 +48,7 @@ public class SubjectServiceImpl implements SubjectService {
         if (subjectId == null) {
             return false;
         }
-        SubjectValidator subjectValidator = new SubjectValidator();
-        if (!subjectValidator.isIdValid(subjectId)) {
+        if (!EntityValidator.isIdValid(subjectId)) {
             return false;
         }
         TestDao testDao = DaoFactory.getInstance().getTestDao();

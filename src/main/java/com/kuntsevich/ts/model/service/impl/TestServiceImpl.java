@@ -9,6 +9,8 @@ import com.kuntsevich.ts.model.service.creator.QuestionCreator;
 import com.kuntsevich.ts.model.service.creator.TestCreator;
 import com.kuntsevich.ts.model.service.exception.CreatorException;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
+import com.kuntsevich.ts.validator.EntityValidator;
+import com.kuntsevich.ts.validator.NumberValidator;
 import com.kuntsevich.ts.validator.TestValidator;
 import com.kuntsevich.ts.validator.UserValidator;
 import org.apache.log4j.Logger;
@@ -19,13 +21,13 @@ public class TestServiceImpl implements TestService {
     private static final Logger log = Logger.getLogger(TestServiceImpl.class);
     private static final String QUESTION_ID_PREFIX = "q-";
     private static final String ANSWER_ID_PREFIX = "a-";
-    private static final int FIRST_ELEMENT = 0;
     private static final String SPACE = " ";
     private static final String POINTS_PREFIX = "p";
     private static final String ONE_POINT = "1";
     private static final String ANSWER_ATTRIBUTE_PREFIX = "c-";
     private static final String TRUE = "true";
     private static final String STATUS = "Активный";
+    private static final int FIRST_ELEMENT = 0;
 
     @Override
     public List<Test> findAll() throws ServiceException {
@@ -45,12 +47,10 @@ public class TestServiceImpl implements TestService {
         if (testId == null || userId == null || answers == null) {
             throw new ServiceException("Parameters are null");
         }
-        TestValidator testValidator = new TestValidator();
-        if (!testValidator.isIdValid(testId)) {
+        if (!EntityValidator.isIdValid(testId)) {
             throw new ServiceException("Test id is invalid");
         }
-        UserValidator userValidator = new UserValidator();
-        if (!userValidator.isIdValid(userId)) {
+        if (!EntityValidator.isIdValid(userId)) {
             throw new ServiceException("User id is invalid");
         }
         long id = Long.parseLong(testId);
@@ -139,9 +139,9 @@ public class TestServiceImpl implements TestService {
             throw new ServiceException("Parameters are null");
         }
         TestValidator testValidator = new TestValidator();
-        if (!testValidator.isTitleValid(title)
-                || !testValidator.isDescriptionValid(description)
-                || !testValidator.isSubjectNameValid(subject)
+        if (!TestValidator.isTitleValid(title)
+                || !TestValidator.isDescriptionValid(description)
+                || !TestValidator.isSubjectNameValid(subject)
                 || !testValidator.isPointsToPassValid(pointsToPass)) {
             throw new ServiceException("Invalid parameters");
         }
@@ -225,8 +225,7 @@ public class TestServiceImpl implements TestService {
         if (testId == null) {
             return false;
         }
-        TestValidator testValidator = new TestValidator();
-        if (!testValidator.isIdValid(testId)) {
+        if (!EntityValidator.isIdValid(testId)) {
             return false;
         }
         TestDao testDao = DaoFactory.getInstance().getTestDao();
@@ -279,6 +278,43 @@ public class TestServiceImpl implements TestService {
             throw new ServiceException("Error while deleting test", e);
         }
         return true;
+    }
+
+    @Override
+    public int findPageCount(String recordsPerPage) throws ServiceException {
+        if (recordsPerPage == null) {
+            throw new ServiceException("Parameter is null");
+        }
+        if (!NumberValidator.isIntegerValid(recordsPerPage)) {
+            throw new ServiceException("Page is invalid");
+        }
+        TestDao testDao = DaoFactory.getInstance().getTestDao();
+        try {
+            int recordsCount = testDao.findCount();
+            int recordsPerPageInt = Integer.parseInt(recordsPerPage);
+            int pageCount = recordsCount / recordsPerPageInt;
+            pageCount = recordsCount % recordsPerPageInt > 0 ? pageCount + 1 : pageCount;
+            return pageCount;
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding test count");
+        }
+    }
+
+    @Override
+    public List<Test> findPageTests(String page, String recordsPerPage) throws ServiceException {
+        if (page == null || recordsPerPage == null) {
+            throw new ServiceException("Parameters are null");
+        }
+        if (!NumberValidator.isIntegerValid(page) || !NumberValidator.isIntegerValid(recordsPerPage)) {
+            throw new ServiceException("Parameters are invalid");
+        }
+        TestDao testDao = DaoFactory.getInstance().getTestDao();
+        int rpp = Integer.parseInt(recordsPerPage);
+        try {
+            return testDao.findWithLimits(rpp * (Integer.parseInt(page) - 1), rpp);
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding tests with limits");
+        }
     }
 
     private boolean isQuestionAnswersCorrect(Question question, List<Answer> answers) {

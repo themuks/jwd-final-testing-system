@@ -1,9 +1,6 @@
 package com.kuntsevich.ts.model.dao.impl;
 
-import com.kuntsevich.ts.entity.Credential;
-import com.kuntsevich.ts.entity.Role;
-import com.kuntsevich.ts.entity.Status;
-import com.kuntsevich.ts.entity.User;
+import com.kuntsevich.ts.entity.*;
 import com.kuntsevich.ts.model.dao.DaoException;
 import com.kuntsevich.ts.model.dao.UserDao;
 import com.kuntsevich.ts.model.dao.factory.DaoFactory;
@@ -24,6 +21,8 @@ public class SqlUserDaoImpl implements UserDao {
     private static final int FIRST_ELEMENT_INDEX = 0;
     private static final String PASSWORD_HASH = "password_hash";
     private static final String USER_HASH = "user_hash";
+    private static final String FIND_USER_WITH_LIMITS_QUERY = "SELECT user_id, username, name, surname, email_hash, password_hash, user_hash, role, status FROM testing_system.users ORDER BY user_id DESC LIMIT ? OFFSET ?";
+    private static final String FIND_COUNT_OF_USERS_QUERY = "SELECT count(*) FROM testing_system.users";
 
     @Override
     public Optional<User> findById(long id) throws DaoException {
@@ -77,8 +76,7 @@ public class SqlUserDaoImpl implements UserDao {
 
     @Override
     public List<User> findAll() throws DaoException {
-        List<User> users = findByCriteria(new HashMap<>());
-        return users;
+        return findByCriteria(new HashMap<>());
     }
 
     @Override
@@ -211,5 +209,64 @@ public class SqlUserDaoImpl implements UserDao {
             optionalUser = Optional.of(users.get(FIRST_ELEMENT_INDEX));
         }
         return optionalUser;
+    }
+
+    @Override
+    public List<User> findWithLimits(int offset, int limit) throws DaoException {
+        List<User> users = new ArrayList<>();
+        Connection con;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        con = DatabaseConnectionPool.getInstance().getConnection();
+        String query = EMPTY_STRING;
+        try {
+            query = FIND_USER_WITH_LIMITS_QUERY;
+            ps = con.prepareStatement(query);
+            ps.setInt(1, limit);
+            ps.setInt(2, offset);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                long userId = rs.getLong(1);
+                String username = rs.getString(2);
+                String name = rs.getString(3);
+                String surname = rs.getString(4);
+                String emailHash = rs.getString(5);
+                String passwordHash = rs.getString(6);
+                String userHash = rs.getString(7);
+                long roleId = rs.getLong(8);
+                Optional<Role> roleOptional = DaoFactory.getInstance().getRoleDao().findById(roleId);
+                Role role = roleOptional.orElseGet(Role::new);
+                long statusId = rs.getLong(9);
+                Optional<Status> statusOptional = DaoFactory.getInstance().getStatusDao().findById(statusId);
+                Status status = statusOptional.orElseGet(Status::new);
+                User user = new User(userId, username, name, surname, emailHash, passwordHash, userHash, role, status);
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Error executing query " + query, e);
+        } finally {
+            DaoUtil.releaseResources(con, ps, rs);
+        }
+        return users;
+    }
+
+    @Override
+    public int findCount() throws DaoException {
+        Connection con;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        con = DatabaseConnectionPool.getInstance().getConnection();
+        String query = EMPTY_STRING;
+        try {
+            query = FIND_COUNT_OF_USERS_QUERY;
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            throw new DaoException("Error executing query " + query, e);
+        } finally {
+            DaoUtil.releaseResources(con, ps, rs);
+        }
     }
 }

@@ -15,4 +15,8 @@ public interface TestService {
     boolean createTest(String title, String subject, String description, String pointsToPass, Map<String, String[]> answers, List<String> answersAttributes) throws ServiceException;
 
     boolean deleteTest(String testId) throws ServiceException;
+
+    int findPageCount(String recordsPerPage) throws ServiceException;
+
+    List<Test> findPageTests(String page, String recordsPerPage) throws ServiceException;
 }

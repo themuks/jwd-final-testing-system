@@ -2,6 +2,7 @@ package com.kuntsevich.ts.model.service;
 
 import com.kuntsevich.ts.entity.Credential;
 import com.kuntsevich.ts.entity.Result;
+import com.kuntsevich.ts.entity.Test;
 import com.kuntsevich.ts.entity.User;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
 
@@ -28,4 +29,8 @@ public interface UserService {
     String findUserUsername(String id) throws ServiceException;
 
     List<User> findAllUsers() throws ServiceException;
+
+    int findPageCount(String recordsPerPage) throws ServiceException;
+
+    List<User> findPageUsers(String page, String recordsPerPage) throws ServiceException;
 }

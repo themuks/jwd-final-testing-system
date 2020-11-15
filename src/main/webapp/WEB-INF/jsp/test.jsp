@@ -13,6 +13,7 @@
         <tags:sidebar/>
     </div>
     <div class="col-lg-9">
+        <tags:message/>
         <p class="h4 text-center mt-3"><fmt:message key="test.title"/></p>
         <div class="border rounded p-3 my-3">
             <c:if test="${not empty test}">

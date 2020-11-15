@@ -13,15 +13,15 @@ public class TestValidator extends EntityValidator {
     private static final String DESCRIPTION_REGEX = ".{0,2048}";
     private static final String POINTS_TO_PASS_REGEX = "[1-9]\\d*";
 
-    public boolean isTitleValid(String title) {
+    public static boolean isTitleValid(String title) {
         return Pattern.matches(TITLE_REGEX, title);
     }
 
-    public boolean isDescriptionValid(String description) {
+    public static boolean isDescriptionValid(String description) {
         return Pattern.matches(DESCRIPTION_REGEX, description);
     }
 
-    public boolean isSubjectNameValid(String subject) {
+    public static boolean isSubjectNameValid(String subject) {
         SubjectDao subjectDao = DaoFactory.getInstance().getSubjectDao();
         List<Subject> subjects;
         try {
@@ -37,7 +37,7 @@ public class TestValidator extends EntityValidator {
         return false;
     }
 
-    public boolean isPointsToPassValid(String pointsToPass) {
+    public static boolean isPointsToPassValid(String pointsToPass) {
         return Pattern.matches(POINTS_TO_PASS_REGEX, pointsToPass);
     }
 }

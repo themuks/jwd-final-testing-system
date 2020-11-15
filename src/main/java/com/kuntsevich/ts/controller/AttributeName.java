@@ -15,6 +15,8 @@ public class AttributeName {
     public static final String LANGUAGE = "lang";
     public static final String CURRENT_PAGE = "currentPage";
     public static final String PREVIOUS_PAGE = "previousPage";
+    public static final String PAGE_COUNT = "pageCount";
+    public static final String PAGE = "page";
 
     private AttributeName() {
     }

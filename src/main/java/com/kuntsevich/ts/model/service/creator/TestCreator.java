@@ -23,11 +23,10 @@ public class TestCreator {
                 || pointsToPass == null) {
             throw new CreatorException("Parameters are null");
         }
-        TestValidator testValidator = new TestValidator();
-        if (!testValidator.isTitleValid(title)
-                || !testValidator.isSubjectNameValid(subjectName)
-                || !testValidator.isDescriptionValid(description)
-                || !testValidator.isPointsToPassValid(pointsToPass)) {
+        if (!TestValidator.isTitleValid(title)
+                || !TestValidator.isSubjectNameValid(subjectName)
+                || !TestValidator.isDescriptionValid(description)
+                || !TestValidator.isPointsToPassValid(pointsToPass)) {
             throw new CreatorException("Invalid parameters");
         }
         SubjectDao subjectDao = DaoFactory.getInstance().getSubjectDao();
@@ -56,7 +55,11 @@ public class TestCreator {
         } else {
             throw new CreatorException("Status not found");
         }
-        int points = Integer.parseInt(pointsToPass);
-        return new Test(title, subject, description, questions, status, points);
+        try {
+            int points = Integer.parseInt(pointsToPass);
+            return new Test(title, subject, description, questions, status, points);
+        } catch (NumberFormatException e) {
+            throw new CreatorException("Error while parsing integer", e);
+        }
     }
 }

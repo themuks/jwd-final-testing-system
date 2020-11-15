@@ -29,4 +29,8 @@ public interface UserDao {
     Optional<User> findByUserIdAndPasswordHash(long userId, String passwordHash) throws DaoException;
 
     Optional<User> findByEmailHashAndUserHash(String userHash, String emailHash) throws DaoException;
+
+    List<User> findWithLimits(int offset, int limit) throws DaoException;
+
+    int findCount() throws DaoException;
 }

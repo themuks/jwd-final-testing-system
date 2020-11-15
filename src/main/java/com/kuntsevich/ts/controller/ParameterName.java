@@ -36,6 +36,7 @@ public class ParameterName {
     public static final String SUBJECT_NAME = "subjectName";
     public static final String SUBJECT_ID = "subjectId";
     public static final String LANGUAGE = "lang";
+    public static final String PAGE = "page";
 
     private ParameterName() {
     }

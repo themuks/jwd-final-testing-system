@@ -6,7 +6,7 @@
 <fmt:setBundle basename="content.text"/>
 <fmt:message key="error_403.title" var="title"/>
 <tags:general title="${title}">
-    <div class="col align-self-center text-center my-3">
+    <div class="col align-self-center text-center my-3 p-5">
         <p class="h1"><fmt:message key="error_403.title" var="title"/></p>
         <p class="h2"><fmt:message key="error_403.general" var="title"/></p>
         <p class="h2"><fmt:message key="error_403.hint" var="title"/></p>

@@ -12,11 +12,14 @@ public class QuestionCreator {
         if (text == null || answers == null || points == null) {
             throw new CreatorException("Parameters are null");
         }
-        QuestionValidator questionValidator = new QuestionValidator();
-        if (!questionValidator.isTextValid(text) || !questionValidator.isPointsValid(points)) {
+        if (!QuestionValidator.isTextValid(text) || !QuestionValidator.isPointsValid(points)) {
             throw new CreatorException("Invalid parameters");
         }
-        int pointsValue = Integer.parseInt(points);
-        return new Question(text, answers, pointsValue);
+        try {
+            int pointsValue = Integer.parseInt(points);
+            return new Question(text, answers, pointsValue);
+        } catch (NumberFormatException e) {
+            throw new CreatorException("Error while parsing integer", e);
+        }
     }
 }

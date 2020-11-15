@@ -6,7 +6,7 @@
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:message key="error_500.title" var="title"/>
 <tags:general title="${title}">
-    <div class="col align-self-center text-center my-3">
+    <div class="col align-self-center text-center my-3 p-5">
         <p class="h1"><fmt:message key="error_500.title" var="title"/></p>
         <p class="h2"><fmt:message key="error_500.general" var="title"/></p>
         <p class="h2"><fmt:message key="error_500.hint" var="title"/></p>

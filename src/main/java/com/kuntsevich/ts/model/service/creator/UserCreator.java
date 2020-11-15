@@ -23,11 +23,10 @@ public class UserCreator {
                 || role == null) {
             throw new CreatorException("Parameters are null");
         }
-        UserValidator userValidator = new UserValidator();
-        if (!userValidator.isUsernameValid(username)
-                || !userValidator.isNameValid(name)
-                || !userValidator.isSurnameValid(surname)
-                || !userValidator.isRoleValid(role)) {
+        if (!UserValidator.isUsernameValid(username)
+                || !UserValidator.isNameValid(name)
+                || !UserValidator.isSurnameValid(surname)
+                || !UserValidator.isRoleValid(role)) {
             throw new CreatorException("Parameters are incorrect");
         }
         DaoFactory daoFactory = DaoFactory.getInstance();

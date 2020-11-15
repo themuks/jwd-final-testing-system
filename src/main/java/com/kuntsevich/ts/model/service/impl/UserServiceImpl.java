@@ -4,6 +4,7 @@ import com.kuntsevich.ts.entity.Credential;
 import com.kuntsevich.ts.entity.Result;
 import com.kuntsevich.ts.entity.User;
 import com.kuntsevich.ts.model.dao.DaoException;
+import com.kuntsevich.ts.model.dao.TestDao;
 import com.kuntsevich.ts.model.dao.UserDao;
 import com.kuntsevich.ts.model.dao.factory.DaoFactory;
 import com.kuntsevich.ts.model.service.UserService;
@@ -11,6 +12,8 @@ import com.kuntsevich.ts.model.service.creator.CredentialCreator;
 import com.kuntsevich.ts.model.service.creator.UserCreator;
 import com.kuntsevich.ts.model.service.exception.CreatorException;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
+import com.kuntsevich.ts.validator.EntityValidator;
+import com.kuntsevich.ts.validator.NumberValidator;
 import com.kuntsevich.ts.validator.UserValidator;
 
 import java.nio.charset.StandardCharsets;
@@ -81,13 +84,12 @@ public class UserServiceImpl implements UserService {
                 || role == null) {
             throw new ServiceException("Parameters are null");
         }
-        UserValidator userValidator = new UserValidator();
-        if (!userValidator.isUsernameValid(username)
-                || !userValidator.isNameValid(name)
-                || !userValidator.isSurnameValid(surname)
-                || !userValidator.isEmailValid(email)
-                || !userValidator.isPasswordValid(password)
-                || !userValidator.isRoleValid(role)) {
+        if (!UserValidator.isUsernameValid(username)
+                || !UserValidator.isNameValid(name)
+                || !UserValidator.isSurnameValid(surname)
+                || !UserValidator.isEmailValid(email)
+                || !UserValidator.isPasswordValid(password)
+                || !UserValidator.isRoleValid(role)) {
             throw new ServiceException("Parameters are incorrect");
         }
         if (role.equals(ADMIN)) {
@@ -132,8 +134,7 @@ public class UserServiceImpl implements UserService {
         if (emailHash == null || userHash == null) {
             throw new ServiceException("Parameters are null");
         }
-        UserValidator userValidator = new UserValidator();
-        if (!userValidator.isIdValid(emailHash)) {
+        if (!EntityValidator.isIdValid(emailHash)) {
             throw new ServiceException("Parameters are incorrect");
         }
         DaoFactory daoFactory = DaoFactory.getInstance();
@@ -156,8 +157,7 @@ public class UserServiceImpl implements UserService {
         if (id == null) {
             throw new ServiceException("Parameters are null");
         }
-        UserValidator userValidator = new UserValidator();
-        if (!userValidator.isIdValid(id)) {
+        if (!EntityValidator.isIdValid(id)) {
             throw new ServiceException("Parameters are incorrect");
         }
         UserDao userDao = DaoFactory.getInstance().getUserDao();
@@ -183,11 +183,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserById(String userId) throws ServiceException {
-        UserValidator userValidator = new UserValidator();
         if (userId == null) {
             throw new ServiceException("Parameter is null");
         }
-        if (!userValidator.isIdValid(userId)) {
+        if (!EntityValidator.isIdValid(userId)) {
             throw new ServiceException("User id is invalid");
         }
         UserDao userDao = DaoFactory.getInstance().getUserDao();
@@ -211,11 +210,10 @@ public class UserServiceImpl implements UserService {
                 || newPasswordAgain == null) {
             return false;
         }
-        UserValidator userValidator = new UserValidator();
-        if (!userValidator.isIdValid(userId)
-                || !userValidator.isPasswordValid(oldPassword)
-                || !userValidator.isPasswordValid(newPassword)
-                || !userValidator.isPasswordValid(newPasswordAgain)) {
+        if (!EntityValidator.isIdValid(userId)
+                || !UserValidator.isPasswordValid(oldPassword)
+                || !UserValidator.isPasswordValid(newPassword)
+                || !UserValidator.isPasswordValid(newPasswordAgain)) {
             return false;
         }
         if (newPassword.equals(newPasswordAgain)) {
@@ -256,11 +254,10 @@ public class UserServiceImpl implements UserService {
                 || surname == null) {
             return false;
         }
-        UserValidator userValidator = new UserValidator();
-        if (!userValidator.isIdValid(userId)
-                || !userValidator.isUsernameValid(username)
-                || !userValidator.isNameValid(name)
-                || !userValidator.isSurnameValid(surname)) {
+        if (!EntityValidator.isIdValid(userId)
+                || !UserValidator.isUsernameValid(username)
+                || !UserValidator.isNameValid(name)
+                || !UserValidator.isSurnameValid(surname)) {
             return false;
         }
         UserDao userDao = DaoFactory.getInstance().getUserDao();
@@ -290,8 +287,7 @@ public class UserServiceImpl implements UserService {
         if (id == null) {
             throw new ServiceException("Parameters are null");
         }
-        UserValidator userValidator = new UserValidator();
-        if (!userValidator.isIdValid(id)) {
+        if (!EntityValidator.isIdValid(id)) {
             throw new ServiceException("Parameters are incorrect");
         }
         UserDao userDao = DaoFactory.getInstance().getUserDao();
@@ -317,6 +313,43 @@ public class UserServiceImpl implements UserService {
             return userDao.findAll();
         } catch (DaoException e) {
             throw new ServiceException("Error while finding all users", e);
+        }
+    }
+
+    @Override
+    public int findPageCount(String recordsPerPage) throws ServiceException {
+        if (recordsPerPage == null) {
+            throw new ServiceException("Parameter is null");
+        }
+        if (!NumberValidator.isIntegerValid(recordsPerPage)) {
+            throw new ServiceException("Page is invalid");
+        }
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        try {
+            int recordsCount = userDao.findCount();
+            int recordsPerPageInt = Integer.parseInt(recordsPerPage);
+            int pageCount = recordsCount / recordsPerPageInt;
+            pageCount = recordsCount % recordsPerPageInt > 0 ? pageCount + 1 : pageCount;
+            return pageCount;
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding user count");
+        }
+    }
+
+    @Override
+    public List<User> findPageUsers(String page, String recordsPerPage) throws ServiceException {
+        if (page == null || recordsPerPage == null) {
+            throw new ServiceException("Parameters are null");
+        }
+        if (!NumberValidator.isIntegerValid(page) || !NumberValidator.isIntegerValid(recordsPerPage)) {
+            throw new ServiceException("Parameters are invalid");
+        }
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        int rpp = Integer.parseInt(recordsPerPage);
+        try {
+            return userDao.findWithLimits(rpp * (Integer.parseInt(page) - 1), rpp);
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding users with limits");
         }
     }
 

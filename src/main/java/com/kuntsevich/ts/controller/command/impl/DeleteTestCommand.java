@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class DeleteTestCommand implements Command {
     private static final Logger log = Logger.getLogger(DeleteTestCommand.class);
@@ -21,21 +22,24 @@ public class DeleteTestCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
+        MessageManager.setLanguage(language);
         String testId = request.getParameter(ParameterName.TEST_ID);
         if (testId == null || testId.isEmpty()) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
-            return new Router(CommandPath.SHOW_ALL_TESTS);
+            return new Router(PagePath.HOME);
         }
         TestService testService = ServiceFactory.getInstance().getTestService();
         try {
             if (!testService.deleteTest(testId)) {
                 request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
-                return new Router(CommandPath.SHOW_ALL_TESTS);
+                return new Router(CommandPath.SHOW_TESTS);
             }
         } catch (ServiceException e) {
             log.error("Error while adding test", e);
             return new Router(PagePath.ERROR_500);
         }
-        return new Router(CommandPath.SHOW_ALL_TESTS).setRedirect();
+        return new Router(CommandPath.SHOW_TESTS).setRedirect();
     }
 }

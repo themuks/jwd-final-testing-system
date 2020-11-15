@@ -21,6 +21,9 @@ public class ChangeUserParametersCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
+        MessageManager.setLanguage(language);
         String username = request.getParameter(ParameterName.USERNAME);
         String name = request.getParameter(ParameterName.NAME);
         String surname = request.getParameter(ParameterName.SURNAME);
@@ -33,7 +36,6 @@ public class ChangeUserParametersCommand implements Command {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
             return new Router(CommandPath.SHOW_PROFILE);
         }
-        HttpSession session = request.getSession();
         Long userId = (Long) session.getAttribute(AttributeName.USER_ID);
         UserService userService = ServiceFactory.getInstance().getUserService();
         try {

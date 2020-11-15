@@ -10,12 +10,6 @@
         <tags:sidebar/>
     </div>
     <div class="col-lg-9">
-        <c:if test="${not empty errorMessage}">
-            <div class="alert alert-danger my-3" role="alert">${errorMessage}</div>
-        </c:if>
-        <c:if test="${not empty infoMessage}">
-            <div class="alert alert-info my-3" role="alert">${infoMessage}</div>
-        </c:if>
         <div class="mx-auto my-3 text-center">
             <fmt:message key="home.choose_menu_item"/>
         </div>

@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class AddSubjectCommand implements Command {
     private static final Logger log = Logger.getLogger(AddSubjectCommand.class);
@@ -21,11 +22,14 @@ public class AddSubjectCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
+        MessageManager.setLanguage(language);
         String subjectName = request.getParameter(ParameterName.SUBJECT_NAME);
         String subjectDescription = request.getParameter(ParameterName.SUBJECT_DESCRIPTION);
         if (subjectName == null || subjectName.isEmpty() || subjectDescription == null || subjectDescription.isEmpty()) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
-            return new Router(CommandPath.SHOW_SUBJECTS);
+            return new Router(PagePath.HOME);
         }
         SubjectService subjectService = ServiceFactory.getInstance().getSubjectService();
         try {

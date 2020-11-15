@@ -15,11 +15,13 @@ public interface ResultDao {
 
     long add(Result result) throws DaoException;
 
-    void update(Result result) throws DaoException;
-
     void delete(Result result) throws DaoException;
 
     List<Result> findByUserId(long userId) throws DaoException;
 
     List<Result> findByTestId(long testId) throws DaoException;
+
+    List<Result> findByUserIdWithLimits(long userId, int offset, int limit) throws DaoException;
+
+    int findCountByUserId(long userId) throws DaoException;
 }

@@ -12,14 +12,15 @@ import javax.servlet.http.HttpSession;
 
 public class LogoutCommand implements Command {
     private static final String USER_HASH = "userHash";
-    private static final String EMPTY_STRING = "";
     private static final String USER_EMAIL = "userEmail";
+    private static final String EMPTY_STRING = "";
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         String language = (String) session.getAttribute(AttributeName.LANGUAGE);
         session.invalidate();
+        session = request.getSession(true);
         session.setAttribute(AttributeName.LANGUAGE, language);
         Cookie cookie = new Cookie(USER_HASH, EMPTY_STRING);
         cookie.setMaxAge(0);

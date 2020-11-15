@@ -11,6 +11,7 @@
         <tags:sidebar/>
     </div>
     <div class="col-lg-9">
+        <tags:message/>
         <p class="h4 text-center mt-3"><fmt:message key="profile.title"/></p>
         <div class="border rounded p-3 my-3">
             <form class="my-3" method="post" action="${pageContext.request.contextPath}/controller">

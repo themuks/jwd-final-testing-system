@@ -11,6 +11,7 @@
         <tags:sidebar/>
     </div>
     <div class="col-lg-9">
+        <tags:message/>
         <c:if test="${not empty results}">
             <p class="h4 text-center mt-3"><fmt:message key="results.title"/></p>
             <c:forEach var="result" items="${results}">
@@ -34,6 +35,8 @@
                     </div>
                 </div>
             </c:forEach>
+            <tags:pagination pageCount="${pageCount}" currentPage="${page}"
+                             url="/controller?command=show-user-results&userId=${userId}"/>
         </c:if>
         <c:if test="${empty results}">
             <div class="mx-auto my-3 text-center">

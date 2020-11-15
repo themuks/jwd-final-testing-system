@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class DeleteResultCommand implements Command {
     private static final Logger log = Logger.getLogger(DeleteResultCommand.class);
@@ -22,11 +23,14 @@ public class DeleteResultCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
+        MessageManager.setLanguage(language);
         String userId = request.getParameter(ParameterName.USER_ID);
         String resultId = request.getParameter(ParameterName.RESULT_ID);
         if (userId == null || userId.isEmpty() || resultId == null || resultId.isEmpty()) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
-            return new Router(CommandPath.SHOW_ALL_USERS);
+            return new Router(CommandPath.SHOW_USERS);
         }
         ResultService resultService = ServiceFactory.getInstance().getResultService();
         try {

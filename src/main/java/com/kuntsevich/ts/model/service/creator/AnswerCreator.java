@@ -9,8 +9,7 @@ public class AnswerCreator {
         if (text == null || isCorrect == null) {
             throw new CreatorException("Text is null");
         }
-        AnswerValidator answerValidator = new AnswerValidator();
-        if (!answerValidator.isTextValid(text)) {
+        if (!AnswerValidator.isTextValid(text)) {
             throw new CreatorException("Invalid text value");
         }
         boolean isCorrectValue = Boolean.parseBoolean(isCorrect);

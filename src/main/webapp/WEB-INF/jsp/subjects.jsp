@@ -10,6 +10,7 @@
         <tags:sidebar/>
     </div>
     <div class="col-lg-9">
+        <tags:message/>
         <c:if test="${not empty subjects}">
             <p class="h4 text-center mt-3"><fmt:message key="subjects.title"/></p>
             <c:if test="${not empty sessionScope.role}">

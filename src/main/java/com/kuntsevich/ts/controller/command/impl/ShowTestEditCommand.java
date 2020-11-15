@@ -1,8 +1,8 @@
 package com.kuntsevich.ts.controller.command.impl;
 
+import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.controller.PagePath;
 import com.kuntsevich.ts.controller.ParameterName;
-import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.manager.MessageManager;
 import com.kuntsevich.ts.controller.router.Router;
@@ -17,13 +17,14 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public class ShowTestEditCommand implements Command {
-    private static final String ADMIN = "Администратор";
-    private static final String TUTOR = "Тьютор";
     private static final String MESSAGE_PARAMETERS_ERROR = "message.parameters.error";
     private static final String MESSAGE_SERVER_ERROR = "message.server.error";
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
+        MessageManager.setLanguage(language);
         String questionsCount = request.getParameter(ParameterName.QUESTIONS_COUNT);
         if (questionsCount == null || questionsCount.isEmpty()) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
@@ -36,20 +37,15 @@ public class ShowTestEditCommand implements Command {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
             return new Router(PagePath.ERROR_500);
         }
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute(AttributeName.ROLE);
-        if ((ADMIN.equals(role) || TUTOR.equals(role))) {
-            SubjectService subjectService = ServiceFactory.getInstance().getSubjectService();
-            try {
-                List<Subject> allSubjects = subjectService.findAllSubjects();
-                request.setAttribute(ParameterName.SUBJECTS, allSubjects);
-            } catch (ServiceException e) {
-                request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SERVER_ERROR));
-                return new Router(PagePath.ERROR_500);
-            }
-            request.setAttribute(ParameterName.QUESTIONS_COUNT, count);
-            return new Router(PagePath.TEST_EDIT);
+        SubjectService subjectService = ServiceFactory.getInstance().getSubjectService();
+        try {
+            List<Subject> allSubjects = subjectService.findAllSubjects();
+            request.setAttribute(ParameterName.SUBJECTS, allSubjects);
+        } catch (ServiceException e) {
+            request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SERVER_ERROR));
+            return new Router(PagePath.ERROR_500);
         }
-        return new Router(PagePath.ERROR_403).setRedirect();
+        request.setAttribute(ParameterName.QUESTIONS_COUNT, count);
+        return new Router(PagePath.TEST_EDIT);
     }
 }
