@@ -1,6 +1,8 @@
 package com.kuntsevich.ts.model.service.impl;
 
 import com.kuntsevich.ts.entity.Result;
+import com.kuntsevich.ts.entity.Role;
+import com.kuntsevich.ts.entity.User;
 import com.kuntsevich.ts.model.dao.DaoException;
 import com.kuntsevich.ts.model.dao.ResultDao;
 import com.kuntsevich.ts.model.dao.factory.DaoFactory;
@@ -10,6 +12,7 @@ import com.kuntsevich.ts.validator.EntityValidator;
 import com.kuntsevich.ts.validator.NumberValidator;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ResultServiceImpl implements ResultService {
     @Override
@@ -86,5 +89,28 @@ public class ResultServiceImpl implements ResultService {
         } catch (DaoException e) {
             throw new ServiceException("Error while finding results by user id", e);
         }
+    }
+
+    @Override
+    public Role findResultUserRole(String resultId) throws ServiceException {
+        if (resultId == null) {
+            throw new ServiceException("Parameter is null");
+        }
+        if (!EntityValidator.isIdValid(resultId)) {
+            throw new ServiceException("Parameter is invalid");
+        }
+        ResultDao resultDao = DaoFactory.getInstance().getResultDao();
+        Optional<Result> optionalResult;
+        try {
+            optionalResult = resultDao.findById(Long.parseLong(resultId));
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding result by id", e);
+        }
+        if (optionalResult.isEmpty()) {
+            throw new ServiceException("Result isn't exist");
+        }
+        Result result = optionalResult.get();
+        User user = result.getUser();
+        return user.getRole();
     }
 }

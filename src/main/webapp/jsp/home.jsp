@@ -10,6 +10,7 @@
         <tags:sidebar/>
     </div>
     <div class="col-lg-9">
+        <tags:message/>
         <div class="mx-auto my-3 text-center">
             <fmt:message key="home.choose_menu_item"/>
         </div>

@@ -1,11 +1,9 @@
 package com.kuntsevich.ts.controller.command.impl;
 
 import com.kuntsevich.ts.controller.AttributeName;
-import com.kuntsevich.ts.controller.CommandPath;
 import com.kuntsevich.ts.controller.PagePath;
 import com.kuntsevich.ts.controller.ParameterName;
 import com.kuntsevich.ts.controller.command.Command;
-import com.kuntsevich.ts.controller.manager.MessageManager;
 import com.kuntsevich.ts.controller.router.Router;
 import com.kuntsevich.ts.entity.User;
 import com.kuntsevich.ts.model.service.UserService;
@@ -23,12 +21,10 @@ public class ShowUsersCommand implements Command {
     private static final String MESSAGE_PARAMETERS_ERROR = "message.parameters.error";
     private static final int RECORDS_PER_PAGE = 5;
     private static final String FIRST_PAGE = "1";
+    private static final String ADMIN = "Администратор";
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
-        MessageManager.setLanguage(language);
         String page = request.getParameter(ParameterName.PAGE);
         if (page == null || page.isEmpty()) {
             page = FIRST_PAGE;
@@ -37,7 +33,10 @@ public class ShowUsersCommand implements Command {
         try {
             String recordsPerPageStr = Integer.toString(RECORDS_PER_PAGE);
             int pageCount = userService.findPageCount(recordsPerPageStr);
-            List<User> users = userService.findPageUsers(page, recordsPerPageStr);
+            HttpSession session = request.getSession();
+            String role = (String) session.getAttribute(AttributeName.ROLE);
+            Long userId = (Long) session.getAttribute(AttributeName.USER_ID);
+            List<User> users = userService.findPageUsers(userId.toString(), role, page, recordsPerPageStr);
             request.setAttribute(AttributeName.USERS, users);
             request.setAttribute(AttributeName.PAGE_COUNT, pageCount);
             request.setAttribute(AttributeName.PAGE, page);

@@ -1,7 +1,7 @@
 package com.kuntsevich.ts.controller.filter;
 
-import com.kuntsevich.ts.controller.PagePath;
 import com.kuntsevich.ts.controller.AttributeName;
+import com.kuntsevich.ts.controller.PagePath;
 import com.kuntsevich.ts.entity.User;
 import com.kuntsevich.ts.model.dao.DaoException;
 import com.kuntsevich.ts.model.dao.UserDao;

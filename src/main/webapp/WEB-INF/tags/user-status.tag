@@ -5,9 +5,28 @@
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="content.text"/>
 <c:if test="${not empty sessionScope.role}">
-    <p class="m-0 px-3 py-2 text-light"><fmt:message key="user_status.hello"/>, ${sessionScope.username}</p>
-    <a class="nav-link text-light" href="<c:url value="/controller?command=show-profile"/>"><fmt:message key="user_status.profile"/></a>
-    <a class="nav-link text-light" href="<c:url value="/controller?command=logout"/>"><fmt:message key="user_status.exit"/></a>
+    <ul class="nav navbar justify-content-center flex-row flex-nowrap">
+        <li class="nav-item">
+            <p class="m-0 px-3 text-light"><fmt:message key="user_status.hello"/>, ${sessionScope.username}</p>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="<c:url value="/controller?command=show-profile"/>"><fmt:message
+                    key="user_status.profile"/></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="<c:url value="/controller?command=logout"/>"><fmt:message
+                    key="user_status.exit"/></a>
+        </li>
+    </ul>
+    <%--<li class="nav-item ml-auto">
+        <p class="m-0 px-3 py-2 text-light"><fmt:message key="user_status.hello"/>, ${sessionScope.username}</p>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-light" href="<c:url value="/controller?command=show-profile"/>"><fmt:message key="user_status.profile"/></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-light" href="<c:url value="/controller?command=logout"/>"><fmt:message key="user_status.exit"/></a>
+    </li>--%>
 </c:if>
 <c:if test="${empty sessionScope.role}">
     <div class="form-inline">

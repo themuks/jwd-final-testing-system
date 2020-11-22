@@ -1,8 +1,8 @@
 package com.kuntsevich.ts.controller.command.impl;
 
+import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.controller.PagePath;
 import com.kuntsevich.ts.controller.ParameterName;
-import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.manager.MessageManager;
 import com.kuntsevich.ts.controller.router.Router;
@@ -25,8 +25,6 @@ public class SubmitTestCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
-        MessageManager.setLanguage(language);
         String testId = request.getParameter(ParameterName.TEST_ID);
         Long userId = (Long) session.getAttribute(AttributeName.USER_ID);
         Map<String, String[]> answers = request.getParameterMap();

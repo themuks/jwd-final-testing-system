@@ -2,9 +2,10 @@ package com.kuntsevich.ts.model.service.impl;
 
 import com.kuntsevich.ts.entity.Credential;
 import com.kuntsevich.ts.entity.Result;
+import com.kuntsevich.ts.entity.Status;
 import com.kuntsevich.ts.entity.User;
 import com.kuntsevich.ts.model.dao.DaoException;
-import com.kuntsevich.ts.model.dao.TestDao;
+import com.kuntsevich.ts.model.dao.StatusDao;
 import com.kuntsevich.ts.model.dao.UserDao;
 import com.kuntsevich.ts.model.dao.factory.DaoFactory;
 import com.kuntsevich.ts.model.service.UserService;
@@ -22,16 +23,26 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
     private static final String HEX_FORMAT_STRING = "%02x";
     private static final String MESSAGE_DIGEST_MD5 = "MD5";
     private static final String SALT = "s7l3T1hTEA3";
-    private static final String INACTIVE = "Не активный";
+    private static final String INACTIVE = "Неактивный";
     private static final String ADMIN = "Администратор";
+    private static final String TUTOR = "Тьютор";
+    private static final String PROMO_CODE = "promo";
+    private static final String PENDING = "В ожидании";
 
     @Override
     public Optional<Credential> checkLogin(String email, String password) throws ServiceException {
+        if (email == null || password == null) {
+            throw new ServiceException("Parameters are null");
+        }
+        if (!UserValidator.isEmailValid(email) || !UserValidator.isPasswordValid(password)) {
+            throw new ServiceException("Parameters are invalid");
+        }
         Optional<Credential> optionalCredential = Optional.empty();
         DaoFactory daoFactory = DaoFactory.getInstance();
         UserDao userDao = daoFactory.getUserDao();
@@ -51,7 +62,8 @@ public class UserServiceImpl implements UserService {
         }
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (user.getStatus().getName().equals(INACTIVE)) {
+            String roleName = user.getStatus().getName();
+            if (INACTIVE.equals(roleName) || PENDING.equals(roleName)) {
                 return Optional.empty();
             }
             Random random = new Random();
@@ -75,14 +87,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean registration(String username, String name, String surname, String email, String password, String role) throws ServiceException {
+    public boolean registration(String username, String name, String surname, String email, String password, String role, String promo) throws ServiceException {
         if (username == null
                 || name == null
                 || surname == null
                 || email == null
                 || password == null
                 || role == null) {
-            throw new ServiceException("Parameters are null");
+            return false;
         }
         if (!UserValidator.isUsernameValid(username)
                 || !UserValidator.isNameValid(name)
@@ -90,9 +102,12 @@ public class UserServiceImpl implements UserService {
                 || !UserValidator.isEmailValid(email)
                 || !UserValidator.isPasswordValid(password)
                 || !UserValidator.isRoleValid(role)) {
-            throw new ServiceException("Parameters are incorrect");
+            return false;
         }
         if (role.equals(ADMIN)) {
+            return false;
+        }
+        if (role.equals(TUTOR) && !PROMO_CODE.equals(promo)) {
             return false;
         }
         String emailHash;
@@ -114,7 +129,6 @@ public class UserServiceImpl implements UserService {
         if (optionalUser.isPresent()) {
             return false;
         }
-        // TODO: 15.10.2020 Send email to confirm registration
         User user;
         try {
             user = UserCreator.createUser(username, name, surname, emailHash, passwordHash, role);
@@ -126,16 +140,23 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             throw new ServiceException("User dao add error", e);
         }
+        /*if (!sendVerificationEmail(email, user)) {
+            try {
+                userDao.delete(user);
+            } catch (DaoException e) {
+                throw new ServiceException("User dao delete error", e);
+            }
+        }*/
         return true;
     }
 
     @Override
     public boolean authorization(String emailHash, String userHash) throws ServiceException {
         if (emailHash == null || userHash == null) {
-            throw new ServiceException("Parameters are null");
+            return false;
         }
         if (!EntityValidator.isIdValid(emailHash)) {
-            throw new ServiceException("Parameters are incorrect");
+            return false;
         }
         DaoFactory daoFactory = DaoFactory.getInstance();
         UserDao userDao = daoFactory.getUserDao();
@@ -337,20 +358,90 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findPageUsers(String page, String recordsPerPage) throws ServiceException {
-        if (page == null || recordsPerPage == null) {
+    public List<User> findPageUsers(String userId, String role, String page, String recordsPerPage) throws ServiceException {
+        if (userId == null
+                || role == null
+                || page == null
+                || recordsPerPage == null) {
             throw new ServiceException("Parameters are null");
         }
-        if (!NumberValidator.isIntegerValid(page) || !NumberValidator.isIntegerValid(recordsPerPage)) {
+        if (!EntityValidator.isIdValid(userId)
+                || !UserValidator.isRoleValid(role)
+                || !NumberValidator.isIntegerValid(page)
+                || !NumberValidator.isIntegerValid(recordsPerPage)) {
             throw new ServiceException("Parameters are invalid");
         }
         UserDao userDao = DaoFactory.getInstance().getUserDao();
-        int rpp = Integer.parseInt(recordsPerPage);
+        int recordsPerPageInt = Integer.parseInt(recordsPerPage);
         try {
-            return userDao.findWithLimits(rpp * (Integer.parseInt(page) - 1), rpp);
+            List<User> users = userDao.findWithLimits(recordsPerPageInt * (Integer.parseInt(page) - 1), recordsPerPageInt);
+            if (!ADMIN.equals(userId)) {
+                long userIdLong = Long.parseLong(userId);
+                users = users.stream()
+                        .filter(u -> !u.getRole().getName().equals(ADMIN))
+                        .filter(u -> u.getUserId() != userIdLong)
+                        .collect(Collectors.toList());
+            }
+            return users;
         } catch (DaoException e) {
             throw new ServiceException("Error while finding users with limits");
         }
+    }
+
+    @Override
+    public boolean resetPassword(String userId, String newPassword, String secretKey) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean sendPasswordRecoveryEmail(String email) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean deactivateAccount(String userId) throws ServiceException {
+        if (userId == null) {
+            return false;
+        }
+        if (!EntityValidator.isIdValid(userId)) {
+            return false;
+        }
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        Optional<User> optionalUser;
+        try {
+            optionalUser = userDao.findById(Long.parseLong(userId));
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding user by id", e);
+        }
+        if (optionalUser.isEmpty()) {
+            return false;
+        }
+        User user = optionalUser.get();
+        StatusDao statusDao = DaoFactory.getInstance().getStatusDao();
+        Optional<Status> optionalStatus;
+        try {
+            optionalStatus = statusDao.findByName(INACTIVE);
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding status by name", e);
+        }
+        if (optionalStatus.isEmpty()) {
+            return false;
+        }
+        Status status = optionalStatus.get();
+        if (user.getStatus().equals(status)) {
+            return false;
+        }
+        user.setStatus(status);
+        try {
+            userDao.update(user);
+        } catch (DaoException e) {
+            throw new ServiceException("Error while updating user", e);
+        }
+        return true;
+    }
+
+    private boolean sendVerificationEmail(String email, User user) {
+        throw new UnsupportedOperationException();
     }
 
     private String calculateMdHash(String str) throws NoSuchAlgorithmException {

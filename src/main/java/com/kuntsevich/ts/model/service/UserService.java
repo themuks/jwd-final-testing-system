@@ -2,7 +2,6 @@ package com.kuntsevich.ts.model.service;
 
 import com.kuntsevich.ts.entity.Credential;
 import com.kuntsevich.ts.entity.Result;
-import com.kuntsevich.ts.entity.Test;
 import com.kuntsevich.ts.entity.User;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
 
@@ -12,7 +11,7 @@ import java.util.Optional;
 public interface UserService {
     Optional<Credential> checkLogin(String email, String password) throws ServiceException;
 
-    boolean registration(String username, String name, String surname, String email, String password, String role) throws ServiceException;
+    boolean registration(String username, String name, String surname, String email, String password, String role, String promo) throws ServiceException;
 
     boolean authorization(String emailHash, String userHash) throws ServiceException;
 
@@ -32,5 +31,11 @@ public interface UserService {
 
     int findPageCount(String recordsPerPage) throws ServiceException;
 
-    List<User> findPageUsers(String page, String recordsPerPage) throws ServiceException;
+    List<User> findPageUsers(String userId, String role, String page, String recordsPerPage) throws ServiceException;
+
+    boolean resetPassword(String userId, String newPassword, String secretKey) throws ServiceException;
+
+    boolean sendPasswordRecoveryEmail(String email) throws ServiceException;
+
+    boolean deactivateAccount(String userId) throws ServiceException;
 }

@@ -17,6 +17,7 @@ public class AttributeName {
     public static final String PREVIOUS_PAGE = "previousPage";
     public static final String PAGE_COUNT = "pageCount";
     public static final String PAGE = "page";
+    public static final String SECRET_KEY = "secretKey";
 
     private AttributeName() {
     }

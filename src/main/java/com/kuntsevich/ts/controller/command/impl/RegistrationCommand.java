@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 public class RegistrationCommand implements Command {
     private static final Logger log = Logger.getLogger(RegistrationCommand.class);
@@ -21,9 +20,6 @@ public class RegistrationCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
-        MessageManager.setLanguage(language);
         String username = request.getParameter(ParameterName.USERNAME);
         String name = request.getParameter(ParameterName.NAME);
         String surname = request.getParameter(ParameterName.SURNAME);
@@ -31,6 +27,7 @@ public class RegistrationCommand implements Command {
         String role = request.getParameter(ParameterName.ROLE);
         String password = request.getParameter(ParameterName.PASSWORD);
         String passwordAgain = request.getParameter(ParameterName.PASSWORD_AGAIN);
+        String promo = request.getParameter(ParameterName.PROMO);
         if (username == null || username.isEmpty()
                 || name == null || name.isEmpty()
                 || surname == null || surname.isEmpty()
@@ -39,17 +36,18 @@ public class RegistrationCommand implements Command {
                 || password == null || password.isEmpty()
                 || passwordAgain == null || passwordAgain.isEmpty()) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_REGISTRATION_ERROR));
-            return new Router(PagePath.REGISTRATION).setRedirect();
+            return new Router(PagePath.REGISTRATION);
         }
         if (password.equals(passwordAgain)) {
             try {
                 ServiceFactory serviceFactory = ServiceFactory.getInstance();
                 UserService userService = serviceFactory.getUserService();
-                if (userService.registration(username, name, surname, email, password, role)) {
+                if (userService.registration(username, name, surname, email, password, role, promo)) {
                     return new Router(PagePath.LOGIN).setRedirect();
                 }
             } catch (ServiceException e) {
                 log.error("Register error", e);
+                return new Router(PagePath.ERROR_500);
             }
         }
         request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_REGISTRATION_ERROR));

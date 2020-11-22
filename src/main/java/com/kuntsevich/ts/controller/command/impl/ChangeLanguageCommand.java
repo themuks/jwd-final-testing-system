@@ -19,7 +19,6 @@ public class ChangeLanguageCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         String language = (String) session.getAttribute(AttributeName.LANGUAGE);
-        MessageManager.setLanguage(language);
         if (language == null || language.isEmpty()) {
             session.setAttribute(AttributeName.LANGUAGE, RUSSIAN);
         }
@@ -33,6 +32,7 @@ public class ChangeLanguageCommand implements Command {
             return new Router(previousPage).setRedirect();
         }
         session.setAttribute(AttributeName.LANGUAGE, newLanguage);
+        MessageManager.setLanguage(newLanguage);
         return new Router(PagePath.HOME);
     }
 }

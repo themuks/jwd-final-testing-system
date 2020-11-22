@@ -6,6 +6,7 @@ public class CommandPath {
     public static final String SHOW_USERS = "/controller?command=show-users";
     public static final String SHOW_USER_RESULTS = "/controller?command=show-user-results";
     public static final String SHOW_TESTS = "/controller?command=show-tests";
+    public static final String SHOW_PASSWORD_RESET = "/controller?command=show-password-reset";
 
     private CommandPath() {
     }

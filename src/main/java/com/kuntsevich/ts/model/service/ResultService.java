@@ -1,6 +1,7 @@
 package com.kuntsevich.ts.model.service;
 
 import com.kuntsevich.ts.entity.Result;
+import com.kuntsevich.ts.entity.Role;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface ResultService {
     int findPageCountByUserId(String userId, String recordsPerPage) throws ServiceException;
 
     List<Result> findUserPageResults(String userId, String page, String recordsPerPage) throws ServiceException;
+
+    Role findResultUserRole(String resultId) throws ServiceException;
 }

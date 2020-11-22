@@ -12,7 +12,6 @@ import com.kuntsevich.ts.model.service.exception.ServiceException;
 import com.kuntsevich.ts.validator.EntityValidator;
 import com.kuntsevich.ts.validator.NumberValidator;
 import com.kuntsevich.ts.validator.TestValidator;
-import com.kuntsevich.ts.validator.UserValidator;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -25,7 +24,6 @@ public class TestServiceImpl implements TestService {
     private static final String POINTS_PREFIX = "p";
     private static final String ONE_POINT = "1";
     private static final String ANSWER_ATTRIBUTE_PREFIX = "c-";
-    private static final String TRUE = "true";
     private static final String STATUS = "Активный";
     private static final int FIRST_ELEMENT = 0;
 
@@ -138,11 +136,10 @@ public class TestServiceImpl implements TestService {
                 || answersAttributes == null) {
             throw new ServiceException("Parameters are null");
         }
-        TestValidator testValidator = new TestValidator();
         if (!TestValidator.isTitleValid(title)
                 || !TestValidator.isDescriptionValid(description)
                 || !TestValidator.isSubjectNameValid(subject)
-                || !testValidator.isPointsToPassValid(pointsToPass)) {
+                || !TestValidator.isPointsToPassValid(pointsToPass)) {
             throw new ServiceException("Invalid parameters");
         }
         Set<String> keys = questionsParameters.keySet();
@@ -243,9 +240,9 @@ public class TestServiceImpl implements TestService {
         QuestionDao questionDao = DaoFactory.getInstance().getQuestionDao();
         AnswerDao answerDao = DaoFactory.getInstance().getAnswerDao();
         List<Question> questions = test.getQuestions();
-        for (var question: questions) {
+        for (var question : questions) {
             List<Answer> answers = question.getAnswers();
-            for (var answer: answers) {
+            for (var answer : answers) {
                 try {
                     answerDao.delete(answer);
                 } catch (DaoException e) {
@@ -265,7 +262,7 @@ public class TestServiceImpl implements TestService {
         } catch (DaoException e) {
             throw new ServiceException("Error while finding results by test id", e);
         }
-        for (var result: results) {
+        for (var result : results) {
             try {
                 resultDao.delete(result);
             } catch (DaoException e) {

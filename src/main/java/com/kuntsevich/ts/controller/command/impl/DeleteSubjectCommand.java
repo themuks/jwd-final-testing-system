@@ -23,9 +23,6 @@ public class DeleteSubjectCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
-        MessageManager.setLanguage(language);
         String subjectId = request.getParameter(ParameterName.SUBJECT_ID);
         if (subjectId == null || subjectId.isEmpty()) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));

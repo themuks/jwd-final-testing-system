@@ -17,6 +17,8 @@ public class PagePath {
     public static final String TEST_CREATE = "/WEB-INF/jsp/test-create.jsp";
     public static final String SUBJECT_ADD = "/WEB-INF/jsp/subject-add.jsp";
     public static final String USERS = "/WEB-INF/jsp/users.jsp";
+    public static final String PASSWORD_RESET = "/WEB-INF/jsp/password-reset.jsp";
+    public static final String PASSWORD_RECOVERY = "/WEB-INF/jsp/password-recovery.jsp";
 
     private PagePath() {
     }

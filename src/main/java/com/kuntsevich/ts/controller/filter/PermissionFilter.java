@@ -31,7 +31,10 @@ public class PermissionFilter implements Filter {
                 "show-tests",
                 "show-subjects",
                 "show-welcome-page",
-                "change-language"
+                "change-language",
+                "recover-password",
+                "show-password-reset",
+                "password-reset"
         );
         List<String> studentCommands = new ArrayList<>(guestCommands);
         studentCommands.addAll(List.of(
@@ -87,7 +90,7 @@ public class PermissionFilter implements Filter {
         }
         List<String> commands = permissions.get(role);
         if (commands == null || !commands.contains(command)) {
-            response.sendRedirect(request.getContextPath() + PagePath.LOGIN);
+            response.sendRedirect(request.getContextPath() + PagePath.ERROR_403);
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }

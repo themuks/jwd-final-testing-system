@@ -10,12 +10,12 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
-    <!--<error-page>
+    <error-page>
         <error-code>404</error-code>
         <location>/WEB-INF/jsp/error/error404.jsp</location>
     </error-page>
 
-    <error-page>
+    <!--<error-page>
         <error-code>500</error-code>
         <location>/WEB-INF/jsp/error/error500.jsp</location>
     </error-page>-->
@@ -41,16 +41,6 @@
     </filter-mapping>
 
     <filter>
-        <filter-name>PermissionFilter</filter-name>
-        <filter-class>com.kuntsevich.ts.controller.filter.PermissionFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>PermissionFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <filter>
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>com.kuntsevich.ts.controller.filter.AuthenticationFilter</filter-class>
     </filter>
@@ -60,6 +50,15 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>PermissionFilter</filter-name>
+        <filter-class>com.kuntsevich.ts.controller.filter.PermissionFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>PermissionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <servlet>
         <servlet-name>TestingSystemServlet</servlet-name>

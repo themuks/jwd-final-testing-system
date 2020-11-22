@@ -1,6 +1,9 @@
 package com.kuntsevich.ts.model.dao.impl;
 
-import com.kuntsevich.ts.entity.*;
+import com.kuntsevich.ts.entity.Question;
+import com.kuntsevich.ts.entity.Status;
+import com.kuntsevich.ts.entity.Subject;
+import com.kuntsevich.ts.entity.Test;
 import com.kuntsevich.ts.model.dao.DaoException;
 import com.kuntsevich.ts.model.dao.TestDao;
 import com.kuntsevich.ts.model.dao.factory.DaoFactory;

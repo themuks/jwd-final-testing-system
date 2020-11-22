@@ -55,9 +55,12 @@ body {
 }
 
 .form-signup #inputPasswordAgain {
-    margin-bottom: 16px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+
+.form-signup .custom-select {
+    margin: 16px 0;
 }
 
 .form-signup .form-control:focus {

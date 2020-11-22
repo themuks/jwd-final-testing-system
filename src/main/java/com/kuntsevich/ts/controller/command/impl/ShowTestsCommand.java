@@ -1,7 +1,6 @@
 package com.kuntsevich.ts.controller.command.impl;
 
 import com.kuntsevich.ts.controller.AttributeName;
-import com.kuntsevich.ts.controller.CommandPath;
 import com.kuntsevich.ts.controller.PagePath;
 import com.kuntsevich.ts.controller.ParameterName;
 import com.kuntsevich.ts.controller.command.Command;
@@ -26,9 +25,6 @@ public class ShowTestsCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
-        MessageManager.setLanguage(language);
         String page = request.getParameter(ParameterName.PAGE);
         if (page == null || page.isEmpty()) {
             page = FIRST_PAGE;

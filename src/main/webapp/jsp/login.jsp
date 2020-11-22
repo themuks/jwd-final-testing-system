@@ -39,8 +39,12 @@
     <button class="btn btn-lg btn-primary btn-block mb-3" type="submit"><fmt:message
             key="login.submit_button"/></button>
     <div>
-        <fmt:message key="login.question"/>
-        <a href="registration.jsp"><fmt:message key="login.question_suggestion"/></a>
+        <fmt:message key="login.password_question"/>
+        <a href="password-recovery.jsp"><fmt:message key="login.password_question_suggestion"/></a>
+    </div>
+    <div>
+        <fmt:message key="login.account_question"/>
+        <a href="registration.jsp"><fmt:message key="login.account_question_suggestion"/></a>
     </div>
 </form>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

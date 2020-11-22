@@ -18,6 +18,9 @@ public enum CommandType {
     SHOW_SUBJECT_ADD(new ShowSubjectAddCommand()),
     SHOW_USERS(new ShowUsersCommand()),
     SHOW_USER_RESULTS(new ShowUserResultsCommand()),
+    RECOVER_PASSWORD(new RecoverPasswordCommand()),
+    SHOW_PASSWORD_RESET(new ShowPasswordResetCommand()),
+    PASSWORD_RESET(new PasswordResetCommand()),
     DELETE_RESULT(new DeleteResultCommand()),
     ADD_SUBJECT(new AddSubjectCommand()),
     DELETE_SUBJECT(new DeleteSubjectCommand()),
@@ -25,6 +28,7 @@ public enum CommandType {
     DELETE_TEST(new DeleteTestCommand()),
     SUBMIT_TEST(new SubmitTestCommand()),
     CHANGE_USER_PARAMETERS(new ChangeUserParametersCommand()),
+    DEACTIVATE_ACCOUNT(new DeactivateAccountCommand()),
     CHANGE_LANGUAGE(new ChangeLanguageCommand()),
     SHOW_WELCOME_PAGE((req, resp) -> new Router(PagePath.WELCOME).setRedirect());
 

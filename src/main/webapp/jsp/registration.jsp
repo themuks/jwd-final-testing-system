@@ -55,6 +55,10 @@
         <option value="Студент"><fmt:message key="registration.student"/></option>
     </select>
 
+    <label for="inputPromo" class="sr-only"><fmt:message key="registration.promo"/></label>
+    <input type="text" name="promo" id="inputPromo" class="form-control"
+           placeholder="<fmt:message key="registration.promo"/>">
+
     <button class="btn btn-lg btn-primary btn-block my-3" type="submit"><fmt:message
             key="registration.submit_button"/></button>
 

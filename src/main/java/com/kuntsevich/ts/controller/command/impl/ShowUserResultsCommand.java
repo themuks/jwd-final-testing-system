@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public class ShowUserResultsCommand implements Command {
@@ -26,9 +25,6 @@ public class ShowUserResultsCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
-        MessageManager.setLanguage(language);
         String userId = request.getParameter(ParameterName.USER_ID);
         String page = request.getParameter(ParameterName.PAGE);
         if (userId == null || userId.isEmpty()) {

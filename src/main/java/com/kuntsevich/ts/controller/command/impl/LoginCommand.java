@@ -1,8 +1,8 @@
 package com.kuntsevich.ts.controller.command.impl;
 
+import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.controller.PagePath;
 import com.kuntsevich.ts.controller.ParameterName;
-import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.manager.MessageManager;
 import com.kuntsevich.ts.controller.router.Router;
@@ -31,8 +31,6 @@ public class LoginCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
-        MessageManager.setLanguage(language);
         String page;
         String email = request.getParameter(ParameterName.EMAIL);
         String password = request.getParameter(ParameterName.PASSWORD);

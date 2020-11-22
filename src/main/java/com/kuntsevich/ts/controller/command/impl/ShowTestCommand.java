@@ -1,8 +1,8 @@
 package com.kuntsevich.ts.controller.command.impl;
 
+import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.controller.PagePath;
 import com.kuntsevich.ts.controller.ParameterName;
-import com.kuntsevich.ts.controller.AttributeName;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.manager.MessageManager;
 import com.kuntsevich.ts.controller.router.Router;
@@ -24,8 +24,6 @@ public class ShowTestCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
-        MessageManager.setLanguage(language);
         try {
             String testIdParameter = request.getParameter(ParameterName.ID);
             long testId = Long.parseLong(testIdParameter);

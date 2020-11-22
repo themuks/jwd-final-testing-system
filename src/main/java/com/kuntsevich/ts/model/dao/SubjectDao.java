@@ -1,7 +1,6 @@
 package com.kuntsevich.ts.model.dao;
 
 import com.kuntsevich.ts.entity.Subject;
-import com.kuntsevich.ts.entity.User;
 
 import java.util.List;
 import java.util.Map;

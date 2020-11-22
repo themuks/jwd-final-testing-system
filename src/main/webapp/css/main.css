@@ -1,7 +1,4 @@
-.navbar div {
-    justify-content: space-evenly;
-}
-
-.navbar div .form-inline {
-    justify-content: space-evenly;
+.navbar-nav .nav-item .nav-link {
+    padding-left: 1rem;
+    padding-right: 1rem;
 }

@@ -28,7 +28,7 @@
                         <c:if test="${not result.testPassed}">
                             <p class="card-text text-danger"><fmt:message key="results.test_not_passed"/></p>
                         </c:if>
-                        <c:if test="${not empty sessionScope.role eq 'Администратор' || sessionScope.role eq 'Тьютор'}">
+                        <c:if test="${sessionScope.role eq 'Администратор' || sessionScope.role eq 'Тьютор'}">
                             <a href="<c:url value="/controller?command=delete-result&userId=${userId}&resultId=${result.resultId}"/>"
                                class="btn btn-outline-danger"><fmt:message key="results.delete"/></a>
                         </c:if>

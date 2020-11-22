@@ -1,6 +1,9 @@
 package com.kuntsevich.ts.model.dao.impl;
 
-import com.kuntsevich.ts.entity.*;
+import com.kuntsevich.ts.entity.Credential;
+import com.kuntsevich.ts.entity.Role;
+import com.kuntsevich.ts.entity.Status;
+import com.kuntsevich.ts.entity.User;
 import com.kuntsevich.ts.model.dao.DaoException;
 import com.kuntsevich.ts.model.dao.UserDao;
 import com.kuntsevich.ts.model.dao.factory.DaoFactory;

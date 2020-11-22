@@ -10,6 +10,7 @@ import com.kuntsevich.ts.entity.Subject;
 import com.kuntsevich.ts.model.service.SubjectService;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
 import com.kuntsevich.ts.model.service.factory.ServiceFactory;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,14 +18,12 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public class ShowTestEditCommand implements Command {
+    private static final Logger log = Logger.getLogger(ShowTestEditCommand.class);
     private static final String MESSAGE_PARAMETERS_ERROR = "message.parameters.error";
     private static final String MESSAGE_SERVER_ERROR = "message.server.error";
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        String language = (String) session.getAttribute(AttributeName.LANGUAGE);
-        MessageManager.setLanguage(language);
         String questionsCount = request.getParameter(ParameterName.QUESTIONS_COUNT);
         if (questionsCount == null || questionsCount.isEmpty()) {
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
@@ -34,6 +33,7 @@ public class ShowTestEditCommand implements Command {
         try {
             count = Long.parseLong(questionsCount);
         } catch (NumberFormatException e) {
+            log.error(e);
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_PARAMETERS_ERROR));
             return new Router(PagePath.ERROR_500);
         }
@@ -42,6 +42,7 @@ public class ShowTestEditCommand implements Command {
             List<Subject> allSubjects = subjectService.findAllSubjects();
             request.setAttribute(ParameterName.SUBJECTS, allSubjects);
         } catch (ServiceException e) {
+            log.error(e);
             request.setAttribute(AttributeName.ERROR_MESSAGE, MessageManager.getProperty(MESSAGE_SERVER_ERROR));
             return new Router(PagePath.ERROR_500);
         }
