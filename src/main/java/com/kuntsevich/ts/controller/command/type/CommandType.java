@@ -29,6 +29,7 @@ public enum CommandType {
     SUBMIT_TEST(new SubmitTestCommand()),
     CHANGE_USER_PARAMETERS(new ChangeUserParametersCommand()),
     DEACTIVATE_ACCOUNT(new DeactivateAccountCommand()),
+    ACTIVATE_ACCOUNT(new ActivateAccountCommand()),
     CHANGE_LANGUAGE(new ChangeLanguageCommand()),
     SHOW_WELCOME_PAGE((req, resp) -> new Router(PagePath.WELCOME).setRedirect());
 

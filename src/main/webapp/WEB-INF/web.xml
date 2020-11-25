@@ -15,10 +15,14 @@
         <location>/WEB-INF/jsp/error/error404.jsp</location>
     </error-page>
 
-    <!--<error-page>
+    <error-page>
         <error-code>500</error-code>
         <location>/WEB-INF/jsp/error/error500.jsp</location>
-    </error-page>-->
+    </error-page>
+
+    <listener>
+        <listener-class>com.kuntsevich.ts.controller.listener.DatabaseConnectionPoolListener</listener-class>
+    </listener>
 
     <filter>
         <filter-name>CharsetFilter</filter-name>

@@ -15,16 +15,16 @@ import java.util.*;
 
 public class SqlUserDaoImpl implements UserDao {
     private static final String USER_ID = "user_id";
-    private static final String FIND_ALL_USER_QUERY = "SELECT user_id, username, name, surname, email_hash, password_hash, user_hash, role, status FROM testing_system.users";
-    private static final String INSERT_USER_QUERY = "INSERT INTO testing_system.users (username, name, surname, email_hash, password_hash, user_hash, role, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String FIND_ALL_USER_QUERY = "SELECT user_id, username, name, surname, email, password_hash, user_hash, role, status FROM testing_system.users";
+    private static final String INSERT_USER_QUERY = "INSERT INTO testing_system.users (username, name, surname, email, password_hash, user_hash, role, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String DELETE_USER_QUERY = "DELETE FROM testing_system.users WHERE (user_id = ?)";
-    private static final String UPDATE_USER_QUERY = "UPDATE testing_system.users SET username = ?, name = ?, surname = ?, email_hash = ?, password_hash = ?, user_hash = ?, role = ?, status = ? WHERE (user_id = ?)";
+    private static final String UPDATE_USER_QUERY = "UPDATE testing_system.users SET username = ?, name = ?, surname = ?, email = ?, password_hash = ?, user_hash = ?, role = ?, status = ? WHERE (user_id = ?)";
     private static final String EMPTY_STRING = "";
-    private static final String EMAIL_HASH = "email_hash";
+    private static final String EMAIL = "email";
     private static final int FIRST_ELEMENT_INDEX = 0;
     private static final String PASSWORD_HASH = "password_hash";
     private static final String USER_HASH = "user_hash";
-    private static final String FIND_USER_WITH_LIMITS_QUERY = "SELECT user_id, username, name, surname, email_hash, password_hash, user_hash, role, status FROM testing_system.users ORDER BY user_id DESC LIMIT ? OFFSET ?";
+    private static final String FIND_USER_WITH_LIMITS_QUERY = "SELECT user_id, username, name, surname, email, password_hash, user_hash, role, status FROM testing_system.users ORDER BY user_id DESC LIMIT ? OFFSET ?";
     private static final String FIND_COUNT_OF_USERS_QUERY = "SELECT count(*) FROM testing_system.users";
 
     @Override
@@ -57,7 +57,7 @@ public class SqlUserDaoImpl implements UserDao {
                 String username = rs.getString(2);
                 String name = rs.getString(3);
                 String surname = rs.getString(4);
-                String emailHash = rs.getString(5);
+                String email = rs.getString(5);
                 String passwordHash = rs.getString(6);
                 String userHash = rs.getString(7);
                 long roleId = rs.getLong(8);
@@ -66,7 +66,7 @@ public class SqlUserDaoImpl implements UserDao {
                 long statusId = rs.getLong(9);
                 Optional<Status> statusOptional = DaoFactory.getInstance().getStatusDao().findById(statusId);
                 Status status = statusOptional.orElseGet(Status::new);
-                User user = new User(userId, username, name, surname, emailHash, passwordHash, userHash, role, status);
+                User user = new User(userId, username, name, surname, email, passwordHash, userHash, role, status);
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -94,7 +94,7 @@ public class SqlUserDaoImpl implements UserDao {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getName());
             ps.setString(3, user.getSurname());
-            ps.setString(4, user.getEmailHash());
+            ps.setString(4, user.getEmail());
             ps.setString(5, user.getPasswordHash());
             ps.setString(6, user.getUserHash());
             ps.setLong(7, user.getRole().getRoleId());
@@ -122,7 +122,7 @@ public class SqlUserDaoImpl implements UserDao {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getName());
             ps.setString(3, user.getSurname());
-            ps.setString(4, user.getEmailHash());
+            ps.setString(4, user.getEmail());
             ps.setString(5, user.getPasswordHash());
             ps.setString(6, user.getUserHash());
             ps.setLong(7, user.getRole().getRoleId());
@@ -153,9 +153,9 @@ public class SqlUserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findByEmailHash(String emailHash) throws DaoException {
+    public Optional<User> findByEmail(String email) throws DaoException {
         Map<String, String> criteria = new HashMap<>();
-        criteria.put(EMAIL_HASH, emailHash);
+        criteria.put(EMAIL, email);
         List<User> users = findByCriteria(criteria);
         Optional<User> optionalUser = Optional.empty();
         if (users.size() > 0) {
@@ -165,10 +165,10 @@ public class SqlUserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findByEmailHashAndPasswordHash(String emailHash, String passwordHash) throws DaoException {
+    public Optional<User> findByEmailAndPasswordHash(String email, String passwordHash) throws DaoException {
         Map<String, String> criteria = new HashMap<>();
         criteria.put(PASSWORD_HASH, passwordHash);
-        criteria.put(EMAIL_HASH, emailHash);
+        criteria.put(EMAIL, email);
         List<User> users = findByCriteria(criteria);
         Optional<User> optionalUser = Optional.empty();
         if (users.size() > 0) {
@@ -202,10 +202,10 @@ public class SqlUserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findByEmailHashAndUserHash(String userHash, String emailHash) throws DaoException {
+    public Optional<User> findByEmailAndUserHash(String userHash, String email) throws DaoException {
         Map<String, String> criteria = new HashMap<>();
         criteria.put(USER_HASH, userHash);
-        criteria.put(EMAIL_HASH, emailHash);
+        criteria.put(EMAIL, email);
         List<User> users = findByCriteria(criteria);
         Optional<User> optionalUser = Optional.empty();
         if (users.size() > 0) {
@@ -233,7 +233,7 @@ public class SqlUserDaoImpl implements UserDao {
                 String username = rs.getString(2);
                 String name = rs.getString(3);
                 String surname = rs.getString(4);
-                String emailHash = rs.getString(5);
+                String email = rs.getString(5);
                 String passwordHash = rs.getString(6);
                 String userHash = rs.getString(7);
                 long roleId = rs.getLong(8);
@@ -242,7 +242,7 @@ public class SqlUserDaoImpl implements UserDao {
                 long statusId = rs.getLong(9);
                 Optional<Status> statusOptional = DaoFactory.getInstance().getStatusDao().findById(statusId);
                 Status status = statusOptional.orElseGet(Status::new);
-                User user = new User(userId, username, name, surname, emailHash, passwordHash, userHash, role, status);
+                User user = new User(userId, username, name, surname, email, passwordHash, userHash, role, status);
                 users.add(user);
             }
         } catch (SQLException e) {

@@ -3,7 +3,6 @@ package com.kuntsevich.ts.controller;
 import com.kuntsevich.ts.controller.command.Command;
 import com.kuntsevich.ts.controller.command.provider.CommandProvider;
 import com.kuntsevich.ts.controller.router.Router;
-import com.kuntsevich.ts.model.dao.pool.DatabaseConnectionPool;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +20,6 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
-
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,10 +34,5 @@ public class MainServlet extends HttpServlet {
             case REDIRECT -> response.sendRedirect(request.getContextPath() + router.getPage());
             case INCLUDE -> request.getRequestDispatcher(router.getPage()).include(request, response);
         }
-    }
-
-    @Override
-    public void destroy() {
-        DatabaseConnectionPool.getInstance().destroyPool();
     }
 }

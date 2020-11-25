@@ -16,11 +16,11 @@ public class UserCreator {
     private static final String STATUS_ACTIVE = "В ожидании";
     private static final String EMPTY_STRING = "";
 
-    public static User createUser(String username, String name, String surname, String emailHash, String passwordHash, String role) throws CreatorException {
+    public static User createUser(String username, String name, String surname, String email, String passwordHash, String role) throws CreatorException {
         if (username == null
                 || name == null
                 || surname == null
-                || emailHash == null
+                || email == null
                 || passwordHash == null
                 || role == null) {
             throw new CreatorException("Parameters are null");
@@ -28,6 +28,7 @@ public class UserCreator {
         if (!UserValidator.isUsernameValid(username)
                 || !UserValidator.isNameValid(name)
                 || !UserValidator.isSurnameValid(surname)
+                || !UserValidator.isEmailValid(email)
                 || !UserValidator.isRoleValid(role)) {
             throw new CreatorException("Parameters are incorrect");
         }
@@ -48,6 +49,6 @@ public class UserCreator {
             log.error(e);
             throw new CreatorException("Error finding status by name", e);
         }
-        return new User(username, name, surname, emailHash, passwordHash, EMPTY_STRING, roleFromDb, statusFromDb);
+        return new User(username, name, surname, email, passwordHash, EMPTY_STRING, roleFromDb, statusFromDb);
     }
 }

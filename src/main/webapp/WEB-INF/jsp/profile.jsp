@@ -17,16 +17,16 @@
             <form class="my-3" method="post" action="${pageContext.request.contextPath}/controller">
                 <input type="hidden" name="command" value="change-user-parameters"/>
                 <div class="form-group">
-                    <label for="usernameInput"><fmt:message key="profile.username"/></label>
+                    <label for="usernameInput"><fmt:message key="profile.username"/> *</label>
                     <input type="text" name="username" class="form-control" id="usernameInput" value="${user.username}"
                            required>
                 </div>
                 <div class="form-group">
-                    <label for="nameInput"><fmt:message key="profile.name"/></label>
+                    <label for="nameInput"><fmt:message key="profile.name"/> *</label>
                     <input type="text" name="name" class="form-control" id="nameInput" value="${user.name}" required>
                 </div>
                 <div class="form-group">
-                    <label for="surnameInput"><fmt:message key="profile.surname"/></label>
+                    <label for="surnameInput"><fmt:message key="profile.surname"/> *</label>
                     <input type="text" name="surname" class="form-control" id="surnameInput" value="${user.surname}"
                            required>
                 </div>

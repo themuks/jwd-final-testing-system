@@ -20,7 +20,7 @@ import java.util.Optional;
 public class AuthenticationFilter implements Filter {
     private static final Logger log = Logger.getLogger(AuthenticationFilter.class);
     private static final String USER_HASH = "userHash";
-    private static final String EMAIL_HASH = "userEmail";
+    private static final String EMAIL = "userEmail";
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -33,19 +33,19 @@ public class AuthenticationFilter implements Filter {
         }
         List<Cookie> cookies = List.of(request.getCookies());
         String userHash = null;
-        String emailHash = null;
+        String email = null;
         for (var cookie : cookies) {
             if (cookie.getName().equals(USER_HASH)) {
                 userHash = cookie.getValue();
             }
-            if (cookie.getName().equals(EMAIL_HASH)) {
-                emailHash = cookie.getValue();
+            if (cookie.getName().equals(EMAIL)) {
+                email = cookie.getValue();
             }
         }
-        if (userHash != null && emailHash != null) {
+        if (userHash != null && email != null) {
             UserDao userDao = DaoFactory.getInstance().getUserDao();
             try {
-                Optional<User> optionalUser = userDao.findByEmailHashAndUserHash(userHash, emailHash);
+                Optional<User> optionalUser = userDao.findByEmailAndUserHash(userHash, email);
                 if (optionalUser.isPresent()) {
                     User user = optionalUser.get();
                     session.setAttribute(AttributeName.USER_ID, user.getUserId());

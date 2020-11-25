@@ -1,5 +1,6 @@
 package com.kuntsevich.ts.model.service.impl;
 
+import com.kuntsevich.ts.controller.manager.MessageManager;
 import com.kuntsevich.ts.entity.Credential;
 import com.kuntsevich.ts.entity.Result;
 import com.kuntsevich.ts.entity.Status;
@@ -13,16 +14,18 @@ import com.kuntsevich.ts.model.service.creator.CredentialCreator;
 import com.kuntsevich.ts.model.service.creator.UserCreator;
 import com.kuntsevich.ts.model.service.exception.CreatorException;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
+import com.kuntsevich.ts.validator.EmailValidator;
 import com.kuntsevich.ts.validator.EntityValidator;
 import com.kuntsevich.ts.validator.NumberValidator;
 import com.kuntsevich.ts.validator.UserValidator;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
@@ -34,6 +37,25 @@ public class UserServiceImpl implements UserService {
     private static final String TUTOR = "Тьютор";
     private static final String PROMO_CODE = "promo";
     private static final String PENDING = "В ожидании";
+    private static final String CONFIG_MAIL = "config.mail";
+    private static final String CONFIG_CREDENTIALS = "config.credentials";
+    private static final String USERNAME = "credentials.username";
+    private static final String PASSWORD = "credentials.password";
+    private static final String MAIL_SMTP_AUTH = "mail.smtp.auth";
+    private static final String MAIL_SMTP_STARTTLS_ENABLE = "mail.smtp.starttls.enable";
+    private static final String MAIL_SMTP_HOST = "mail.smtp.host";
+    private static final String MAIL_SMTP_PORT = "mail.smtp.port";
+    private static final String MESSAGE_EMAIL_VERIFICATION_SUBJECT = "message.email.verification.subject";
+    private static final String MESSAGE_EMAIL_VERIFICATION_TEXT = "message.email.verification.text";
+    private static final String EMAIL_LINK = "<a href=\"http://localhost:8080/controller?command=%s&userId=%d&secretKey=%s\">%s</a>";
+    private static final String ACTIVE = "Активный";
+    private static final String MESSAGE_EMAIL_RECOVERY_SUBJECT = "message.email.recovery.subject";
+    private static final String MESSAGE_EMAIL_RECOVERY_TEXT = "message.email.recovery.text";
+    private static final String PASSWORD_RESET = "password-reset";
+    private static final String ACTIVATE_ACCOUNT = "activate-account";
+    private static final String UTF_8 = "utf-8";
+    private static final String HTML = "html";
+    private static final String MESSAGE_EMAIL_VERIFICATION_PRESS = "message.email.verification.press";
 
     @Override
     public Optional<Credential> checkLogin(String email, String password) throws ServiceException {
@@ -46,19 +68,17 @@ public class UserServiceImpl implements UserService {
         Optional<Credential> optionalCredential = Optional.empty();
         DaoFactory daoFactory = DaoFactory.getInstance();
         UserDao userDao = daoFactory.getUserDao();
-        String emailHash;
         String passwordHash;
         try {
-            emailHash = calculateMdHash(email + SALT);
             passwordHash = calculateMdHash(password + SALT);
         } catch (NoSuchAlgorithmException e) {
             throw new ServiceException("Can't find MD5 algorithm", e);
         }
         Optional<User> optionalUser;
         try {
-            optionalUser = userDao.findByEmailHashAndPasswordHash(emailHash, passwordHash);
+            optionalUser = userDao.findByEmailAndPasswordHash(email, passwordHash);
         } catch (DaoException e) {
-            throw new ServiceException("Error finding user by emailHash and passwordHash", e);
+            throw new ServiceException("Error finding user by email and passwordHash", e);
         }
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -80,7 +100,7 @@ public class UserServiceImpl implements UserService {
             } catch (DaoException e) {
                 throw new ServiceException("User dao update error", e);
             }
-            Credential credential = new Credential(user.getUserId(), user.getUserHash(), user.getEmailHash());
+            Credential credential = new Credential(user.getUserId(), user.getUserHash(), user.getEmail());
             optionalCredential = Optional.of(credential);
         }
         return optionalCredential;
@@ -110,11 +130,9 @@ public class UserServiceImpl implements UserService {
         if (role.equals(TUTOR) && !PROMO_CODE.equals(promo)) {
             return false;
         }
-        String emailHash;
         String passwordHash;
         try {
             passwordHash = calculateMdHash(password + SALT);
-            emailHash = calculateMdHash(email + SALT);
         } catch (NoSuchAlgorithmException e) {
             throw new ServiceException("Can't find MD5 algorithm", e);
         }
@@ -122,47 +140,49 @@ public class UserServiceImpl implements UserService {
         UserDao userDao = daoFactory.getUserDao();
         Optional<User> optionalUser;
         try {
-            optionalUser = userDao.findByEmailHash(emailHash);
+            optionalUser = userDao.findByEmail(email);
         } catch (DaoException e) {
-            throw new ServiceException("Error finding user by emailHash", e);
+            throw new ServiceException("Error finding user by email", e);
         }
         if (optionalUser.isPresent()) {
             return false;
         }
         User user;
         try {
-            user = UserCreator.createUser(username, name, surname, emailHash, passwordHash, role);
+            user = UserCreator.createUser(username, name, surname, email, passwordHash, role);
         } catch (CreatorException e) {
             throw new ServiceException("Error creating user", e);
         }
         try {
-            userDao.add(user);
+            long id = userDao.add(user);
+            user.setUserId(id);
         } catch (DaoException e) {
             throw new ServiceException("User dao add error", e);
         }
-        /*if (!sendVerificationEmail(email, user)) {
+        if (!sendVerificationEmail(email, user)) {
             try {
                 userDao.delete(user);
             } catch (DaoException e) {
                 throw new ServiceException("User dao delete error", e);
             }
-        }*/
+            return false;
+        }
         return true;
     }
 
     @Override
-    public boolean authorization(String emailHash, String userHash) throws ServiceException {
-        if (emailHash == null || userHash == null) {
+    public boolean authorization(String email, String userHash) throws ServiceException {
+        if (email == null || userHash == null) {
             return false;
         }
-        if (!EntityValidator.isIdValid(emailHash)) {
+        if (!EntityValidator.isIdValid(email)) {
             return false;
         }
         DaoFactory daoFactory = DaoFactory.getInstance();
         UserDao userDao = daoFactory.getUserDao();
         Credential credential;
         try {
-            credential = CredentialCreator.createCredential(userHash, emailHash);
+            credential = CredentialCreator.createCredential(userHash, email);
         } catch (CreatorException e) {
             throw new ServiceException("Error creating credential", e);
         }
@@ -389,16 +409,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean resetPassword(String userId, String newPassword, String secretKey) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean sendPasswordRecoveryEmail(String email) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean deactivateAccount(String userId) throws ServiceException {
         if (userId == null) {
             return false;
@@ -440,8 +450,198 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    private boolean sendVerificationEmail(String email, User user) {
-        throw new UnsupportedOperationException();
+    @Override
+    public boolean resetPassword(String userId, String newPassword, String secretKey) throws ServiceException {
+        if (userId == null || newPassword == null || secretKey == null) {
+            return false;
+        }
+        if (!EntityValidator.isIdValid(userId) || !UserValidator.isPasswordValid(newPassword)) {
+            return false;
+        }
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        Optional<User> optionalUser;
+        try {
+            optionalUser = userDao.findById(Long.parseLong(userId));
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding user by email", e);
+        }
+        if (optionalUser.isEmpty()) {
+            return false;
+        }
+        User user = optionalUser.get();
+        String userSecretKey;
+        try {
+            userSecretKey = calculateMdHash(user.getUserId() + user.getEmail() + user.getPasswordHash() + SALT);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Error while calculating md hash", e);
+        }
+        if (!secretKey.equals(userSecretKey)) {
+            return false;
+        }
+        String passwordHash;
+        try {
+            passwordHash = calculateMdHash(newPassword + SALT);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Can't find MD5 algorithm", e);
+        }
+        user.setPasswordHash(passwordHash);
+        try {
+            userDao.update(user);
+        } catch (DaoException e) {
+            throw new ServiceException("Error while updating user", e);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean sendPasswordRecoveryEmail(String email) throws ServiceException {
+        if (email == null) {
+            return false;
+        }
+        if (!UserValidator.isEmailValid(email)) {
+            return false;
+        }
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        Optional<User> optionalUser;
+        try {
+            optionalUser = userDao.findByEmail(email);
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding user by email", e);
+        }
+        if (optionalUser.isEmpty()) {
+            return false;
+        }
+        User user = optionalUser.get();
+        String subject = MessageManager.getProperty(MESSAGE_EMAIL_RECOVERY_SUBJECT);
+        String text = MessageManager.getProperty(MESSAGE_EMAIL_RECOVERY_TEXT);
+        String press = MessageManager.getProperty(MESSAGE_EMAIL_VERIFICATION_PRESS);
+        String secretKey;
+        try {
+            secretKey = calculateMdHash(user.getUserId() + user.getEmail() + user.getPasswordHash() + SALT);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Error while calculating md hash", e);
+        }
+        String link = String.format(EMAIL_LINK, PASSWORD_RESET, user.getUserId(), secretKey, press);
+        text = text + System.lineSeparator() + link;
+        return sendEmail(email, subject, text);
+    }
+
+    @Override
+    public boolean activateAccount(String userId, String secretKey) throws ServiceException {
+        if (userId == null || secretKey == null) {
+            return false;
+        }
+        if (!EntityValidator.isIdValid(userId)) {
+            return false;
+        }
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        Optional<User> optionalUser;
+        try {
+            optionalUser = userDao.findById(Long.parseLong(userId));
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding user by id", e);
+        }
+        if (optionalUser.isEmpty()) {
+            return false;
+        }
+        User user = optionalUser.get();
+        if (!PENDING.equals(user.getStatus().getName())) {
+            return false;
+        }
+        String generatedSecretKey;
+        try {
+            generatedSecretKey = calculateMdHash(user.getEmail() + user.getPasswordHash() + SALT);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Error while calculating md hash", e);
+        }
+        if (!secretKey.equals(generatedSecretKey)) {
+            return false;
+        }
+        StatusDao statusDao = DaoFactory.getInstance().getStatusDao();
+        Optional<Status> optionalStatus;
+        try {
+            optionalStatus = statusDao.findByName(ACTIVE);
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding status by name", e);
+        }
+        if (optionalStatus.isEmpty()) {
+            return false;
+        }
+        Status status = optionalStatus.get();
+        if (user.getStatus().equals(status)) {
+            return false;
+        }
+        user.setStatus(status);
+        try {
+            userDao.update(user);
+        } catch (DaoException e) {
+            throw new ServiceException("Error while updating user", e);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean sendVerificationEmail(String email, User user) throws ServiceException {
+        if (email == null || user == null) {
+            return false;
+        }
+        if (!UserValidator.isEmailValid(email)) {
+            return false;
+        }
+        String subject = MessageManager.getProperty(MESSAGE_EMAIL_VERIFICATION_SUBJECT);
+        String text = MessageManager.getProperty(MESSAGE_EMAIL_VERIFICATION_TEXT);
+        String press = MessageManager.getProperty(MESSAGE_EMAIL_VERIFICATION_PRESS);
+        String secretKey;
+        try {
+            secretKey = calculateMdHash(user.getEmail() + user.getPasswordHash() + SALT);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Error while calculating md hash", e);
+        }
+        String link = String.format(EMAIL_LINK, ACTIVATE_ACCOUNT, user.getUserId(), secretKey, press);
+        text = text + System.lineSeparator() + link;
+        return sendEmail(email, subject, text);
+    }
+
+    private boolean sendEmail(String to, String subject, String text) {
+        if (to == null
+                || subject == null
+                || text == null) {
+            return false;
+        }
+        if (!UserValidator.isEmailValid(to)
+                || !EmailValidator.isSubjectValid(subject)
+                || !EmailValidator.isTextValid(text)) {
+            return false;
+        }
+        ResourceBundle credentialBundle = ResourceBundle.getBundle(CONFIG_CREDENTIALS);
+        ResourceBundle mailBundle = ResourceBundle.getBundle(CONFIG_MAIL);
+        String username = credentialBundle.getString(USERNAME);
+        String password = credentialBundle.getString(PASSWORD);
+        String auth = mailBundle.getString(MAIL_SMTP_AUTH);
+        String starttls = mailBundle.getString(MAIL_SMTP_STARTTLS_ENABLE);
+        String host = mailBundle.getString(MAIL_SMTP_HOST);
+        String port = mailBundle.getString(MAIL_SMTP_PORT);
+        Properties properties = new Properties();
+        properties.put(MAIL_SMTP_AUTH, auth);
+        properties.put(MAIL_SMTP_STARTTLS_ENABLE, starttls);
+        properties.put(MAIL_SMTP_HOST, host);
+        properties.put(MAIL_SMTP_PORT, port);
+        Session session = Session.getInstance(properties, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+        MimeMessage message = new MimeMessage(session);
+        try {
+            message.setFrom(new InternetAddress(username));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject(subject);
+            message.setText(text, UTF_8, HTML);
+            Transport.send(message);
+        } catch (MessagingException e) {
+            return false;
+        }
+        return true;
     }
 
     private String calculateMdHash(String str) throws NoSuchAlgorithmException {

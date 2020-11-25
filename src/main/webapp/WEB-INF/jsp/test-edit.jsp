@@ -19,11 +19,11 @@
             <form class="m-0" method="post" action="${pageContext.request.contextPath}/controller">
                 <input type="hidden" name="command" value="create-test"/>
                 <div class="form-group">
-                    <label for="titleInput"><fmt:message key="test_edit.test_title"/></label>
+                    <label for="titleInput"><fmt:message key="test_edit.test_title"/> *</label>
                     <input type="text" name="title" class="form-control" id="titleInput" required>
                 </div>
                 <div class="form-group">
-                    <label for="subjectInput"><fmt:message key="test_edit.subject"/></label>
+                    <label for="subjectInput"><fmt:message key="test_edit.subject"/> *</label>
                     <select class="form-control" name="subject" id="subjectInput" required>
                         <c:forEach var="subject" items="${subjects}">
                             <option>${subject.name}</option>
@@ -31,19 +31,19 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="descriptionInput"><fmt:message key="test_edit.description"/></label>
+                    <label for="descriptionInput"><fmt:message key="test_edit.description"/> *</label>
                     <textarea class="form-control" name="description" id="descriptionInput" rows="3"
                               required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="pointsToPassInput"><fmt:message key="test_edit.points_needed"/></label>
+                    <label for="pointsToPassInput"><fmt:message key="test_edit.points_needed"/> *</label>
                     <input type="number" name="points" class="form-control" id="pointsToPassInput" min="1" required>
                 </div>
                 <c:forEach begin="1" end="${questionCount}" varStatus="loop">
                     <div class="border rounded p-3 my-3">
                         <p class="h4 text-center"><fmt:message key="test_edit.question_number"/>${loop.index}</p>
                         <div class="form-group">
-                            <label class="" for="question${loop.index}Input"><fmt:message key="test_edit.text"/></label>
+                            <label class="" for="question${loop.index}Input"><fmt:message key="test_edit.text"/> *</label>
                             <input type="text" name="q-${loop.index}" class="form-control"
                                    id="question${loop.index}Input"
                                    required>
@@ -51,7 +51,7 @@
                         <div class="form-row mb-3">
                             <div class="col-auto d-flex align-items-center">
                                 <label class="m-0" for="questionPointsInput"><fmt:message
-                                        key="test_edit.points"/></label>
+                                        key="test_edit.points"/> *</label>
                             </div>
                             <div class="col">
                                 <input type="number" name="q-${loop.index} p" class="form-control"
@@ -65,7 +65,7 @@
                             <div class="form-row mb-3">
                                 <div class="col-auto d-flex align-items-center">
                                     <label class="m-0" for="answer${innerLoop.index}Input"><fmt:message
-                                            key="test_edit.answer_number"/>${innerLoop.index}</label>
+                                            key="test_edit.answer_number"/>${innerLoop.index} *</label>
                                 </div>
                                 <div class="col">
                                     <input type="text" name="q-${loop.index} a-${innerLoop.index}" class="form-control"

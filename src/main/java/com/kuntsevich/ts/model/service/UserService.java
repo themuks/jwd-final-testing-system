@@ -13,7 +13,7 @@ public interface UserService {
 
     boolean registration(String username, String name, String surname, String email, String password, String role, String promo) throws ServiceException;
 
-    boolean authorization(String emailHash, String userHash) throws ServiceException;
+    boolean authorization(String email, String userHash) throws ServiceException;
 
     String findUserRole(String id) throws ServiceException;
 
@@ -35,7 +35,11 @@ public interface UserService {
 
     boolean resetPassword(String userId, String newPassword, String secretKey) throws ServiceException;
 
+    boolean sendVerificationEmail(String email, User user) throws ServiceException;
+
     boolean sendPasswordRecoveryEmail(String email) throws ServiceException;
 
     boolean deactivateAccount(String userId) throws ServiceException;
+
+    boolean activateAccount(String userId, String secretKey) throws ServiceException;
 }

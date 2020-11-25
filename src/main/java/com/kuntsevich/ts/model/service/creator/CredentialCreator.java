@@ -5,10 +5,10 @@ import com.kuntsevich.ts.model.service.exception.CreatorException;
 import com.kuntsevich.ts.validator.EntityValidator;
 
 public class CredentialCreator {
-    public static Credential createCredential(String userId, String userHash, String emailHash) throws CreatorException {
+    public static Credential createCredential(String userId, String userHash, String email) throws CreatorException {
         if (userId == null
                 || userHash == null
-                || emailHash == null) {
+                || email == null) {
             throw new CreatorException("Parameters are null");
         }
         if (!EntityValidator.isIdValid(userId)) {
@@ -16,16 +16,16 @@ public class CredentialCreator {
         }
         try {
             long id = Long.parseLong(userId);
-            return new Credential(id, userHash, emailHash);
+            return new Credential(id, userHash, email);
         } catch (NumberFormatException e) {
             throw new CreatorException("Error while parsing integer", e);
         }
     }
 
-    public static Credential createCredential(String userHash, String emailHash) throws CreatorException {
-        if (userHash == null || emailHash == null) {
+    public static Credential createCredential(String userHash, String email) throws CreatorException {
+        if (userHash == null || email == null) {
             throw new CreatorException("Parameters are null");
         }
-        return new Credential(userHash, emailHash);
+        return new Credential(userHash, email);
     }
 }

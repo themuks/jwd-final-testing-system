@@ -25,7 +25,7 @@ public class LoginCommand implements Command {
     private static final String MESSAGE_LOGIN_ERROR = "message.login.error";
     private static final String LOGIN_SERVER_ERROR = "message.login.server.error";
     private static final String USER_HASH = "userHash";
-    private static final String EMAIL_HASH = "userEmail";
+    private static final String EMAIL = "userEmail";
     private static final String MESSAGE_PARAMETERS_ERROR = "message.parameters.error";
 
     @Override
@@ -55,7 +55,7 @@ public class LoginCommand implements Command {
                 session.setAttribute(AttributeName.USER_NAME, username);
                 if (rememberMe) {
                     response.addCookie(new Cookie(USER_HASH, credential.getUserHash()));
-                    response.addCookie(new Cookie(EMAIL_HASH, credential.getEmailHash()));
+                    response.addCookie(new Cookie(EMAIL, credential.getEmail()));
                 }
                 page = PagePath.HOME;
                 isSuccessful = true;

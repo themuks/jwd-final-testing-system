@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 public class RegistrationCommand implements Command {
     private static final Logger log = Logger.getLogger(RegistrationCommand.class);
     private static final String MESSAGE_REGISTRATION_ERROR = "message.registration.error";
+    private static final String MESSAGE_REGISTRATION_SUCCESS = "message.registration.success";
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
@@ -43,7 +44,8 @@ public class RegistrationCommand implements Command {
                 ServiceFactory serviceFactory = ServiceFactory.getInstance();
                 UserService userService = serviceFactory.getUserService();
                 if (userService.registration(username, name, surname, email, password, role, promo)) {
-                    return new Router(PagePath.LOGIN).setRedirect();
+                    request.setAttribute(AttributeName.INFO_MESSAGE, MessageManager.getProperty(MESSAGE_REGISTRATION_SUCCESS));
+                    return new Router(PagePath.LOGIN);
                 }
             } catch (ServiceException e) {
                 log.error("Register error", e);

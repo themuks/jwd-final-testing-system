@@ -1,16 +1,14 @@
 package com.kuntsevich.ts.validator;
 
-import java.util.regex.Pattern;
-
 public class SubjectValidator extends EntityValidator {
-    private static final String NAME_REGEX = ".{0,255}";
-    private static final String DESCRIPTION_REGEX = ".{0,16777215}";
+    private static final int NAME_MAX_LENGTH = 256;
+    private static final int DESCRIPTION_MAX_LENGTH = 16777216;
 
     public static boolean isNameValid(String name) {
-        return Pattern.matches(NAME_REGEX, name);
+        return name.length() < NAME_MAX_LENGTH;
     }
 
     public static boolean isDescriptionValid(String description) {
-        return Pattern.matches(DESCRIPTION_REGEX, description);
+        return description.length() < DESCRIPTION_MAX_LENGTH;
     }
 }

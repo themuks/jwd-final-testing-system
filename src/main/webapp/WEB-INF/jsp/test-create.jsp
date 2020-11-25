@@ -19,7 +19,7 @@
             <form class="m-0" method="post" action="${pageContext.request.contextPath}/controller">
                 <input type="hidden" name="command" value="show-test-edit"/>
                 <div class="form-group">
-                    <label for="questionsCountInput"><fmt:message key="create_test.question_count"/></label>
+                    <label for="questionsCountInput"><fmt:message key="create_test.question_count"/> *</label>
                     <input type="number" name="questionCount" class="form-control" id="questionsCountInput" min="1"
                            required>
                 </div>

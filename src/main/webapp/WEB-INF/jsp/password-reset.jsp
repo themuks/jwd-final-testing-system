@@ -13,11 +13,11 @@
             <input type="hidden" name="secretKey" value="${secretKey}"/>
             <input type="hidden" name="userId" value="${userId}"/>
             <div class="form-group">
-                <label for="newPasswordInput"><fmt:message key="profile.new_password"/></label>
+                <label for="newPasswordInput"><fmt:message key="profile.new_password"/> *</label>
                 <input type="password" name="newPassword" class="form-control" id="newPasswordInput" required>
             </div>
             <div class="form-group">
-                <label for="newPasswordAgainInput"><fmt:message key="profile.new_password_again"/></label>
+                <label for="newPasswordAgainInput"><fmt:message key="profile.new_password_again"/> *</label>
                 <input type="password" name="newPasswordAgain" class="form-control" id="newPasswordAgainInput" required>
             </div>
             <div class="d-flex justify-content-center">

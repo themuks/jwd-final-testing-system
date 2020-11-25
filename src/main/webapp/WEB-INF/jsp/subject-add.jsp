@@ -19,11 +19,11 @@
             <form method="post" action="${pageContext.request.contextPath}/controller">
                 <input type="hidden" name="command" value="add-subject"/>
                 <div class="form-group">
-                    <label for="subjectNameInput"><fmt:message key="subject_add.subject_name"/></label>
+                    <label for="subjectNameInput"><fmt:message key="subject_add.subject_name"/> *</label>
                     <input type="text" name="subjectName" class="form-control" id="subjectNameInput" required>
                 </div>
                 <div class="form-group">
-                    <label for="subjectDescriptionInput"><fmt:message key="subject_add.subject_description"/></label>
+                    <label for="subjectDescriptionInput"><fmt:message key="subject_add.subject_description"/> *</label>
                     <textarea class="form-control" name="subjectDescription" id="subjectDescriptionInput" rows="3"
                               required></textarea>
                 </div>

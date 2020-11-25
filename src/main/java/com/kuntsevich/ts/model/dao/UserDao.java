@@ -20,15 +20,15 @@ public interface UserDao {
 
     void delete(User user) throws DaoException;
 
-    Optional<User> findByEmailHash(String emailHash) throws DaoException;
+    Optional<User> findByEmail(String email) throws DaoException;
 
-    Optional<User> findByEmailHashAndPasswordHash(String emailHash, String passwordHash) throws DaoException;
+    Optional<User> findByEmailAndPasswordHash(String email, String passwordHash) throws DaoException;
 
     boolean isUserIdAndUserHashExist(Credential credential) throws DaoException;
 
     Optional<User> findByUserIdAndPasswordHash(long userId, String passwordHash) throws DaoException;
 
-    Optional<User> findByEmailHashAndUserHash(String userHash, String emailHash) throws DaoException;
+    Optional<User> findByEmailAndUserHash(String userHash, String email) throws DaoException;
 
     List<User> findWithLimits(int offset, int limit) throws DaoException;
 

@@ -1,11 +1,10 @@
 package com.kuntsevich.ts.validator;
 
-import java.util.regex.Pattern;
-
 public class AnswerValidator extends EntityValidator {
-    private static final String TEXT_REGEX = ".{1,255}";
+    private static final int TEXT_MIN_LENGTH = 0;
+    private static final int TEXT_MAX_LENGTH = 256;
 
     public static boolean isTextValid(String text) {
-        return Pattern.matches(TEXT_REGEX, text);
+        return TEXT_MIN_LENGTH < text.length() && text.length() < TEXT_MAX_LENGTH;
     }
 }

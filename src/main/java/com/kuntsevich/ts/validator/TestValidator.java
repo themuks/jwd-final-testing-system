@@ -9,16 +9,17 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class TestValidator extends EntityValidator {
-    private static final String TITLE_REGEX = ".{1,255}";
-    private static final String DESCRIPTION_REGEX = ".{0,2048}";
     private static final String POINTS_TO_PASS_REGEX = "[1-9]\\d*";
+    private static final int TITLE_MIN_LENGTH = 0;
+    private static final int TITLE_MAX_LENGTH = 256;
+    private static final int DESCRIPTION_MAX_LENGTH = 2048;
 
     public static boolean isTitleValid(String title) {
-        return Pattern.matches(TITLE_REGEX, title);
+        return TITLE_MIN_LENGTH < title.length() && title.length() < TITLE_MAX_LENGTH;
     }
 
     public static boolean isDescriptionValid(String description) {
-        return Pattern.matches(DESCRIPTION_REGEX, description);
+        return description.length() < DESCRIPTION_MAX_LENGTH;
     }
 
     public static boolean isSubjectNameValid(String subject) {

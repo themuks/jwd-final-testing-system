@@ -25,34 +25,33 @@
 
     <label for="inputUsername" class="sr-only"><fmt:message key="registration.username"/></label>
     <input type="text" name="username" id="inputUsername" class="form-control form-top"
-           placeholder="<fmt:message key="registration.username"/>" required
+           placeholder="<fmt:message key="registration.username"/> *" required
            autofocus>
 
     <label for="inputName" class="sr-only"><fmt:message key="registration.name"/></label>
     <input type="text" name="name" id="inputName" class="form-control"
-           placeholder="<fmt:message key="registration.name"/>" required>
+           placeholder="<fmt:message key="registration.name"/> *" required>
 
     <label for="inputSurname" class="sr-only"><fmt:message key="registration.surname"/></label>
     <input type="text" name="surname" id="inputSurname" class="form-control"
-           placeholder="<fmt:message key="registration.surname"/>" required>
+           placeholder="<fmt:message key="registration.surname"/> *" required>
 
     <label for="inputEmail" class="sr-only"><fmt:message key="registration.email"/></label>
     <input type="email" name="email" id="inputEmail" class="form-control"
-           placeholder="<fmt:message key="registration.email"/>" required>
+           placeholder="<fmt:message key="registration.email"/> *" required>
 
     <label for="inputPassword" class="sr-only"><fmt:message key="registration.password"/></label>
     <input type="password" name="password" id="inputPassword" class="form-control"
-           placeholder="<fmt:message key="registration.password"/>" required>
+           placeholder="<fmt:message key="registration.password"/> *" required>
 
     <label for="inputPasswordAgain" class="sr-only"><fmt:message key="registration.password_again"/></label>
     <input type="password" name="passwordAgain" id="inputPasswordAgain" class="form-control form-bottom"
-           placeholder="<fmt:message key="registration.password_again"/>" required>
+           placeholder="<fmt:message key="registration.password_again"/> *" required>
 
-    <label for="role" class="sr-only">Роль</label>
+    <label for="role" class="sr-only">Роль *</label>
     <select id="role" class="custom-select" name="role" required>
-        <option selected><fmt:message key="registration.choose_role"/></option>
+        <option selected value="Студент"><fmt:message key="registration.student"/></option>
         <option value="Тьютор"><fmt:message key="registration.tutor"/></option>
-        <option value="Студент"><fmt:message key="registration.student"/></option>
     </select>
 
     <label for="inputPromo" class="sr-only"><fmt:message key="registration.promo"/></label>

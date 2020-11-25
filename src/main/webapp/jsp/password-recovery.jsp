@@ -11,7 +11,7 @@
         <form class="my-3" method="post" action="${pageContext.request.contextPath}/controller">
             <input type="hidden" name="command" value="recover-password"/>
             <div class="form-group">
-                <label for="emailInput"><fmt:message key="password-recovery.email"/></label>
+                <label for="emailInput"><fmt:message key="password-recovery.email"/> *</label>
                 <input type="email" name="email" class="form-control" id="emailInput" required>
             </div>
             <div class="d-flex justify-content-center">

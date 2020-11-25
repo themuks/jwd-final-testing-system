@@ -34,7 +34,8 @@ public class PermissionFilter implements Filter {
                 "change-language",
                 "recover-password",
                 "show-password-reset",
-                "password-reset"
+                "password-reset",
+                "activate-account"
         );
         List<String> studentCommands = new ArrayList<>(guestCommands);
         studentCommands.addAll(List.of(
