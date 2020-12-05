@@ -39,7 +39,6 @@ public class TestServiceImpl implements TestService {
         return tests;
     }
 
-    // TODO: 15.10.2020 Refactor this method
     @Override
     public Result submitTest(String testId, String userId, Map<String, String[]> answers) throws ServiceException {
         if (testId == null || userId == null || answers == null) {

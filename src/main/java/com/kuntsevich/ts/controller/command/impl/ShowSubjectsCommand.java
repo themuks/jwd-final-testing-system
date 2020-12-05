@@ -9,12 +9,10 @@ import com.kuntsevich.ts.entity.Subject;
 import com.kuntsevich.ts.model.service.SubjectService;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
 import com.kuntsevich.ts.model.service.factory.ServiceFactory;
-import com.mysql.cj.log.Log;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public class ShowSubjectsCommand implements Command {

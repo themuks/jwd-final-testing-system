@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
-<fmt:setBundle basename="content.text"/>
+<fmt:setBundle basename="text"/>
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:message key="error_500.title" var="title"/>
 <tags:general title="${title}">

@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="content.text"/>
+<fmt:setBundle basename="text"/>
 <fmt:message key="subjects.title" var="title"/>
 <tags:general title="${title}">
     <div class="col-lg-3">

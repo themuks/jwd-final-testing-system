@@ -5,7 +5,7 @@
 <%@ tag trimDirectiveWhitespaces="true" %>
 <%@ attribute name="title" required="true" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="content.text"/>
+<fmt:setBundle basename="text"/>
 <!DOCTYPE html>
 <html lang="${sessionScope.lang}">
 <head>
@@ -51,12 +51,12 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item"
                                href="#"
-                               data-href="<c:url value="/controller?command=change-language&lang=ru"/>"
+                               data-href="/controller?command=change-language&lang=ru"
                                data-toggle="modal"
                                data-target="#languageModal">Русский</a>
                             <a class="dropdown-item"
                                href="#"
-                               data-href="<c:url value="/controller?command=change-language&lang=en"/>"
+                               data-href="/controller?command=change-language&lang=en"
                                data-toggle="modal"
                                data-target="#languageModal">English</a>
                         </div>
@@ -115,7 +115,6 @@
         crossorigin="anonymous"></script>
 <script>
     $('#languageModal').on('show.bs.modal', function (e) {
-        console.log("yay");
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>

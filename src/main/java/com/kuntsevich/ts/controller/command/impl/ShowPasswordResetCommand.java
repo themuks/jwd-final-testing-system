@@ -9,7 +9,6 @@ import com.kuntsevich.ts.controller.router.Router;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 public class ShowPasswordResetCommand implements Command {
     private static final String MESSAGE_PARAMETERS_ERROR = "message.parameters.error";

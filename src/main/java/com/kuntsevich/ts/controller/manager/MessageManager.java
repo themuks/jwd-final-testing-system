@@ -4,7 +4,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class MessageManager {
-    private static final String BUNDLE_NAME = "content.message";
+    private static final String BUNDLE_NAME = "message";
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
 
     private MessageManager() {

@@ -4,7 +4,7 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <jsp:useBean id="result" class="com.kuntsevich.ts.entity.Result" scope="request"/>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="content.text"/>
+<fmt:setBundle basename="text"/>
 <fmt:message key="results.title" var="title"/>
 <tags:general title="${title}">
     <div class="col-lg-3">
@@ -29,7 +29,7 @@
                             <p class="card-text text-danger"><fmt:message key="results.test_not_passed"/></p>
                         </c:if>
                         <c:if test="${sessionScope.role eq 'Администратор' || sessionScope.role eq 'Тьютор'}">
-                            <a href="<c:url value="/controller?command=delete-result&userId=${userId}&resultId=${result.resultId}"/>"
+                            <a href="controller?command=delete-result&userId=${userId}&resultId=${result.resultId}"
                                class="btn btn-outline-danger"><fmt:message key="results.delete"/></a>
                         </c:if>
                     </div>

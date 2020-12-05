@@ -4,7 +4,7 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <jsp:useBean id="result" class="com.kuntsevich.ts.entity.Result" scope="request"/>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="content.text"/>
+<fmt:setBundle basename="text"/>
 <fmt:message key="result.title" var="title"/>
 <tags:general title="${title}">
     <div class="col-lg-3">

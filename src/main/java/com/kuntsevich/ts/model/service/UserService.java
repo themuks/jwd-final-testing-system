@@ -1,7 +1,6 @@
 package com.kuntsevich.ts.model.service;
 
 import com.kuntsevich.ts.entity.Credential;
-import com.kuntsevich.ts.entity.Result;
 import com.kuntsevich.ts.entity.User;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
 
@@ -13,11 +12,7 @@ public interface UserService {
 
     boolean registration(String username, String name, String surname, String email, String password, String role, String promo) throws ServiceException;
 
-    boolean authorization(String email, String userHash) throws ServiceException;
-
     String findUserRole(String id) throws ServiceException;
-
-    List<Result> findUserResults(String role) throws ServiceException;
 
     User findUserById(String id) throws ServiceException;
 
@@ -26,8 +21,6 @@ public interface UserService {
     boolean changeUserData(String userId, String username, String name, String surname) throws ServiceException;
 
     String findUserUsername(String id) throws ServiceException;
-
-    List<User> findAllUsers() throws ServiceException;
 
     int findPageCount(String recordsPerPage) throws ServiceException;
 

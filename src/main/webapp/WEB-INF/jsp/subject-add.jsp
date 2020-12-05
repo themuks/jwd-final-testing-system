@@ -6,7 +6,7 @@
 <jsp:useBean id="question" class="com.kuntsevich.ts.entity.Question" scope="request"/>
 <jsp:useBean id="answer" class="com.kuntsevich.ts.entity.Answer" scope="request"/>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="content.text"/>
+<fmt:setBundle basename="text"/>
 <fmt:message key="subject_add.title" var="title"/>
 <tags:general title="${title}">
     <div class="col-lg-3">

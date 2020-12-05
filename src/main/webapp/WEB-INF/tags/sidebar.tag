@@ -3,7 +3,7 @@
 <%@ tag pageEncoding="UTF-8" %>
 <%@ tag trimDirectiveWhitespaces="true" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="content.text"/>
+<fmt:setBundle basename="text"/>
 <nav class="d-block ml-sm-auto bg-light sidebar mt-3 mb-lg-3 rounded">
     <ul class="nav flex-column">
         <c:if test="${(sessionScope.role eq 'Администратор') || (sessionScope.role eq 'Тьютор')}">

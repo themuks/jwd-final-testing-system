@@ -1,6 +1,5 @@
 package com.kuntsevich.ts.model.dao.impl;
 
-import com.kuntsevich.ts.entity.Credential;
 import com.kuntsevich.ts.entity.Role;
 import com.kuntsevich.ts.entity.Status;
 import com.kuntsevich.ts.entity.User;
@@ -175,17 +174,6 @@ public class SqlUserDaoImpl implements UserDao {
             optionalUser = Optional.of(users.get(FIRST_ELEMENT_INDEX));
         }
         return optionalUser;
-    }
-
-    @Override
-    public boolean isUserIdAndUserHashExist(Credential credential) throws DaoException {
-        Map<String, String> criteria = new HashMap<>();
-        long userId = credential.getUserId();
-        String userHash = credential.getUserHash();
-        criteria.put(USER_ID, Long.toString(userId));
-        criteria.put(USER_HASH, userHash);
-        List<User> users = findByCriteria(criteria);
-        return users.size() > 0;
     }
 
     @Override

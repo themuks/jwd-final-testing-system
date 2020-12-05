@@ -21,7 +21,7 @@ public class DatabaseConnectionPool {
     private static final String CHARACTER_ENCODING = "characterEncoding";
     private static final String USE_UNICODE = "useUnicode";
     private static final int DEFAULT_POOL_SIZE = 32;
-    private static final String DATABASE_BUNDLE_NAME = "config.database";
+    private static final String DATABASE_BUNDLE_NAME = "database";
     private static final String DB_URL = "db.url";
     private static final String DB_USER = "db.user";
     private static final String DB_PASSWORD = "db.password";

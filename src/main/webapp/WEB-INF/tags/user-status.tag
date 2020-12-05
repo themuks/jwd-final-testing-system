@@ -3,7 +3,7 @@
 <%@ tag pageEncoding="UTF-8" %>
 <%@ tag trimDirectiveWhitespaces="true" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="content.text"/>
+<fmt:setBundle basename="text"/>
 <c:if test="${not empty sessionScope.role}">
     <ul class="nav navbar justify-content-center flex-row flex-nowrap">
         <li class="nav-item">

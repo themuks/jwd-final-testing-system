@@ -6,7 +6,7 @@
 <jsp:useBean id="question" class="com.kuntsevich.ts.entity.Question" scope="request"/>
 <jsp:useBean id="answer" class="com.kuntsevich.ts.entity.Answer" scope="request"/>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="content.text"/>
+<fmt:setBundle basename="text"/>
 <fmt:message key="test_edit.title" var="title"/>
 <tags:general title="${title}">
     <div class="col-lg-3">
@@ -43,7 +43,8 @@
                     <div class="border rounded p-3 my-3">
                         <p class="h4 text-center"><fmt:message key="test_edit.question_number"/>${loop.index}</p>
                         <div class="form-group">
-                            <label class="" for="question${loop.index}Input"><fmt:message key="test_edit.text"/> *</label>
+                            <label class="" for="question${loop.index}Input"><fmt:message key="test_edit.text"/>
+                                *</label>
                             <input type="text" name="q-${loop.index}" class="form-control"
                                    id="question${loop.index}Input"
                                    required>

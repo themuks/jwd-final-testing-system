@@ -2,7 +2,6 @@ package com.kuntsevich.ts.model.service.impl;
 
 import com.kuntsevich.ts.controller.manager.MessageManager;
 import com.kuntsevich.ts.entity.Credential;
-import com.kuntsevich.ts.entity.Result;
 import com.kuntsevich.ts.entity.Status;
 import com.kuntsevich.ts.entity.User;
 import com.kuntsevich.ts.model.dao.DaoException;
@@ -10,7 +9,6 @@ import com.kuntsevich.ts.model.dao.StatusDao;
 import com.kuntsevich.ts.model.dao.UserDao;
 import com.kuntsevich.ts.model.dao.factory.DaoFactory;
 import com.kuntsevich.ts.model.service.UserService;
-import com.kuntsevich.ts.model.service.creator.CredentialCreator;
 import com.kuntsevich.ts.model.service.creator.UserCreator;
 import com.kuntsevich.ts.model.service.exception.CreatorException;
 import com.kuntsevich.ts.model.service.exception.ServiceException;
@@ -37,8 +35,8 @@ public class UserServiceImpl implements UserService {
     private static final String TUTOR = "Тьютор";
     private static final String PROMO_CODE = "promo";
     private static final String PENDING = "В ожидании";
-    private static final String CONFIG_MAIL = "config.mail";
-    private static final String CONFIG_CREDENTIALS = "config.credentials";
+    private static final String CONFIG_MAIL = "mail";
+    private static final String CONFIG_CREDENTIALS = "credentials";
     private static final String USERNAME = "credentials.username";
     private static final String PASSWORD = "credentials.password";
     private static final String MAIL_SMTP_AUTH = "mail.smtp.auth";
@@ -56,17 +54,17 @@ public class UserServiceImpl implements UserService {
     private static final String UTF_8 = "utf-8";
     private static final String HTML = "html";
     private static final String MESSAGE_EMAIL_VERIFICATION_PRESS = "message.email.verification.press";
+    private DaoFactory daoFactory = DaoFactory.getInstance();
 
     @Override
     public Optional<Credential> checkLogin(String email, String password) throws ServiceException {
         if (email == null || password == null) {
-            throw new ServiceException("Parameters are null");
+            return Optional.empty();
         }
         if (!UserValidator.isEmailValid(email) || !UserValidator.isPasswordValid(password)) {
-            throw new ServiceException("Parameters are invalid");
+            return Optional.empty();
         }
         Optional<Credential> optionalCredential = Optional.empty();
-        DaoFactory daoFactory = DaoFactory.getInstance();
         UserDao userDao = daoFactory.getUserDao();
         String passwordHash;
         try {
@@ -136,7 +134,6 @@ public class UserServiceImpl implements UserService {
         } catch (NoSuchAlgorithmException e) {
             throw new ServiceException("Can't find MD5 algorithm", e);
         }
-        DaoFactory daoFactory = DaoFactory.getInstance();
         UserDao userDao = daoFactory.getUserDao();
         Optional<User> optionalUser;
         try {
@@ -171,29 +168,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean authorization(String email, String userHash) throws ServiceException {
-        if (email == null || userHash == null) {
-            return false;
-        }
-        if (!EntityValidator.isIdValid(email)) {
-            return false;
-        }
-        DaoFactory daoFactory = DaoFactory.getInstance();
-        UserDao userDao = daoFactory.getUserDao();
-        Credential credential;
-        try {
-            credential = CredentialCreator.createCredential(userHash, email);
-        } catch (CreatorException e) {
-            throw new ServiceException("Error creating credential", e);
-        }
-        try {
-            return userDao.isUserIdAndUserHashExist(credential);
-        } catch (DaoException e) {
-            throw new ServiceException("Error while checking user id and user hash", e);
-        }
-    }
-
-    @Override
     public String findUserRole(String id) throws ServiceException {
         if (id == null) {
             throw new ServiceException("Parameters are null");
@@ -201,7 +175,7 @@ public class UserServiceImpl implements UserService {
         if (!EntityValidator.isIdValid(id)) {
             throw new ServiceException("Parameters are incorrect");
         }
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        UserDao userDao = daoFactory.getUserDao();
         long idValue = Long.parseLong(id);
         Optional<User> userOptional;
         try {
@@ -218,11 +192,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Result> findUserResults(String role) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public User findUserById(String userId) throws ServiceException {
         if (userId == null) {
             throw new ServiceException("Parameter is null");
@@ -230,7 +199,7 @@ public class UserServiceImpl implements UserService {
         if (!EntityValidator.isIdValid(userId)) {
             throw new ServiceException("User id is invalid");
         }
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        UserDao userDao = daoFactory.getUserDao();
         try {
             Optional<User> userOptional = userDao.findById(Long.parseLong(userId));
             if (userOptional.isPresent()) {
@@ -261,7 +230,7 @@ public class UserServiceImpl implements UserService {
             try {
                 String oldPasswordHash = calculateMdHash(oldPassword + SALT);
                 String newPasswordHash = calculateMdHash(newPassword + SALT);
-                UserDao userDao = DaoFactory.getInstance().getUserDao();
+                UserDao userDao = daoFactory.getUserDao();
                 Optional<User> optionalUser;
                 try {
                     optionalUser = userDao.findByUserIdAndPasswordHash(Long.parseLong(userId), oldPasswordHash);
@@ -301,7 +270,7 @@ public class UserServiceImpl implements UserService {
                 || !UserValidator.isSurnameValid(surname)) {
             return false;
         }
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        UserDao userDao = daoFactory.getUserDao();
         Optional<User> optionalUser;
         try {
             optionalUser = userDao.findById(Long.parseLong(userId));
@@ -331,7 +300,7 @@ public class UserServiceImpl implements UserService {
         if (!EntityValidator.isIdValid(id)) {
             throw new ServiceException("Parameters are incorrect");
         }
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        UserDao userDao = daoFactory.getUserDao();
         long idValue = Long.parseLong(id);
         Optional<User> userOptional;
         try {
@@ -348,16 +317,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllUsers() throws ServiceException {
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
-        try {
-            return userDao.findAll();
-        } catch (DaoException e) {
-            throw new ServiceException("Error while finding all users", e);
-        }
-    }
-
-    @Override
     public int findPageCount(String recordsPerPage) throws ServiceException {
         if (recordsPerPage == null) {
             throw new ServiceException("Parameter is null");
@@ -365,7 +324,7 @@ public class UserServiceImpl implements UserService {
         if (!NumberValidator.isIntegerValid(recordsPerPage)) {
             throw new ServiceException("Page is invalid");
         }
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        UserDao userDao = daoFactory.getUserDao();
         try {
             int recordsCount = userDao.findCount();
             int recordsPerPageInt = Integer.parseInt(recordsPerPage);
@@ -391,7 +350,7 @@ public class UserServiceImpl implements UserService {
                 || !NumberValidator.isIntegerValid(recordsPerPage)) {
             throw new ServiceException("Parameters are invalid");
         }
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        UserDao userDao = daoFactory.getUserDao();
         int recordsPerPageInt = Integer.parseInt(recordsPerPage);
         try {
             List<User> users = userDao.findWithLimits(recordsPerPageInt * (Integer.parseInt(page) - 1), recordsPerPageInt);
@@ -416,7 +375,7 @@ public class UserServiceImpl implements UserService {
         if (!EntityValidator.isIdValid(userId)) {
             return false;
         }
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        UserDao userDao = daoFactory.getUserDao();
         Optional<User> optionalUser;
         try {
             optionalUser = userDao.findById(Long.parseLong(userId));
@@ -427,7 +386,7 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         User user = optionalUser.get();
-        StatusDao statusDao = DaoFactory.getInstance().getStatusDao();
+        StatusDao statusDao = daoFactory.getStatusDao();
         Optional<Status> optionalStatus;
         try {
             optionalStatus = statusDao.findByName(INACTIVE);
@@ -458,7 +417,7 @@ public class UserServiceImpl implements UserService {
         if (!EntityValidator.isIdValid(userId) || !UserValidator.isPasswordValid(newPassword)) {
             return false;
         }
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        UserDao userDao = daoFactory.getUserDao();
         Optional<User> optionalUser;
         try {
             optionalUser = userDao.findById(Long.parseLong(userId));
@@ -501,7 +460,7 @@ public class UserServiceImpl implements UserService {
         if (!UserValidator.isEmailValid(email)) {
             return false;
         }
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        UserDao userDao = daoFactory.getUserDao();
         Optional<User> optionalUser;
         try {
             optionalUser = userDao.findByEmail(email);
@@ -534,7 +493,7 @@ public class UserServiceImpl implements UserService {
         if (!EntityValidator.isIdValid(userId)) {
             return false;
         }
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        UserDao userDao = daoFactory.getUserDao();
         Optional<User> optionalUser;
         try {
             optionalUser = userDao.findById(Long.parseLong(userId));
@@ -557,7 +516,7 @@ public class UserServiceImpl implements UserService {
         if (!secretKey.equals(generatedSecretKey)) {
             return false;
         }
-        StatusDao statusDao = DaoFactory.getInstance().getStatusDao();
+        StatusDao statusDao = daoFactory.getStatusDao();
         Optional<Status> optionalStatus;
         try {
             optionalStatus = statusDao.findByName(ACTIVE);

@@ -5,7 +5,7 @@
 <%@ attribute name="currentPage" required="true" type="java.lang.Integer" %>
 <%@ attribute name="url" required="true" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="content.text"/>
+<fmt:setBundle basename="text"/>
 <c:if test="${pageCount > 1}">
     <nav>
         <ul class="pagination justify-content-center">
