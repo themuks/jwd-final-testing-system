@@ -15,8 +15,7 @@ public interface TestService {
      * Finds all tests.
      *
      * @return list of tests
-     * @throws ServiceException
-     *      if error occurred while finding all tests
+     * @throws ServiceException if error occurred while finding all tests
      */
     List<Test> findAll() throws ServiceException;
 
@@ -27,8 +26,7 @@ public interface TestService {
      * @param userId  user id
      * @param answers user answers
      * @return result
-     * @throws ServiceException
-     *      if parameters are null or invalid. If error occurred while submitting test
+     * @throws ServiceException if parameters are null or invalid. If error occurred while submitting test
      */
     Result submitTest(String testId, String userId, Map<String, String[]> answers) throws ServiceException;
 
@@ -42,8 +40,7 @@ public interface TestService {
      * @param answers           test answers
      * @param answersAttributes test answers attributes
      * @return true, if test creating is successful, false otherwise
-     * @throws ServiceException
-     *      if error occurred while creating test
+     * @throws ServiceException if error occurred while creating test
      */
     boolean createTest(String title, String subject, String description, String pointsToPass, Map<String, String[]> answers, List<String> answersAttributes) throws ServiceException;
 
@@ -52,8 +49,7 @@ public interface TestService {
      *
      * @param testId test id
      * @return true, if test deleting is successful, false otherwise
-     * @throws ServiceException
-     *      if error occurred while deleting test
+     * @throws ServiceException if error occurred while deleting test
      */
     boolean deleteTest(String testId) throws ServiceException;
 
@@ -62,8 +58,7 @@ public interface TestService {
      *
      * @param recordsPerPage records per page
      * @return page count
-     * @throws ServiceException
-     *      if {@code recordsPerPage} is null or invalid. If error occurred while finding page count
+     * @throws ServiceException if {@code recordsPerPage} is null or invalid. If error occurred while finding page count
      */
     int findPageCount(String recordsPerPage) throws ServiceException;
 
@@ -73,8 +68,7 @@ public interface TestService {
      * @param page           page
      * @param recordsPerPage records per page
      * @return tests list
-     * @throws ServiceException
-     *      if parameters are null or invalid. If error occurred while finding page tests
+     * @throws ServiceException if parameters are null or invalid. If error occurred while finding page tests
      */
     List<Test> findPageTests(String page, String recordsPerPage) throws ServiceException;
 }

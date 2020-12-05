@@ -13,8 +13,7 @@ public interface SubjectService {
      * Finds all subjects list.
      *
      * @return subjects list
-     * @throws ServiceException
-     *      if error occurred while finding all subjects
+     * @throws ServiceException if error occurred while finding all subjects
      */
     List<Subject> findAllSubjects() throws ServiceException;
 
@@ -24,8 +23,7 @@ public interface SubjectService {
      * @param subjectName        subject name
      * @param subjectDescription subject description
      * @return true, if adding subject is successful, false otherwise
-     * @throws ServiceException
-     *      if error occurred while adding subject
+     * @throws ServiceException if error occurred while adding subject
      */
     boolean addSubject(String subjectName, String subjectDescription) throws ServiceException;
 
@@ -34,8 +32,7 @@ public interface SubjectService {
      *
      * @param subjectId subject id
      * @return true is deleting subject is successful, false otherwise
-     * @throws ServiceException
-     *      if error occurred while deleting subject
+     * @throws ServiceException if error occurred while deleting subject
      */
     boolean deleteSubject(String subjectId) throws ServiceException;
 }

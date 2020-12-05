@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="text"/>
@@ -19,9 +20,7 @@
     <input type="hidden" name="command" value="registration"/>
     <h1 class="h3 mb-3 font-weight-normal"><fmt:message key="registration.title"/></h1>
 
-    <c:if test="${not empty errorMessage}">
-        <div class="alert alert-danger" role="alert">${errorMessage}</div>
-    </c:if>
+    <tags:message/>
 
     <label for="inputUsername" class="sr-only"><fmt:message key="registration.username"/></label>
     <input type="text" name="username" id="inputUsername" class="form-control form-top"
@@ -63,7 +62,8 @@
 
     <div>
         <fmt:message key="registration.question"/>
-        <a href="login.jsp"><fmt:message key="registration.question_suggestion"/></a>
+        <a href="${pageContext.request.contextPath}/jsp/login.jsp"><fmt:message
+                key="registration.question_suggestion"/></a>
     </div>
 </form>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

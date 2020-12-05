@@ -17,8 +17,7 @@ public interface UserService {
      * @param email    user email
      * @param password user password
      * @return optional of user data such user hash and user id
-     * @throws ServiceException
-     *      if {@code email} or {@code password} are null or invalid
+     * @throws ServiceException if {@code email} or {@code password} are null or invalid
      */
     Optional<Credential> checkLogin(String email, String password) throws ServiceException;
 
@@ -34,8 +33,7 @@ public interface UserService {
      * @param role     user role
      * @param promo    promo for tutors
      * @return true, if registration is successful, false otherwise
-     * @throws ServiceException
-     *      if parameters are null or invalid
+     * @throws ServiceException if parameters are null or invalid
      */
     boolean registration(String username, String name, String surname, String email, String password, String role, String promo) throws ServiceException;
 
@@ -44,8 +42,7 @@ public interface UserService {
      *
      * @param id user id
      * @return user role name
-     * @throws ServiceException
-     *      if error is occurred while finding user role
+     * @throws ServiceException if error is occurred while finding user role
      */
     String findUserRole(String id) throws ServiceException;
 
@@ -54,8 +51,7 @@ public interface UserService {
      *
      * @param id the id
      * @return user
-     * @throws ServiceException
-     *      if {@code id} is null or invalid
+     * @throws ServiceException if {@code id} is null or invalid
      */
     User findUserById(String id) throws ServiceException;
 
@@ -67,8 +63,7 @@ public interface UserService {
      * @param newPassword      new password
      * @param newPasswordAgain new password again
      * @return true is changing user data is successful, false otherwise
-     * @throws ServiceException
-     *      if parameters are null or invalid
+     * @throws ServiceException if parameters are null or invalid
      */
     boolean changeUserPassword(String userId, String oldPassword, String newPassword, String newPasswordAgain) throws ServiceException;
 
@@ -80,8 +75,7 @@ public interface UserService {
      * @param name     user name
      * @param surname  user surname
      * @return true if changing data is successful, false otherwise
-     * @throws ServiceException
-     *      if error is occurred while changing user data
+     * @throws ServiceException if error is occurred while changing user data
      */
     boolean changeUserData(String userId, String username, String name, String surname) throws ServiceException;
 
@@ -90,8 +84,7 @@ public interface UserService {
      *
      * @param id user id
      * @return username
-     * @throws ServiceException
-     *      if {@code id} is null or invalid
+     * @throws ServiceException if {@code id} is null or invalid
      */
     String findUserUsername(String id) throws ServiceException;
 
@@ -100,8 +93,7 @@ public interface UserService {
      *
      * @param recordsPerPage records per page
      * @return page count
-     * @throws ServiceException
-     *      if {@code recordsPerPage} is null or invalid. If error occurred while finding page count
+     * @throws ServiceException if {@code recordsPerPage} is null or invalid. If error occurred while finding page count
      */
     int findPageCount(String recordsPerPage) throws ServiceException;
 
@@ -113,8 +105,7 @@ public interface UserService {
      * @param page           page number
      * @param recordsPerPage records per page
      * @return user list of current page
-     * @throws ServiceException
-     *      if parameters are null or invalid. If error occurred while finding page users
+     * @throws ServiceException if parameters are null or invalid. If error occurred while finding page users
      */
     List<User> findPageUsers(String userId, String role, String page, String recordsPerPage) throws ServiceException;
 
@@ -125,8 +116,7 @@ public interface UserService {
      * @param newPassword new password
      * @param secretKey   secret key
      * @return true if password reset is successful, false otherwise
-     * @throws ServiceException
-     *      if error occurred while resetting password
+     * @throws ServiceException if error occurred while resetting password
      */
     boolean resetPassword(String userId, String newPassword, String secretKey) throws ServiceException;
 
@@ -136,8 +126,7 @@ public interface UserService {
      * @param email user email
      * @param user  user
      * @return true if sending email is successful, false otherwise
-     * @throws ServiceException
-     *      if error occurred while sending verification email
+     * @throws ServiceException if error occurred while sending verification email
      */
     boolean sendVerificationEmail(String email, User user) throws ServiceException;
 
@@ -155,8 +144,7 @@ public interface UserService {
      *
      * @param userId user id
      * @return true if account deactivating is successful, false otherwise
-     * @throws ServiceException
-     *      if error occurred while deactivating user account
+     * @throws ServiceException if error occurred while deactivating user account
      */
     boolean deactivateAccount(String userId) throws ServiceException;
 
@@ -166,8 +154,7 @@ public interface UserService {
      * @param userId    user id
      * @param secretKey secret key
      * @return the boolean
-     * @throws ServiceException
-     *      if error occurred while activating user account
+     * @throws ServiceException if error occurred while activating user account
      */
     boolean activateAccount(String userId, String secretKey) throws ServiceException;
 }

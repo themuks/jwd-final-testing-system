@@ -15,8 +15,7 @@ public interface ResultService {
      *
      * @param userId user id
      * @return results list
-     * @throws ServiceException
-     *      if {@code userId} is null or invalid. If error occurred while finding all user results
+     * @throws ServiceException if {@code userId} is null or invalid. If error occurred while finding all user results
      */
     List<Result> findAllUserResults(String userId) throws ServiceException;
 
@@ -25,8 +24,7 @@ public interface ResultService {
      *
      * @param resultId result id
      * @return true, if deleting user result is successful, false otherwise
-     * @throws ServiceException
-     *      if error occurred while deleting user result
+     * @throws ServiceException if error occurred while deleting user result
      */
     boolean deleteUserResult(String resultId) throws ServiceException;
 
@@ -36,8 +34,7 @@ public interface ResultService {
      * @param userId         user id
      * @param recordsPerPage records per page
      * @return page count
-     * @throws ServiceException
-     *      if parameters are null or invalid. If error occurred while finding page count by user id
+     * @throws ServiceException if parameters are null or invalid. If error occurred while finding page count by user id
      */
     int findPageCountByUserId(String userId, String recordsPerPage) throws ServiceException;
 
@@ -48,8 +45,7 @@ public interface ResultService {
      * @param page           page
      * @param recordsPerPage records per page
      * @return results list
-     * @throws ServiceException
-     *      if parameters are null or invalid. If error occurred while finding user page results
+     * @throws ServiceException if parameters are null or invalid. If error occurred while finding user page results
      */
     List<Result> findUserPageResults(String userId, String page, String recordsPerPage) throws ServiceException;
 
@@ -58,8 +54,7 @@ public interface ResultService {
      *
      * @param resultId result id
      * @return role
-     * @throws ServiceException
-     *      if {@code resultId} is null or invalid. If error occurred while finding result user role
+     * @throws ServiceException if {@code resultId} is null or invalid. If error occurred while finding result user role
      */
     Role findResultUserRole(String resultId) throws ServiceException;
 }

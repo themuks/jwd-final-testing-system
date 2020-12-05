@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="text"/>
@@ -18,9 +19,7 @@
     <input type="hidden" name="command" value="login"/>
     <h1 class="h3 mb-3 font-weight-normal"><fmt:message key="login.title"/></h1>
 
-    <c:if test="${not empty errorMessage}">
-        <div class="alert alert-danger" role="alert">${errorMessage}</div>
-    </c:if>
+    <tags:message/>
 
     <c:if test="${not empty sessionScope.origin}">
         <div class="alert alert-info" role="alert"><fmt:message key="login.enter_hint"/></div>
@@ -40,11 +39,13 @@
             key="login.submit_button"/></button>
     <div>
         <fmt:message key="login.password_question"/>
-        <a href="password-recovery.jsp"><fmt:message key="login.password_question_suggestion"/></a>
+        <a href="${pageContext.request.contextPath}/jsp/password-recovery.jsp"><fmt:message
+                key="login.password_question_suggestion"/></a>
     </div>
     <div>
         <fmt:message key="login.account_question"/>
-        <a href="registration.jsp"><fmt:message key="login.account_question_suggestion"/></a>
+        <a href="${pageContext.request.contextPath}/jsp/registration.jsp"><fmt:message
+                key="login.account_question_suggestion"/></a>
     </div>
 </form>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
