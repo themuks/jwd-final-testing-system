@@ -20,7 +20,7 @@
                 <input type="hidden" name="command" value="create-test"/>
                 <div class="form-group">
                     <label for="titleInput"><fmt:message key="test_edit.test_title"/> *</label>
-                    <input type="text" name="title" class="form-control" id="titleInput" required>
+                    <input type="text" maxlength="255" name="title" class="form-control" id="titleInput" required>
                 </div>
                 <div class="form-group">
                     <label for="subjectInput"><fmt:message key="test_edit.subject"/> *</label>
@@ -45,7 +45,7 @@
                         <div class="form-group">
                             <label class="" for="question${loop.index}Input"><fmt:message key="test_edit.text"/>
                                 *</label>
-                            <input type="text" name="q-${loop.index}" class="form-control"
+                            <input type="text" maxlength="10000" name="q-${loop.index}" class="form-control"
                                    id="question${loop.index}Input"
                                    required>
                         </div>
@@ -69,7 +69,7 @@
                                             key="test_edit.answer_number"/>${innerLoop.index} *</label>
                                 </div>
                                 <div class="col">
-                                    <input type="text" name="q-${loop.index} a-${innerLoop.index}" class="form-control"
+                                    <input type="text" maxlength="255" name="q-${loop.index} a-${innerLoop.index}" class="form-control"
                                            id="answer${innerLoop.index}Input" required>
                                 </div>
                                 <div class="col-auto d-flex align-items-center">

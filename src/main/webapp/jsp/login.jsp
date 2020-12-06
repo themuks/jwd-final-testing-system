@@ -29,7 +29,7 @@
     <input type="email" name="email" id="inputEmail" class="form-control" placeholder="<fmt:message key="login.email"/>"
            required autofocus>
     <label for="inputPassword" class="sr-only"><fmt:message key="login.password"/></label>
-    <input type="password" name="password" id="inputPassword" class="form-control"
+    <input type="password" maxlength="255" name="password" id="inputPassword" class="form-control"
            placeholder="<fmt:message key="login.password"/>" required>
     <div class="custom-control custom-checkbox mb-3">
         <input type="checkbox" class="custom-control-input" id="customCheck1" name="rememberMe" value="rememberMe">

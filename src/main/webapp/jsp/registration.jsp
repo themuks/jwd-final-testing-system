@@ -23,16 +23,16 @@
     <tags:message/>
 
     <label for="inputUsername" class="sr-only"><fmt:message key="registration.username"/></label>
-    <input type="text" name="username" id="inputUsername" class="form-control form-top"
+    <input type="text" maxlength="255" name="username" id="inputUsername" class="form-control form-top"
            placeholder="<fmt:message key="registration.username"/> *" required
            autofocus>
 
     <label for="inputName" class="sr-only"><fmt:message key="registration.name"/></label>
-    <input type="text" name="name" id="inputName" class="form-control"
+    <input type="text" maxlength="255" name="name" id="inputName" class="form-control"
            placeholder="<fmt:message key="registration.name"/> *" required>
 
     <label for="inputSurname" class="sr-only"><fmt:message key="registration.surname"/></label>
-    <input type="text" name="surname" id="inputSurname" class="form-control"
+    <input type="text" maxlength="255" name="surname" id="inputSurname" class="form-control"
            placeholder="<fmt:message key="registration.surname"/> *" required>
 
     <label for="inputEmail" class="sr-only"><fmt:message key="registration.email"/></label>
@@ -40,11 +40,11 @@
            placeholder="<fmt:message key="registration.email"/> *" required>
 
     <label for="inputPassword" class="sr-only"><fmt:message key="registration.password"/></label>
-    <input type="password" name="password" id="inputPassword" class="form-control"
+    <input type="password" maxlength="255" name="password" id="inputPassword" class="form-control"
            placeholder="<fmt:message key="registration.password"/> *" required>
 
     <label for="inputPasswordAgain" class="sr-only"><fmt:message key="registration.password_again"/></label>
-    <input type="password" name="passwordAgain" id="inputPasswordAgain" class="form-control form-bottom"
+    <input type="password" maxlength="255" name="passwordAgain" id="inputPasswordAgain" class="form-control form-bottom"
            placeholder="<fmt:message key="registration.password_again"/> *" required>
 
     <label for="role" class="sr-only">Роль *</label>
@@ -54,7 +54,7 @@
     </select>
 
     <label for="inputPromo" class="sr-only"><fmt:message key="registration.promo"/></label>
-    <input type="text" name="promo" id="inputPromo" class="form-control"
+    <input type="text" maxlength="255" name="promo" id="inputPromo" class="form-control"
            placeholder="<fmt:message key="registration.promo"/>">
 
     <button class="btn btn-lg btn-primary btn-block my-3" type="submit"><fmt:message

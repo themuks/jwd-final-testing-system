@@ -18,29 +18,29 @@
                 <input type="hidden" name="command" value="change-user-parameters"/>
                 <div class="form-group">
                     <label for="usernameInput"><fmt:message key="profile.username"/> *</label>
-                    <input type="text" name="username" class="form-control" id="usernameInput" value="${user.username}"
+                    <input type="text" maxlength="72" name="username" class="form-control" id="usernameInput" value="${user.username}"
                            required>
                 </div>
                 <div class="form-group">
                     <label for="nameInput"><fmt:message key="profile.name"/> *</label>
-                    <input type="text" name="name" class="form-control" id="nameInput" value="${user.name}" required>
+                    <input type="text" maxlength="255" name="name" class="form-control" id="nameInput" value="${user.name}" required>
                 </div>
                 <div class="form-group">
                     <label for="surnameInput"><fmt:message key="profile.surname"/> *</label>
-                    <input type="text" name="surname" class="form-control" id="surnameInput" value="${user.surname}"
+                    <input type="text" maxlength="255" name="surname" class="form-control" id="surnameInput" value="${user.surname}"
                            required>
                 </div>
                 <div class="form-group">
                     <label for="oldPasswordInput"><fmt:message key="profile.old_password"/></label>
-                    <input type="password" name="oldPassword" class="form-control" id="oldPasswordInput">
+                    <input type="password" maxlength="255" name="oldPassword" class="form-control" id="oldPasswordInput">
                 </div>
                 <div class="form-group">
                     <label for="newPasswordInput"><fmt:message key="profile.new_password"/></label>
-                    <input type="password" name="newPassword" class="form-control" id="newPasswordInput">
+                    <input type="password" maxlength="255" name="newPassword" class="form-control" id="newPasswordInput">
                 </div>
                 <div class="form-group">
                     <label for="newPasswordAgainInput"><fmt:message key="profile.new_password_again"/></label>
-                    <input type="password" name="newPasswordAgain" class="form-control" id="newPasswordAgainInput">
+                    <input type="password" maxlength="255" name="newPasswordAgain" class="form-control" id="newPasswordAgainInput">
                 </div>
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-primary" type="submit"><fmt:message key="profile.submit"/></button>

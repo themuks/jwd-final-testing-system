@@ -14,11 +14,11 @@
             <input type="hidden" name="userId" value="${userId}"/>
             <div class="form-group">
                 <label for="newPasswordInput"><fmt:message key="profile.new_password"/> *</label>
-                <input type="password" name="newPassword" class="form-control" id="newPasswordInput" required>
+                <input type="password" maxlength="255" name="newPassword" class="form-control" id="newPasswordInput" required>
             </div>
             <div class="form-group">
                 <label for="newPasswordAgainInput"><fmt:message key="profile.new_password_again"/> *</label>
-                <input type="password" name="newPasswordAgain" class="form-control" id="newPasswordAgainInput" required>
+                <input type="password" maxlength="255" name="newPasswordAgain" class="form-control" id="newPasswordAgainInput" required>
             </div>
             <div class="d-flex justify-content-center">
                 <button class="btn btn-primary" type="submit"><fmt:message key="profile.submit"/></button>
